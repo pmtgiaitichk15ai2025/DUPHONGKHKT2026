@@ -398,5 +398,8 @@ class TestStationUI(unittest.TestCase):
         self.assertFalse(any("Gaussian" in m.value and "p < 0.001" in m.value for m in at.success))
 
 
+
+from tests.exam_cache_isolation import setUpModule, tearDownModule  # noqa: F401,E402
+
 if __name__ == "__main__":
     unittest.main()

@@ -9229,7 +9229,7 @@ from data.curriculum_data import BIGDATA_CURRICULUM
 
 # ==============================================================================
 
-EXAM_CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "exam_cache")
+EXAM_CACHE_DIR = os.environ.get("GSAI_EXAM_CACHE_DIR") or os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "exam_cache")
 
 
 
@@ -15117,6 +15117,11 @@ if selected_station == station_labels[2]:
                     if val:
                         st.toast(f"🎯 ĐÃ GHI NHẬN & KHÓA YÊU CẦU TÙY BIẾN!", icon="✅")
 
+                st.button(
+                    "Khóa yêu cầu tùy biến",
+                    key="btn_confirm_cp_explicit",
+                    on_click=handle_custom_prompt_commit,
+                )
                 custom_matrix_prompt = st.text_area(
                     "💬 Yêu cầu ma trận / Ngữ liệu tùy biến (Prompt theo ý muốn):",
                     value=st.session_state.get("custom_matrix_prompt", ""),
@@ -15189,6 +15194,7 @@ if selected_station == station_labels[2]:
                     if original_paper_mode:
                         st.caption("Đề gốc giữ khóa và thứ tự Bộ; không trộn và không gọi AI.")
                 st.caption(
+                    "Sinh đề AI theo CT GDPT 2018, bộ sách KNTT và văn bản còn hiệu lực. "
                     "Một nút Sinh đề: lấy câu trong kho đúng môn, lớp, chủ đề và yêu cầu tùy biến. "
                     "Kho chưa đủ cấu trúc đang chọn thì AI sinh phần còn lại và đi qua bộ lọc hiện có. "
                     "Giáo viên cần duyệt trước khi dùng đánh giá chính thức."
@@ -15227,8 +15233,12 @@ if selected_station == station_labels[2]:
                         (num_p1, num_p2, num_p3), st.session_state.exam_code, matrix_order,
                         st.session_state.get("curriculum_pathway", ""))
 
+                    class _BankDraftRejected(Exception):
+                        pass
+
                     try:
                         parsed_exam = None
+                        bank_rejected = False
                         if original_paper_mode:
                             from services.official_paper import original_tin0530
                             parsed_exam = original_tin0530(st.session_state.get("curriculum_pathway", ""))
@@ -15244,20 +15254,37 @@ if selected_station == station_labels[2]:
                                     custom_prompt=matrix_order,
                                     exclude_fingerprints=st.session_state.seen_question_fps,
                                 )
-                                parsed_exam = validate_exam_data(blended, subject, structure_counts)
-                                parsed_exam["exam_source_type"] = "bank"
-                            except (ValueError, TypeError, OSError, KeyError):
-                                parsed_exam = None
-                        if parsed_exam is None:
-                            def _ai_exam(extra=""):
-                                raw_json_ex = call_gemini_with_fallback(
-                                    exam_prompt + extra, system_instruction=exam_system, json_mode=True
-                                ).strip()
+                            except (TypeError, OSError, KeyError):
+                                blended = None
+                            if isinstance(blended, dict) and not any(
+                                blended.get(part_key) for part_key in ("p1", "p2", "p3", "part_doc_hieu", "part_viet")
+                            ):
+                                # Kho không có câu nào đúng môn/lớp/chủ đề: AI sinh đủ, không coi là bản nháp bị từ chối.
+                                blended = None
+                            bank_rejected = False
+                            if blended and not original_paper_mode:
+                                try:
+                                    prepared_bank_exam = enrich_exam_data(blended, custom_request=custom_matrix_prompt)
+                                except ValueError as error:
+                                    st.error(str(error))
+                                    bank_rejected = True
+                                else:
+                                    try:
+                                        validate_exam_data(prepared_bank_exam, subject, structure_counts)
+                                    except ValueError:
+                                        prepared_bank_exam = None
+                                    else:
+                                        parsed_exam = prepared_bank_exam
+                                        parsed_exam["exam_source_type"] = "bank"
+                        if parsed_exam is None and not bank_rejected:
+                            def _validate_ai_exam(raw_json_ex):
                                 return validate_exam_data(
-                                    safe_json_loads(raw_json_ex), subject, structure_counts
+                                    safe_json_loads(raw_json_ex.strip()), subject, structure_counts
                                 )
                             try:
-                                parsed_exam = _ai_exam()
+                                parsed_exam = _validate_ai_exam(call_gemini_with_fallback(
+                                    exam_prompt, system_instruction=exam_system, json_mode=True
+                                ))
                             except Exception as parse_err:
                                 shortage = "chưa đúng" in str(parse_err) and "câu" in str(parse_err)
                                 if not is_duplicate_key_error(parse_err) and not shortage:
@@ -15267,7 +15294,9 @@ if selected_station == station_labels[2]:
                                     f"đúng môn {subject}, đúng lớp {grade_num}, đúng chủ đề đã chọn, "
                                     "đúng yêu cầu tùy biến. Không trả đề thiếu câu."
                                 )
-                                parsed_exam = _ai_exam(suffix)
+                                parsed_exam = _validate_ai_exam(call_gemini_with_fallback(
+                                    exam_prompt + suffix, system_instruction=exam_system, json_mode=True
+                                ))
                                 st.session_state["ai_exam_json_retried"] = True
                             parsed_exam["subject"] = subject
                             parsed_exam["grade"] = grade_num
@@ -15275,6 +15304,9 @@ if selected_station == station_labels[2]:
                             parsed_exam["is_real_exam"] = False
                             parsed_exam["exam_source_type"] = "ai_generated"
 
+                        if parsed_exam is None:
+                            # Bản nháp kho đã bị từ chối và lỗi đã hiển thị; giữ nguyên đề cũ.
+                            raise _BankDraftRejected()
                         st.session_state.exam_data = enrich_exam_data(parsed_exam, custom_request=custom_matrix_prompt)
                         if "seen_question_fps" not in st.session_state:
                             st.session_state.seen_question_fps = set()
@@ -15323,6 +15355,8 @@ if selected_station == station_labels[2]:
 
                         st.rerun()
 
+                    except _BankDraftRejected:
+                        pass
                     except Exception as e:
                         err = str(e)
                         st.error(f"Lỗi khởi tạo đề thi: {err}")

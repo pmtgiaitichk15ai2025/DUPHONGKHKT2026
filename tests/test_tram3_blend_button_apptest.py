@@ -44,6 +44,9 @@ def _assert_simple_controls(test, at, subject: str, grade: int):
     test.assertFalse(any("Trộn Siêu Đề" in lab or "Trích Xuất Đề" in lab for lab in labels))
 
 
+_assert_exam_controls = _assert_simple_controls
+
+
 def _fake_exam(subject: str, grade: int, counts=(3, 1, 0)):
     n1, n2, n3 = counts
     if subject == "Ngữ văn":
@@ -194,6 +197,9 @@ class Tram3SinhDeButtonAppTest(unittest.TestCase):
                 self.assertEqual(at.session_state.get("exam_state"), "testing")
                 self.assertEqual((at.session_state.get("exam_data") or {}).get("subject"), subject)
 
+
+
+from tests.exam_cache_isolation import setUpModule, tearDownModule  # noqa: F401,E402
 
 if __name__ == "__main__":
     unittest.main()

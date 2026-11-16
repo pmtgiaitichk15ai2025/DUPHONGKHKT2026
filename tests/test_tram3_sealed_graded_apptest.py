@@ -109,5 +109,8 @@ class Tram3SealedGradedAppTest(unittest.TestCase):
         self.assertTrue(any("Cách dùng kho đề Tin học" in lab for lab in radios))
 
 
+
+from tests.exam_cache_isolation import setUpModule, tearDownModule  # noqa: F401,E402
+
 if __name__ == "__main__":
     unittest.main()

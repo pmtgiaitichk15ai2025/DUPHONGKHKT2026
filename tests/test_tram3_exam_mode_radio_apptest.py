@@ -98,5 +98,8 @@ class Tram3SimpleSinhDeAppTest(unittest.TestCase):
                     self.assertIn("GEMINI_API_KEY", " ".join(str(e.value) for e in at.error))
 
 
+
+from tests.exam_cache_isolation import setUpModule, tearDownModule  # noqa: F401,E402
+
 if __name__ == "__main__":
     unittest.main()

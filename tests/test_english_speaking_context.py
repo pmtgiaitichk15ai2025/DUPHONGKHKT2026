@@ -83,3 +83,6 @@ render_voice_speech_tex_and_english_evaluator('Tram 1', 'Tiếng Anh', grade)
         self.assertEqual([e.message for e in at.exception], [])
         self.assertIn('không chấm phát âm', at.session_state['captured_feedback_prompt'])
         self.assertIn('Tiếng Anh lớp 12', at.session_state['captured_feedback_prompt'])
+
+
+from tests.exam_cache_isolation import setUpModule, tearDownModule  # noqa: F401,E402

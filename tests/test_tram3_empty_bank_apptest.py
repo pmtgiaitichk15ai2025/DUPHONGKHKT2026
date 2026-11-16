@@ -68,5 +68,8 @@ class Tram3EmptyBankAppTest(unittest.TestCase):
                         self.assertEqual(old, [], msg=f"{subject} L{grade}")
 
 
+
+from tests.exam_cache_isolation import setUpModule, tearDownModule  # noqa: F401,E402
+
 if __name__ == "__main__":
     unittest.main()

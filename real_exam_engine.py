@@ -76,6 +76,12 @@ BASELINE_2025_FILE = os.path.join(REAL_EXAM_DIR, "baseline_exams_2025_2026.json"
 TEACHER_EXAMS_FILE = os.path.join(REAL_EXAM_DIR, "teacher_uploaded_exams.json")
 EXAM_CACHE_DIR = os.path.join(BASE_DIR, "data", "exam_cache")
 
+
+def exam_cache_dir() -> str:
+    """Thư mục cache đề; GSAI_EXAM_CACHE_DIR cho phép kiểm thử dùng thư mục tạm."""
+    return os.environ.get("GSAI_EXAM_CACHE_DIR") or os.path.join(BASE_DIR, "data", "exam_cache")
+
+
 os.makedirs(REAL_EXAM_DIR, exist_ok=True)
 os.makedirs(EXAM_CACHE_DIR, exist_ok=True)
 
@@ -2393,7 +2399,7 @@ def get_baseline_full_exams(subject: str, grade, enrich_visuals: bool = False, *
     t_versions = TEACHER_EXAMS_FILE + '.versions'
     t_mtime = (os.path.getmtime(TEACHER_EXAMS_FILE) if os.path.exists(TEACHER_EXAMS_FILE) else 0,
                os.path.getmtime(t_versions) if os.path.exists(t_versions) else 0)
-    c_dir = os.path.join(BASE_DIR, "data", "exam_cache")
+    c_dir = exam_cache_dir()
     c_mtime = os.path.getmtime(c_dir) if os.path.exists(c_dir) else 0
 
     cached_entry = _FAST_EXAM_LIST_CACHE.get(cache_key)
@@ -2520,7 +2526,7 @@ def ingest_ai_generated_exam_to_bank(exam_data: dict, subject: str, grade):
 
     # 2. Lưu vào tệp nén/JSON cache để tích lũy lâu dài
     try:
-        cache_dir = os.path.join(BASE_DIR, "data", "exam_cache")
+        cache_dir = exam_cache_dir()
         os.makedirs(cache_dir, exist_ok=True)
         safe_subj = re.sub(r'[^\w\-]', '_', norm_subj)
         fname = f"{safe_subj}_lop{grade}_{exam_code}.json"
