@@ -574,13 +574,13 @@ st.set_page_config(
 
 
 
-# QR / share link: ưu tiên Secrets APP_URL; mặc định = subdomain Streamlit Cloud hiện tại.
+# QR / share link: ưu tiên Secrets APP_URL; mặc định = app DUPHONGKHKT2026 trên Streamlit Cloud.
 APP_URL = str(
     get_secret(
         "APP_URL",
-        "https://claudevipgsaikhkt2026-bybgceinifcaqggqyyvatx.streamlit.app",
+        "https://duphongkhkt2026.streamlit.app",
     )
-    or "https://claudevipgsaikhkt2026-bybgceinifcaqggqyyvatx.streamlit.app"
+    or "https://duphongkhkt2026.streamlit.app"
 ).rstrip("/")
 
 
@@ -1230,7 +1230,8 @@ def get_local_img_as_base64(file_path):
 
 @st.cache_data(show_spinner=False)
 
-def generate_local_qr_base64(data_url: str, fill_color: str = "#38bdf8", back_color: str = "#0f172a") -> str:
+def generate_local_qr_base64(data_url: str, fill_color: str = "#0f172a", back_color: str = "#ffffff") -> str:
+    # Chuẩn QR: chấm tối trên nền sáng, viền yên tĩnh 4 ô để Zalo/Android/iPhone đều quét được.
 
     if qrcode is not None:
 
@@ -1244,7 +1245,7 @@ def generate_local_qr_base64(data_url: str, fill_color: str = "#38bdf8", back_co
 
                 box_size=8,
 
-                border=2,
+                border=4,
 
             )
 
@@ -14751,7 +14752,7 @@ if selected_station == station_labels[2]:
 
             app_share_url = f"{APP_URL}?exam_code={ex_c}&subject={urllib.parse.quote(subject_nm)}"
 
-            qr_base64_img = generate_local_qr_base64(app_share_url, fill_color="#0284c7", back_color="#0f172a")
+            qr_base64_img = generate_local_qr_base64(app_share_url, fill_color="#0f172a", back_color="#ffffff")
 
 
 
