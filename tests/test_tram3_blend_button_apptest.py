@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-"""AppTest: nút trộn đề Trạm 3 → testing đúng môn/lớp (mock bank)."""
+"""AppTest: nút Sinh đề Trạm 3 → testing đúng môn/lớp (mock AI JSON)."""
 from __future__ import annotations
 
+import json
 import os
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from streamlit.testing.v1 import AppTest
@@ -24,36 +26,40 @@ def _assert_subject_topics(test, at, subject: str, grade: int):
     else:
         expected = list(curr[grade])
         first = f"[Lớp {grade}] {curr[grade][0]}"
-    labels = [str(c.label) for c in at.checkbox if "AI sinh nguyên câu" not in str(c.label)]
+    labels = [str(c.label) for c in at.checkbox]
     missing = [name for name in expected if name not in labels]
     test.assertEqual(missing, [], msg=f"{subject} L{grade} thiếu checkbox: {missing[:3]}")
     selected = at.session_state.get("policy_selected_topics") or []
     test.assertIn(first, selected, msg=f"{subject} L{grade} không chọn sẵn {first}")
 
 
-def _assert_exam_controls(test, at, subject: str, grade: int):
-    mode = next(r for r in at.radio if r.label == "Lựa chọn hình thức đề thi:")
-    options = [str(o) for o in mode.options]
-    test.assertEqual(len(options), 4, msg=f"{subject} L{grade}")
-    for needle in (
-        "Đề Luyện Tập Chuyên Đề",
-        "Làm Nguyên Đề Thi Thật",
-        "Nạp & Trộn Đề Word",
-        "Quét Đề Link",
-    ):
-        test.assertTrue(any(needle in o for o in options), msg=f"{subject} L{grade} thiếu {needle}")
+def _assert_simple_controls(test, at, subject: str, grade: int):
+    test.assertFalse(any(r.label == "Lựa chọn hình thức đề thi:" for r in at.radio))
     labels = [b.label for b in at.button]
-    test.assertTrue(
-        any("Khởi Tạo Đề Mới" in lab or "AI Tạo Đề" in lab for lab in labels),
-        msg=f"{subject} L{grade} thiếu nút AI",
+    test.assertEqual(
+        sum(1 for lab in labels if lab == "🚀 Sinh đề"),
+        1,
+        msg=f"{subject} L{grade} thiếu đúng 1 nút Sinh đề",
     )
-    if subject == "Tin học" and grade == 12:
-        test.assertTrue(any("Cách dùng kho đề Tin học" in r.label for r in at.radio))
+    test.assertFalse(any("Trộn Siêu Đề" in lab or "Trích Xuất Đề" in lab for lab in labels))
 
 
 def _fake_exam(subject: str, grade: int, counts=(3, 1, 0)):
     n1, n2, n3 = counts
-    exam = {
+    if subject == "Ngữ văn":
+        return {
+            "code": f"MOCK-{grade}",
+            "subject": subject,
+            "grade": grade,
+            "part_doc_hieu": {
+                "text": "Ngữ liệu QA",
+                "author": "",
+                "source": "tự sáng tác",
+                "questions": [{"q": "Đọc hiểu?", "ans": "rubric", "point": 4.0, "explain": "x"}],
+            },
+            "part_viet": [{"q": "Viết", "ans": "rubric", "point": 6.0, "explain": "x"}],
+        }
+    return {
         "code": f"MOCK-{grade}",
         "subject": subject,
         "grade": grade,
@@ -63,6 +69,7 @@ def _fake_exam(subject: str, grade: int, counts=(3, 1, 0)):
                 "opt": ["A.1", "B.2", "C.3", "D.4"],
                 "ans": "B",
                 "subject": subject,
+                "explain": "x",
             }
             for i in range(n1)
         ],
@@ -76,24 +83,22 @@ def _fake_exam(subject: str, grade: int, counts=(3, 1, 0)):
                     {"t": "d", "a": False},
                 ],
                 "subject": subject,
+                "explain": "x",
             }
             for i in range(n2)
         ],
-        "p3": [{"q": f"TLN {i+1}", "ans": "1", "subject": subject} for i in range(n3)],
-        "actual_counts": (n1, n2, n3),
-        "target_counts": (n1, n2, n3),
+        "p3": [{"q": f"TLN {i+1}", "ans": "1", "subject": subject, "explain": "x"} for i in range(n3)],
     }
-    return exam
 
 
-class Tram3BlendButtonAppTest(unittest.TestCase):
+class Tram3SinhDeButtonAppTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         import database
         cls._prev_baseline = os.environ.get("GSAI_LOAD_BASELINE_MASTER")
         os.environ["GSAI_LOAD_BASELINE_MASTER"] = "0"
         cls.temp = tempfile.TemporaryDirectory()
-        cls.db = database.DatabaseManager(Path(cls.temp.name) / "tram3_blend_btn.db")
+        cls.db = database.DatabaseManager(Path(cls.temp.name) / "tram3_sinh_btn.db")
         cls.db_patch = patch.object(database, "db_manager", cls.db)
         cls.db_patch.start()
 
@@ -119,11 +124,28 @@ class Tram3BlendButtonAppTest(unittest.TestCase):
         self.assertEqual([e.message for e in at.exception], [])
         return at
 
-    def test_blend_button_starts_testing_for_matrix_cells(self):
+    def _click_sinh_de(self, at, subject, grade, counts):
+        fake = _fake_exam(subject, grade, counts)
+
+        def _gen(*_a, **_k):
+            return json.dumps(fake, ensure_ascii=False)
+
+        with patch("google.genai.Client") as client:
+            response = client.return_value.__enter__.return_value.models.generate_content
+            response.return_value = SimpleNamespace(text=_gen(), candidates=[])
+            # Also cover non-context-manager Client paths used by some app versions.
+            client.return_value.models.generate_content.return_value = SimpleNamespace(
+                text=_gen(), candidates=[]
+            )
+            with patch("app.call_gemini_with_fallback", side_effect=lambda *a, **k: _gen()):
+                btn = next(b for b in at.button if b.label == "🚀 Sinh đề")
+                btn.click().run(timeout=90)
+        return at
+
+    def test_sinh_de_starts_testing_for_matrix_cells(self):
         from services.academic_context import subjects_for_grade
 
         cells = []
-        # Quét cứng: mọi môn hợp lệ mốc 6/8/9/10/12 (mock). Văn → test_tram3_nguvan_apptest.
         for grade in (6, 8, 9, 10, 12):
             for subject in subjects_for_grade(grade):
                 if subject == "Ngữ văn":
@@ -135,21 +157,8 @@ class Tram3BlendButtonAppTest(unittest.TestCase):
             with self.subTest(subject=subject, grade=grade):
                 at = self._open_tram3(grade_label, subject)
                 _assert_subject_topics(self, at, subject, grade)
-                _assert_exam_controls(self, at, subject, grade)
-                fake = _fake_exam(subject, grade, counts)
-
-                def _gen(subj, g, topics, cnts, **kwargs):
-                    self.assertEqual(subj, subject)
-                    self.assertEqual(g, grade)
-                    return fake
-
-                with patch("real_exam_engine.generate_blended_real_exam", side_effect=_gen):
-                    btn = next(
-                        b
-                        for b in at.button
-                        if "Trộn Siêu Đề" in b.label or "Trích Xuất Đề" in b.label or "Mở đề gốc" in b.label
-                    )
-                    btn.click().run(timeout=90)
+                _assert_simple_controls(self, at, subject, grade)
+                at = self._click_sinh_de(at, subject, grade, counts)
                 self.assertEqual([e.message for e in at.exception], [])
                 self.assertEqual(at.session_state.get("exam_state"), "testing")
                 exam = at.session_state.get("exam_data") or {}
@@ -157,8 +166,7 @@ class Tram3BlendButtonAppTest(unittest.TestCase):
                 radios = [r for r in at.radio if str(r.label).startswith("Lựa chọn câu")]
                 self.assertGreaterEqual(len(radios), 1)
 
-    def test_blend_button_grades_7_and_11(self):
-        """Bổ sung mốc 7/11 (các mốc khác đã cover ở test trên)."""
+    def test_sinh_de_grades_7_and_11(self):
         from services.academic_context import subjects_for_grade
 
         cells = []
@@ -172,21 +180,8 @@ class Tram3BlendButtonAppTest(unittest.TestCase):
             with self.subTest(subject=subject, grade=grade):
                 at = self._open_tram3(grade_label, subject)
                 _assert_subject_topics(self, at, subject, grade)
-                _assert_exam_controls(self, at, subject, grade)
-                fake = _fake_exam(subject, grade, counts)
-
-                def _gen(subj, g, topics, cnts, **kwargs):
-                    self.assertEqual(subj, subject)
-                    self.assertEqual(g, grade)
-                    return fake
-
-                with patch("real_exam_engine.generate_blended_real_exam", side_effect=_gen):
-                    btn = next(
-                        b
-                        for b in at.button
-                        if "Trộn Siêu Đề" in b.label or "Trích Xuất Đề" in b.label or "Mở đề gốc" in b.label
-                    )
-                    btn.click().run(timeout=90)
+                _assert_simple_controls(self, at, subject, grade)
+                at = self._click_sinh_de(at, subject, grade, counts)
                 self.assertEqual([e.message for e in at.exception], [])
                 self.assertEqual(at.session_state.get("exam_state"), "testing")
                 self.assertEqual((at.session_state.get("exam_data") or {}).get("subject"), subject)

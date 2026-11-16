@@ -15107,17 +15107,7 @@ if selected_station == station_labels[2]:
 
                 st.caption(f"📌 **Đã chọn ({len(chosen_topics)} chuyên đề):** {', '.join(chosen_topics[:2])}{'...' if len(chosen_topics) > 2 else ''}")
                 st.session_state.policy_selected_topics = list(chosen_topics)
-                st.checkbox(
-                    "Cho phép AI sinh nguyên câu thay thế khi thiếu dữ liệu",
-                    value=False,
-                    key="enable_ai_context_recovery",
-                )
-                st.caption(
-                    "Mặc định TẮT: chỉ phục hồi từ kho cùng chủ đề. Bật tay nếu chấp nhận tối đa 2 câu AI "
-                    "(có nhãn is_ai_generated, cần GV duyệt). Không tắt nút khởi tạo đề AI."
-                )
-
-
+                st.session_state.setdefault("enable_ai_context_recovery", False)
 
                 request_widget_key = f"area_custom_prompt_main_{current_context_key}"
                 def handle_custom_prompt_commit():
@@ -15138,26 +15128,6 @@ if selected_station == station_labels[2]:
                 )
 
                 st.session_state["custom_matrix_prompt"] = custom_matrix_prompt
-
-                c_cp1, c_cp2 = st.columns([1.5, 1])
-                with c_cp1:
-                    btn_confirm_cp = st.button("🔒 Khóa & Xác Nhận Ma Trận Tùy Biến", key="btn_confirm_cp_explicit",
-                                               on_click=handle_custom_prompt_commit)
-
-                if ree and ree.effective_custom_prompt(custom_matrix_prompt):
-                    st.markdown(textwrap.dedent(f"""
-                    <div style="background: rgba(16, 185, 129, 0.12); border: 1.5px solid #10b981; border-radius: 8px; padding: 10px 14px; margin-top: 6px; font-size: 13px; color: #ecfdf5;">
-                        <div style="color: #34d399; font-weight: bold; font-size: 13.5px; margin-bottom: 3px;">
-                            ✅ ĐÃ XÁC NHẬN YÊU CẦU TÙY BIẾN (ƯU TIÊN SỐ 1 TOÀN HỆ THỐNG):
-                        </div>
-                        <div style="color: #a7f3d0; font-style: italic; background: rgba(0,0,0,0.25); padding: 6px 10px; border-radius: 6px; border-left: 3px solid #10b981;">
-                            "{custom_matrix_prompt.strip()}"
-                        </div>
-                        <div style="font-size: 11.5px; color: #cbd5e1; margin-top: 4px;">
-                            🎯 <b>Cơ chế thông minh:</b> Hệ thống lọc theo môn/lớp/chủ đề. Nội dung AI và nguồn đề cần được giáo viên đối chiếu trước khi đánh giá chính thức.
-                        </div>
-                    </div>
-                    """).strip(), unsafe_allow_html=True)
 
 
 
@@ -15187,13 +15157,7 @@ if selected_station == station_labels[2]:
                     st.selectbox("Định hướng môn học:", paths, key="curriculum_pathway")
 
                 st.session_state.exam_time_mins = exam_time_mins
-
-                st.checkbox(
-                    "🔒 Làm bài kín (nhắc tắt gợi mở Socratic — dùng khi đo pre/post)",
-                    value=bool(st.session_state.get("tram3_sealed_mode", False)),
-                    key="tram3_sealed_mode",
-                    help="Khi tắt: luyện tập Socratic bình thường. Khi bật: cảnh báo làm bài kín."
-                )
+                st.session_state.setdefault("tram3_sealed_mode", False)
 
                 measure_phase = "practice"
 
@@ -15213,216 +15177,101 @@ if selected_station == station_labels[2]:
 
 
 
-                # --- KHU VỰC KHỞI ĐỘNG BÀI THI CHO THÍ SINH (ACTION CENTER - BUỒNG LÁI COCKPIT) ---
-
-                real_exams_list = ree.get_baseline_full_exams(subject, grade_num) if ree else []
-                from services.tram3_exam_ux import find_exam_by_access_code, filter_exams_for_listing, is_teacher_uploaded_exam, copy_stored_exam, stored_exam_size_label
-                from services.exam_delivery import exam_delivery_held
-                real_exams_list = filter_exams_for_listing(real_exams_list, exclude_held_fn=exam_delivery_held)
-                _qp = {}
-                try:
-                    _qp = dict(st.query_params)
-                except Exception:
-                    _qp = {}
-                _access_code = str(_qp.get("exam_code") or st.session_state.get("tram3_access_code_input") or "").strip()
-                if _access_code:
-                    _matched = find_exam_by_access_code(real_exams_list, _access_code, identity_fn=exam_storage_identity)
-                    if _matched is not None:
-                        st.success(f"🔗 Đã khớp mã đề `{_access_code}` — xác nhận rồi nạp. Chưa tự vào phòng thi.")
-                        st.session_state["tram3_deep_link_exam"] = _matched
-                    else:
-                        st.warning(f"Không tìm thấy đề mã `{_access_code}` đúng môn/lớp đang chọn (hoặc đề đang bị giữ thẩm định).")
-                st.text_input("Mã đề / mã truy cập (từ QR hoặc giáo viên giao):", value=_access_code, key="tram3_access_code_input")
-
-
-
-                def detect_exam_type(ex_item):
-
-                    c_str = str(ex_item.get("code") or "").upper()
-
-                    if c_str.startswith("GK1"): return "Giữa học kỳ 1"
-
-                    if c_str.startswith("CK1"): return "Cuối học kỳ 1"
-
-                    if c_str.startswith("GK2"): return "Giữa học kỳ 2"
-
-                    if c_str.startswith("CK2"): return "Cuối học kỳ 2"
-
-                    if c_str.startswith("TT26"): return "Thi thử Tốt nghiệp THPT"
-
-
-
-                    t_str = str(ex_item.get("exam_type") or "").strip()
-
-                    title_str = str(ex_item.get("title") or "").strip().lower()
-
-                    if t_str and t_str != "None":
-
-                        return t_str
-
-                    if "giữa" in title_str:
-
-                        return "Giữa học kỳ 1" if ("1" in title_str or "i" in title_str) else "Giữa học kỳ 2"
-
-                    if "cuối" in title_str:
-
-                        return "Cuối học kỳ 1" if ("1" in title_str or "i" in title_str) else "Cuối học kỳ 2"
-
-                    if "thử" in title_str or "tốt nghiệp" in title_str or "khảo sát" in title_str:
-
-                        return "Thi thử Tốt nghiệp THPT"
-
-                    return "Khảo sát định kỳ"
-
-
-
-                gk1_exams = [it for it in real_exams_list if detect_exam_type(it) == "Giữa học kỳ 1"]
-
-                ck1_exams = [it for it in real_exams_list if detect_exam_type(it) == "Cuối học kỳ 1"]
-
-                gk2_exams = [it for it in real_exams_list if detect_exam_type(it) == "Giữa học kỳ 2"]
-
-                ck2_exams = [it for it in real_exams_list if detect_exam_type(it) == "Cuối học kỳ 2"]
-
-                thithu_exams = [it for it in real_exams_list if detect_exam_type(it) == "Thi thử Tốt nghiệp THPT" or any(kw in detect_exam_type(it).lower() for kw in ["thử", "khảo sát"])]
-
-
-
-                gk1_count = len(gk1_exams)
-
-                ck1_count = len(ck1_exams)
-
-                gk2_count = len(gk2_exams)
-
-                ck2_count = len(ck2_exams)
-
-                thithu_count = len(thithu_exams)
-
-
-
-                exam_mode_options = [
-
-                    f"🎯 Đề Luyện Tập Chuyên Đề ({len(chosen_topics)} CĐ)",
-
-                    f"🏛️ Làm Nguyên Đề Thi Thật ({len(real_exams_list)} đề)",
-
-                    "📤 Nạp & Trộn Đề Word (.docx) / PDF",
-
-                    f"🌐 Quét Đề Link ({_portal_display_name_safe(subject, 'link tùy chỉnh')})"
-
-                ]
-
-                selected_exam_mode = st.radio(
-                    "Lựa chọn hình thức đề thi:",
-                    exam_mode_options,
-                    horizontal=True,
-                    key=f"radio_exam_mode_choice_{current_context_key}",
+                # --- Trạm 3 đơn giản: chủ đề + cấu trúc + một nút Sinh đề (AI) ---
+                st.caption(
+                    "Sinh đề AI theo CT GDPT 2018, bộ sách KNTT và văn bản pháp quy Bộ GD&ĐT còn hiệu lực. "
+                    "Giáo viên cần duyệt trước khi dùng đánh giá chính thức."
+                )
+                matrix_order = ree.effective_custom_prompt(custom_matrix_prompt) if ree else str(custom_matrix_prompt or "").strip()
+                btn_ai_gen = st.button(
+                    "🚀 Sinh đề",
+                    type="primary",
+                    width="stretch",
+                    key=f"btn_tram3_sinh_de_{current_context_key}",
+                    help="AI biên soạn đề theo môn/lớp/chủ đề và cấu trúc đã chọn. Cần giáo viên duyệt.",
                 )
 
+                if btn_ai_gen:
 
+                    if measure_phase != "practice" and not measure_student_id:
 
-                if "Làm Nguyên Đề Thi Thật" in selected_exam_mode and real_exams_list:
+                        st.error("Cần mã học sinh để ghép cặp bài đo trước–sau.")
 
-                    filter_opts = ["Tất cả"]
+                        st.stop()
 
-                    if gk1_count > 0: filter_opts.append(f"🌟 Giữa HK1 ({gk1_count} đề)")
+                    st.session_state.exam_code = str(random.randint(1011, 9999))
 
-                    if ck1_count > 0: filter_opts.append(f"🎯 Cuối HK1 ({ck1_count} đề)")
+                    st.session_state.violation_count = 0
 
-                    if gk2_count > 0: filter_opts.append(f"🌟 Giữa HK2 ({gk2_count} đề)")
+                    st.session_state.custom_request_text = matrix_order
 
-                    if ck2_count > 0: filter_opts.append(f"🎯 Cuối HK2 ({ck2_count} đề)")
-
-                    if thithu_count > 0: filter_opts.append(f"🏛️ Thi thử ({thithu_count} đề)")
-                    _gv_n = sum(1 for it in real_exams_list if is_teacher_uploaded_exam(it))
-                    if _gv_n > 0: filter_opts.append(f"👨‍🏫 Đề giáo viên đã lưu ({_gv_n} đề)")
-
-
-
-                    st.caption("Chọn một đề có sẵn của đúng môn và lớp này. Nạp ra toàn bộ câu của đề đó, không trộn và không bỏ câu.")
-
-                    col_f1, col_f2 = st.columns([1.2, 2.8])
-
-                    with col_f1:
-
-                        filter_ex_type = st.selectbox("Kỳ thi:", filter_opts, key="sel_filter_real_type")
-
-                    with col_f2:
-
-                        filtered_exams = real_exams_list
-
-                        if "Giữa HK1" in filter_ex_type: filtered_exams = gk1_exams or real_exams_list
-
-                        elif "Cuối HK1" in filter_ex_type: filtered_exams = ck1_exams or real_exams_list
-
-                        elif "Giữa HK2" in filter_ex_type: filtered_exams = gk2_exams or real_exams_list
-
-                        elif "Cuối HK2" in filter_ex_type: filtered_exams = ck2_exams or real_exams_list
-
-                        elif "Thi thử" in filter_ex_type: filtered_exams = thithu_exams or real_exams_list
-                        elif "Đề giáo viên" in filter_ex_type: filtered_exams = [e for e in real_exams_list if is_teacher_uploaded_exam(e)] or real_exams_list
+                    st.session_state.exam_start_timestamp = time.time()
 
 
 
-                        r_opts = [
+                    selected_topics_str = "; ".join(chosen_topics)
 
-                            f"[{detect_exam_type(item)}] {item.get('code', '')} — {item.get('title', 'Đề')} — {item.get('school', '')} — {stored_exam_size_label(item)}"
+                    enable_blend_cfg = False
+                    exam_system, exam_prompt = build_curriculum_exam_request(subject, grade_num, chosen_topics,
+                        (num_p1, num_p2, num_p3), st.session_state.exam_code, matrix_order,
+                        st.session_state.get("curriculum_pathway", ""))
 
-                            for item in filtered_exams
-
-                        ]
-
-                        from services.cache_metadata import distinct_exam_labels
-                        r_opts = distinct_exam_labels(r_opts, filtered_exams)
-
-                        if "sel_real_exam_t3" in st.session_state and (not r_opts or st.session_state.sel_real_exam_t3 >= len(r_opts)):
-                            st.session_state.sel_real_exam_t3 = 0
-
-                        chosen_real_idx = st.selectbox(f"Chọn đề ({len(filtered_exams)} đề):", range(len(r_opts)), format_func=lambda i: r_opts[i], key="sel_real_exam_t3")
-
-
-
-                    col_b1, col_b2 = st.columns([1.1, 1.3])
-
-                    with col_b1:
-
-                        btn_load_chosen = st.button("🚀 Nạp Đề Đang Chọn Này (0.1s)", type="secondary", width="stretch", key="btn_load_real_exam")
-
-                    with col_b2:
-
-                        btn_load_random = st.button(f"🎲 Bốc Ngẫu Nhiên 1 Đề Toàn Quốc ({len(filtered_exams)} Đề)", type="primary", width="stretch", key="btn_random_real_exam")
-
-                    if btn_load_chosen or btn_load_random:
-
-                        if (not btn_load_random) and st.session_state.get("tram3_deep_link_exam") is not None:
-                            sel_real_item = st.session_state.get("tram3_deep_link_exam")
-                            st.session_state["tram3_deep_link_exam"] = None
-                        elif btn_load_random:
-                            random.seed(time.time_ns())
-                            if "seen_whole_exam_codes" not in st.session_state:
-                                st.session_state.seen_whole_exam_codes = set()
-
-                            fresh_exams = [e for e in filtered_exams if exam_storage_identity(e) not in st.session_state.seen_whole_exam_codes]
-                            if not fresh_exams:
-                                st.session_state.seen_whole_exam_codes.clear()
-                                fresh_exams = filtered_exams
-
-                            sel_real_item = random.choice(fresh_exams)
-                            st.session_state.seen_whole_exam_codes.add(exam_storage_identity(sel_real_item))
-                            st.toast(f"🎲 Đã bốc ngẫu nhiên đề mới: Mã {sel_real_item.get('code', 'Chính thức')} — {sel_real_item.get('title', 'Đề thi')[:35]}...", icon="🎯")
-                        else:
-                            sel_real_item = filtered_exams[chosen_real_idx]
-                            if "seen_whole_exam_codes" not in st.session_state:
-                                st.session_state.seen_whole_exam_codes = set()
-                            st.session_state.seen_whole_exam_codes.add(exam_storage_identity(sel_real_item))
-
+                    try:
+                        raw_json_ex = call_gemini_with_fallback(
+                            exam_prompt, system_instruction=exam_system, json_mode=True
+                        )
+                        raw_json_ex = raw_json_ex.strip()
                         try:
-                            st.session_state.exam_data = copy_stored_exam(sel_real_item)
-                        except ValueError as error:
-                            st.error(str(error))
-                            st.stop()
+                            parsed_exam = validate_exam_data(
+                                safe_json_loads(raw_json_ex),
+                                subject,
+                                None if subject == "Ngữ văn" else (num_p1, num_p2, num_p3),
+                            )
+                        except Exception as parse_err:
+                            # One bounded retry when AI emits duplicate JSON keys.
+                            if not is_duplicate_key_error(parse_err):
+                                raise
+                            raw_json_ex = call_gemini_with_fallback(
+                                exam_prompt + JSON_CLEAN_RETRY_SUFFIX,
+                                system_instruction=exam_system,
+                                json_mode=True,
+                            )
+                            raw_json_ex = raw_json_ex.strip()
+                            parsed_exam = validate_exam_data(
+                                safe_json_loads(raw_json_ex),
+                                subject,
+                                None if subject == "Ngữ văn" else (num_p1, num_p2, num_p3),
+                            )
+                            st.session_state["ai_exam_json_retried"] = True
 
-                        st.session_state.exam_code = str(sel_real_item.get("code", random.randint(1011, 9999)))
+                        parsed_exam["is_ai_generated"] = True
+                        parsed_exam["is_real_exam"] = False
+                        parsed_exam["exam_source_type"] = "ai_generated"
+
+                        if ree and enable_blend_cfg and not matrix_order:
+                            parsed_exam = ree.blend_real_exam_with_ai(parsed_exam, subject, grade_num, chosen_topics)
+
+                        st.session_state.exam_data = enrich_exam_data(parsed_exam, custom_request=custom_matrix_prompt)
+                        if "seen_question_fps" not in st.session_state:
+                            st.session_state.seen_question_fps = set()
+                        for p_key in ("p1", "p2", "p3"):
+                            for q_new in st.session_state.exam_data.get(p_key, []):
+                                q_txt = str(q_new.get("q", "")).strip().lower()
+                                if q_txt:
+                                    fp_c = ree.q_fingerprint(q_new) if ree else re.sub(r'[^a-zA-Z0-9\u00C0-\u1EF9]', '', q_txt)[:80]
+                                    st.session_state.seen_question_fps.add(fp_c)
+                                    if ree and hasattr(ree, "remember_question_cooldown"):
+                                        ree.remember_question_cooldown(
+                                            (ree.q_fingerprint(q_new) if hasattr(ree, "q_fingerprint") else None)
+                                            or q_new.get("q", "").strip()
+                                        )
+
+                        save_exam_to_cache(st.session_state.exam_data, subject, grade_num, selected_topics_str)
+                        if ree and hasattr(ree, "ingest_ai_generated_exam_to_bank"):
+                            try:
+                                ree.ingest_ai_generated_exam_to_bank(st.session_state.exam_data, subject, grade_num)
+                            except Exception:
+                                pass
 
                         st.session_state.attempt_id = str(uuid.uuid4())
 
@@ -15448,613 +15297,16 @@ if selected_station == station_labels[2]:
 
                         st.session_state.tram3_chat_messages = []
 
-                        st.toast(f"⚡ Đã nạp thành công đề thi thật từ {sel_real_item.get('school', '')} trong 0.1 giây!", icon="✨")
-
                         st.rerun()
 
-
-
-                elif "Nạp & Trộn Đề Word" in selected_exam_mode:
-
-                    st.markdown("##### 📤 Nạp Đề Thi Từ File Word (.docx) / PDF (.pdf) hoặc Dán Đề:")
-
-                    st.markdown(
-                        '<div style="background: rgba(15, 23, 42, 0.7); border: 1px dashed #38bdf8; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 13px; line-height: 1.6; color: #cbd5e1;">'
-                        '<div style="margin-bottom: 6px;">💡 <b style="color: #38bdf8;">MẸO NẠP ĐỀ WORD MATHTYPE CHUẨN 100% CÔNG THỨC (KHÔNG BỊ MẤT KÝ TỰ):</b></div>'
-                        '<div style="margin-bottom: 4px;">• <b>Cách 1 (Nhanh nhất - 1 Click trong Word):</b> Mở file Word ➔ Chọn menu <b>MathType</b> ➔ Bấm <b>Convert Equations</b> ➔ Chọn đổi sang <b>TeX/LaTeX ($...$)</b> ➔ Bấm <b>Convert</b> rồi lưu lại tải lên. Toàn bộ công thức MathType sẽ giữ nguyên 100%!</div>'
-                        '<div>• <b>Cách 2 (Lưu PDF):</b> Trong Word, bấm <b>File ➔ Save As ➔ Chọn định dạng PDF (.pdf)</b> rồi tải file PDF lên để giữ trọn vẹn cả công thức và hình vẽ.</div>'
-                        '</div>',
-                        unsafe_allow_html=True
-                    )
-
-                    col_u1, col_u2 = st.columns([1.1, 1.1])
-
-                    with col_u1:
-
-                        up_file_t3 = st.file_uploader("Chọn file (.docx, .pdf, .txt):", type=["docx", "pdf", "txt"], key="up_file_direct_t3")
-
-                    with col_u2:
-
-                        up_raw_paste = st.text_area("Hoặc dán trực tiếp nội dung đề thi vào đây:", height=95, placeholder="Dán nội dung câu hỏi hoặc toàn bộ đề thi thô...", key="up_paste_direct_t3")
-
-
-
-                    raw_extracted_t3 = ""
-
-                    up_file_t3_bytes = None
-
-                    if up_file_t3 is not None:
-
-                        file_b = up_file_t3.read()
-
-                        up_file_t3_bytes = file_b
-
-                        raw_extracted_t3 = ree.extract_text_from_file_upload(file_b, up_file_t3.name) if ree else ""
-
-                        if raw_extracted_t3.startswith("__MATHTYPE_WARNING__:"):
-
-                            parts_mt = raw_extracted_t3.split("\n", 1)
-
-                            cnt_mt = parts_mt[0].replace("__MATHTYPE_WARNING__:", "")
-
-                            raw_extracted_t3 = parts_mt[1] if len(parts_mt) > 1 else ""
-
-                            st.info(f"✨ **Cơ Chế Xử Lý Ngầm Tự Động Kích Hoạt:** Hệ thống phát hiện `{cnt_mt} công thức MathType` trong file `{up_file_t3.name}`. AI Multimodal sẽ tự động xử lý ngầm và bóc tách toàn vẹn công thức sang chuẩn KaTeX $...$ khi Thầy/Cô bấm Phân tích bên dưới!")
-
-                        elif raw_extracted_t3:
-
-                            if len(raw_extracted_t3) > 25000:
-
-                                st.info(f"📚 **Phát Hiện File Khủng ({len(raw_extracted_t3):,} ký tự):** Đã kích hoạt Bộ máy Định vị Phân đoạn thông minh. Nếu Thầy/Cô có yêu cầu lọc (như *'Chỉ lấy đề Sở Yên Bái'* trong ô Prompt bên trái), AI sẽ tự động khoanh vùng chính xác đề thi đó để bóc tách!")
-
-                            else:
-
-                                st.success(f"Đã đọc file {up_file_t3.name} thành công ({len(raw_extracted_t3)} ký tự)!")
-
-                    elif up_raw_paste.strip():
-
-                        raw_extracted_t3 = up_raw_paste.strip()
-
-
-
-                    if raw_extracted_t3 or up_file_t3_bytes is not None:
-
-                        if st.button("⚙️ Phân Tích & Chuẩn Hóa Cấu Trúc Đề (Xử Lý Ngầm 100%)", key="btn_parse_t3_direct", type="primary", width="stretch"):
-
-                            with st.spinner("Đang kích hoạt bộ máy Xử Lý Ngầm Multimodal AI bóc tách toàn diện công thức MathType và chuẩn hóa ma trận QĐ 764..."):
-
-                                user_prompt_direct = st.session_state.get("custom_matrix_prompt", "")
-
-                                parsed_direct = None
-
-                                if up_file_t3_bytes is not None and up_file_t3 is not None and ree and hasattr(ree, "parse_file_direct_with_ai"):
-
-                                    parsed_direct = ree.parse_file_direct_with_ai(
-
-                                        up_file_t3_bytes,
-
-                                        up_file_t3.name,
-
-                                        subject, grade_num,
-
-                                        "Tài liệu nạp của Giáo viên",
-
-                                        f"Đề nạp môn {subject} - Lớp {grade_num}",
-
-                                        ai_caller=lambda p, json_mode=False: call_gemini_with_fallback(p, json_mode=json_mode),
-
-                                        user_prompt=user_prompt_direct
-
-                                    )
-
-                                if not parsed_direct and ree:
-
-                                    parsed_direct = ree.parse_raw_exam_text(
-
-                                        raw_extracted_t3, subject, grade_num,
-
-                                        "Tài liệu nạp của Giáo viên",
-
-                                        f"Đề nạp môn {subject} - Lớp {grade_num}",
-
-                                        ai_caller=lambda p, json_mode=False: call_gemini_with_fallback(p, json_mode=json_mode),
-
-                                        user_prompt=user_prompt_direct
-
-                                    )
-
-                                if parsed_direct and (parsed_direct.get("p1") or parsed_direct.get("p2") or parsed_direct.get("p3")):
-
-                                    st.session_state["t3_parsed_exam_temp"] = parsed_direct
-
-                                    st.success("🎉 Đã xử lý ngầm và chuẩn hóa cấu trúc đề thi thành công! Toàn bộ công thức MathType đã được chuyển đổi sang KaTeX sắc nét.")
-
-                                else:
-
-                                    st.error("Không thể tự động phân tích cấu trúc đề thi. Vui lòng kiểm tra lại định dạng câu hỏi.")
-
-
-
-                    if st.session_state.get("t3_parsed_exam_temp"):
-
-                        p_dir = st.session_state["t3_parsed_exam_temp"]
-
-                        st.markdown(f"**Kết quả bóc tách:** Phần I: `{len(p_dir.get('p1', []))} câu` | Phần II: `{len(p_dir.get('p2', []))} câu` | Phần III: `{len(p_dir.get('p3', []))} câu`")
-
-                        c_act1, c_act2 = st.columns([1, 1.3])
-
-                        with c_act1:
-
-                            if st.button("🚀 Nạp Nguyên Đề (Làm Ngay)", key="btn_load_dir_exam", type="secondary", width="stretch"):
-
-                                st.session_state.exam_data = enrich_exam_data(p_dir)
-
-                                st.session_state.exam_code = str(p_dir.get("code", random.randint(1011, 9999)))
-
-                                st.session_state.attempt_id = str(uuid.uuid4())
-
-                                st.session_state.exam_start_timestamp = time.time()
-
-                                st.session_state.exam_deadline = time.time() + exam_time_mins * 60
-
-                                st.session_state.exam_context = {"name": student_name, "grade": grade, "subject": subject, "phase": measure_phase, "student_id": measure_student_id}
-
-                                st.session_state.pop("literature_grade", None)
-
-                                st.session_state.pop("exam_submitted_at", None)
-
-                                for widget_key in list(st.session_state):
-
-                                    if widget_key.startswith(("t3_p1_", "t3_p2_", "t3_p3_", "nv_dh_", "nv_v_")):
-
-                                        del st.session_state[widget_key]
-
-                                st.session_state.exam_state = "testing"
-
-                                st.session_state.exam_answers = {}
-
-                                st.session_state.tram3_chat_messages = []
-
-                                st.toast("⚡ Đã nạp thành công đề thi vào phòng thi!", icon="✨")
-
-                                st.rerun()
-
-                        with c_act2:
-
-                            if st.button("🔀 Trộn Đề Mới (Quét + Quốc Gia)", key="btn_blend_dir_exam", type="primary", width="stretch"):
-
-                                with st.spinner("Đang trộn ngữ liệu vừa quét với Ngân hàng Quốc gia, đảo ngẫu nhiên câu hỏi & phương án..."):
-
-                                    blended_exam = ree.create_mixed_scanned_exam(p_dir, subject, grade_num, mix_ratio=0.5, shuffle_options=True) if ree else p_dir
-
-                                    st.session_state.exam_data = enrich_exam_data(blended_exam)
-
-                                    st.session_state.exam_code = str(blended_exam.get("code", random.randint(1011, 9999)))
-
-                                    st.session_state.attempt_id = str(uuid.uuid4())
-
-                                    st.session_state.exam_start_timestamp = time.time()
-
-                                    st.session_state.exam_deadline = time.time() + exam_time_mins * 60
-
-                                    st.session_state.exam_context = {"name": student_name, "grade": grade, "subject": subject, "phase": measure_phase, "student_id": measure_student_id}
-
-                                    st.session_state.pop("literature_grade", None)
-
-                                    st.session_state.pop("exam_submitted_at", None)
-
-                                    for widget_key in list(st.session_state):
-
-                                        if widget_key.startswith(("t3_p1_", "t3_p2_", "t3_p3_", "nv_dh_", "nv_v_")):
-
-                                            del st.session_state[widget_key]
-
-                                    st.session_state.exam_state = "testing"
-
-                                    st.session_state.exam_answers = {}
-
-                                    st.session_state.tram3_chat_messages = []
-
-                                    st.toast(f"🎉 Đã tạo Đề Trộn Mới (Mã {st.session_state.exam_code}) từ file Word/PDF!", icon="✨")
-
-                                    st.rerun()
-
-
-
-                elif "Quét Đề Link" in selected_exam_mode:
-
-                    _scan_portal = _portal_display_name_safe(subject, "")
-                    _link_sources = _tram3_link_scan_sources(subject)
-                    st.markdown(f"##### 🌐 Quét Đề Từ Link{(' — ' + _scan_portal) if _scan_portal else ''}:")
-                    if not _REE_PORTAL_HELPERS_OK:
-                        st.caption(
-                            "Đang dùng bản dự phòng Quét Link trong app "
-                            f"(engine `{getattr(ree, 'PORTAL_LINK_HELPERS_VERSION', 'cũ/thiếu helper')}`)."
-                        )
-
-                    c_src1, c_src2 = st.columns([1.1, 2.3])
-
-                    with c_src1:
-
-                        target_source_type = st.selectbox(
-
-                            "Chọn chuyên trang / Nguồn link:",
-
-                            _link_sources,
-
-                            key=f"sel_portal_type_t3_{current_context_key}"
-
-                        )
-
-                    with c_src2:
-
-                        default_link = _tram3_link_scan_default_url(subject, grade_num, target_source_type)
-
-                        user_target_url = st.text_input("Nhập Link bài viết / chuyên mục / Google Drive:", value=default_link, key=f"inp_target_url_t3_{current_context_key}")
-
-
-
-                    c_btn_l1, c_btn_l2 = st.columns([1, 1.3])
-
-                    with c_btn_l1:
-
-                        btn_scan_and_load = st.button("⚡ Bóc Tách & Làm Ngay", key="btn_scan_and_load_t3", type="secondary", width="stretch")
-
-                    with c_btn_l2:
-
-                        btn_scan_and_blend = st.button("🔀 Bóc Tách & Trộn Đề Mới", key="btn_scan_and_blend_t3", type="primary", width="stretch")
-
-
-
-                    if btn_scan_and_load or btn_scan_and_blend:
-
-                        with st.spinner("Đang truy cập link, tải PDF/Docx và bóc tách ma trận chuẩn Bộ GD&ĐT..."):
-
-                            extracted_res = ree.extract_full_exam_from_url(
-
-                                user_target_url, subject, grade_num,
-
-                                ai_caller=lambda p, json_mode=False: call_gemini_with_fallback(p, json_mode=json_mode)
-
-                            ) if ree else None
-
-
-
-                            if extracted_res and (extracted_res.get("p1") or extracted_res.get("p2") or extracted_res.get("p3")):
-
-                                final_exam_to_use = extracted_res
-
-                                if btn_scan_and_blend:
-
-                                    final_exam_to_use = ree.create_mixed_scanned_exam(extracted_res, subject, grade_num, mix_ratio=0.5, shuffle_options=True)
-
-
-
-                                st.session_state.exam_data = enrich_exam_data(final_exam_to_use)
-
-                                st.session_state.exam_code = str(final_exam_to_use.get("code", random.randint(1011, 9999)))
-
-                                st.session_state.attempt_id = str(uuid.uuid4())
-
-                                st.session_state.exam_start_timestamp = time.time()
-
-                                st.session_state.exam_deadline = time.time() + exam_time_mins * 60
-
-                                st.session_state.exam_context = {"name": student_name, "grade": grade, "subject": subject, "phase": measure_phase, "student_id": measure_student_id}
-
-                                st.session_state.pop("literature_grade", None)
-
-                                st.session_state.pop("exam_submitted_at", None)
-
-                                for widget_key in list(st.session_state):
-
-                                    if widget_key.startswith(("t3_p1_", "t3_p2_", "t3_p3_", "nv_dh_", "nv_v_")):
-
-                                        del st.session_state[widget_key]
-
-                                st.session_state.exam_state = "testing"
-
-                                st.session_state.exam_answers = {}
-
-                                st.session_state.tram3_chat_messages = []
-
-                                st.toast(f"⚡ Đã bóc tách thành công đề từ {final_exam_to_use.get('portal', 'Web')}!", icon="✨")
-
-                                st.rerun()
-
-                            else:
-
-                                st.error("Chưa bóc tách được đề từ link này. Nếu là link nhóm kín Facebook, Thầy/Cô vui lòng dán link Google Drive hoặc dán trực tiếp nội dung đề thi vào mục 'Nạp & Trộn Đề Word / PDF' bên cạnh!")
-
-                elif "Làm Nguyên Đề Thi Thật" in selected_exam_mode:
-
-                    st.info(f"Kho chưa có đề thi thật cho môn {subject}, lớp {grade_num}. Hình thức này không mở đề luyện tập.")
-
-                else:
-
-                    original_paper_mode = False
-                    if subject == "Tin học" and grade_num == 12:
-                        bank_mode = st.radio("Cách dùng kho đề Tin học:",
-                            ["Trộn theo cấu hình", "Đề gốc Bộ 2025 — mã 0530"],
-                            key="tin_bank_delivery_mode")
-                        original_paper_mode = bank_mode == "Đề gốc Bộ 2025 — mã 0530"
-                        if original_paper_mode:
-                            st.caption("Đề gốc: 24 câu trắc nghiệm + 2 câu đúng/sai chung + 2 câu theo định hướng đã chọn; 50 phút. Giữ khóa Bộ và thứ tự gốc; không trộn, thay câu hoặc gọi AI. Nhãn mức độ do ứng dụng thẩm định riêng.")
-                    c_btn1, c_btn2 = st.columns([1.1, 1.1])
-
-                    matrix_order = ree.effective_custom_prompt(custom_matrix_prompt) if ree else ""
-                    has_custom_prompt = bool(matrix_order)
-                    btn1_label = f"📚 Trích Xuất Đề Tùy Biến (Kho 600+ Đề Thật & Vân Tay)" if has_custom_prompt else f"🎲 Trộn Siêu Đề Mới (Kho Ngân Hàng)"
-                    btn2_label = f"🤖 AI Tạo Đề Theo Tùy Biến (Ưu Tiên Số 1 - Mới Tinh 100%)" if has_custom_prompt else "🚀 Khởi Tạo Đề Mới (AI Sáng Tạo 2026)"
-                    if original_paper_mode:
-                        btn1_label = "📚 Mở đề gốc Tin học 2025 — 0530"
-                    btn1_type = "primary" if has_custom_prompt else "secondary"
-
-                    with c_btn1:
-                        btn_blend_direct = st.button(
-                            btn1_label,
-                            type=btn1_type,
-                            width="stretch",
-                            help=f"Khởi tạo từ bản ghi trong kho ({portal_name_ui}) theo cấu hình đang chọn. Câu chưa đạt được đưa qua bước phục hồi/thay thế và kiểm tra lại; nhãn nguồn cần đối chiếu với tài liệu gốc."
-                        )
-
-                    with c_btn2:
-                        btn_ai_gen = st.button(
-                            btn2_label,
-                            type="primary",
-                            width="stretch",
-                            help=f"Khởi tạo đề bằng AI theo môn/lớp/chủ đề. Bản sinh đi qua các kiểm tra hiện có; nếu thiếu hoặc chưa đạt, cơ chế phục hồi phụ thuộc tùy chọn đã chọn. Không bảo đảm mọi câu, đáp án hoặc số liệu đều chính xác; cần giáo viên duyệt."
-                        )
-
-                    st.markdown(textwrap.dedent("""
-                    <div style="background: rgba(15, 23, 42, 0.7); border: 1.5px solid #38bdf8; border-radius: 10px; padding: 10px 14px; margin-top: 8px; font-size: 12.5px; line-height: 1.6; color: #cbd5e1;">
-                        <div style="font-weight: bold; color: #38bdf8; margin-bottom: 4px; font-size: 13px;">⚖️ CƠ CHẾ 2 LUỒNG ĐỘC LẬP TÁCH BẠCH & BỘ LỌC 5 LỚP TOÀN DIỆN:</div>
-                        • 🤖 <b style="color: #f59e0b;">LUỒNG 1 - AI TẠO ĐỀ NGUYÊN BẢN (ƯU TIÊN SỐ 1):</b> AI biên soạn theo môn/lớp/chủ đề; cần giáo viên duyệt kiến thức, đáp án và nguồn trích dẫn.<br>
-                        • 📚 <b style="color: #38bdf8;">LUỒNG 2 - TRÍCH XUẤT TỪ KHO 600+ ĐỀ THI THẬT:</b> Lọc bản ghi trong kho theo môn/lớp/chủ đề. Mã và nhãn nguồn là dữ liệu cần đối chiếu, chưa tự chứng minh tài liệu gốc hoặc mọi đáp án đúng.
-                    </div>
-                    """).strip(), unsafe_allow_html=True)
-
-
-
-                    if btn_blend_direct:
-
-                        if measure_phase != "practice" and not measure_student_id:
-
-                            st.error("Cần mã học sinh để ghép cặp bài đo trước–sau.")
-
-                            st.stop()
-
-                        if ree:
-
-                            # Thu thập các fingerprint câu hỏi cũ đã làm trong phiên để truyền vào Cooldown
-                            current_cooldown_fps = set()
-                            if "seen_question_fps" not in st.session_state:
-                                st.session_state.seen_question_fps = set()
-
-                            # Nếu phiên trước đã có đề, nạp fingerprint của đề cũ vào cooldown
-                            if st.session_state.get("exam_data") and isinstance(st.session_state.exam_data, dict):
-                                for p_key in ("p1", "p2", "p3"):
-                                    for q_old in st.session_state.exam_data.get(p_key, []):
-                                        q_txt = str(q_old.get("q", "")).strip().lower()
-                                        if q_txt:
-                                            fp_c = ree.q_fingerprint(q_old)
-                                            st.session_state.seen_question_fps.add(fp_c)
-
-                            if original_paper_mode:
-                                from services.official_paper import original_tin0530
-                                try:
-                                    blended = original_tin0530(st.session_state.get("curriculum_pathway", ""))
-                                except (OSError, ValueError, TypeError) as error:
-                                    st.error(str(error))
-                                    st.stop()
-                                exam_time_mins = 50
-                                st.session_state.exam_time_mins = 50
-                            else:
-                                blended = ree.generate_blended_real_exam(
-                                    subject, grade_num, chosen_topics, (num_p1, num_p2, num_p3),
-                                    custom_prompt=matrix_order,
-                                    exclude_fingerprints=st.session_state.seen_question_fps
-                                )
-
-                            if blended and (blended.get("p1") or blended.get("p2") or blended.get("p3")):
-                                actual = blended.get("actual_counts") or (
-                                    len(blended.get("p1") or []),
-                                    len(blended.get("p2") or []),
-                                    len(blended.get("p3") or []),
-                                )
-                                # Chỉ lấy target từ payload engine — tránh NameError khi AST-exec regression
-                                # (test_rejected_bank_draft_does_not_crash_or_start_exam) không inject num_p*.
-                                target = blended.get("target_counts")
-                                if blended.get("counts_shortfall") or (
-                                    target is not None and actual != tuple(target)
-                                ):
-                                    shown = tuple(target) if target is not None else actual
-                                    short_note = (
-                                        f"Kho chưa đủ ma trận đúng chủ đề cho cấu hình "
-                                        f"{shown[0]}/{shown[1]}/{shown[2]} "
-                                        f"(đang có {actual[0]}/{actual[1]}/{actual[2]}). "
-                                        "Đề mở đúng số câu còn lại. Không bù câu lệch chủ đề và không bịa câu."
-                                    )
-                                    st.session_state["tram3_counts_shortfall_note"] = short_note
-                                    st.warning(short_note)
-                                else:
-                                    st.session_state.pop("tram3_counts_shortfall_note", None)
-                                try:
-                                    prepared_bank_exam = blended if original_paper_mode else enrich_exam_data(blended, custom_request=matrix_order)
-                                except (ValueError, TypeError) as error:
-                                    st.error(str(error))
-                                else:
-                                    st.session_state.exam_data = prepared_bank_exam
-                                    for p_key in ("p1", "p2", "p3"):
-                                        for q_new in blended.get(p_key, []):
-                                            q_txt = str(q_new.get("q", "")).strip().lower()
-                                            if q_txt:
-                                                fp_c = ree.q_fingerprint(q_new)
-                                                st.session_state.seen_question_fps.add(fp_c)
-
-                                    st.session_state.exam_code = str(blended.get("code", random.randint(1011, 9999)))
-
-                                    st.session_state.attempt_id = str(uuid.uuid4())
-
-                                    st.session_state.exam_start_timestamp = time.time()
-
-                                    st.session_state.exam_deadline = time.time() + exam_time_mins * 60
-
-                                    st.session_state.exam_context = {"name": student_name, "grade": grade, "subject": subject, "phase": measure_phase, "student_id": measure_student_id}
-
-                                    st.session_state.custom_request_text = "" if original_paper_mode else matrix_order
-
-                                    st.session_state.pop("literature_grade", None)
-
-                                    st.session_state.pop("exam_submitted_at", None)
-
-                                    for widget_key in list(st.session_state):
-
-                                        if widget_key.startswith(("t3_p1_", "t3_p2_", "t3_p3_", "nv_dh_", "nv_v_")):
-
-                                            del st.session_state[widget_key]
-
-                                    st.session_state.exam_state = "testing"
-
-                                    st.session_state.exam_answers = {}
-
-                                    st.session_state.tram3_chat_messages = []
-
-                                    if has_custom_prompt:
-                                        st.session_state.show_audit_badges_per_question = True
-                                        st.toast("📚 ĐÃ TRÍCH XUẤT ĐỀ TÙY BIẾN TỪ KHO 600+ ĐỀ THẬT: Có đầy đủ chỉ dấu vân tay & Bảng đối chứng!", icon="✅")
-                                    else:
-                                        st.toast("Đã mở đề gốc Tin học 2025 — mã 0530; giữ nguyên khóa nguồn." if original_paper_mode else "🔥 Đã trộn siêu đề thi mới lạ (Dynamic Seed) thành công trong 0.1 giây!", icon="✨")
-
-                                    st.rerun()
-
-                            else:
-
-                                st.warning("Chưa đủ câu hỏi có sẵn trong kho môn này để trộn 100% tự động, vui lòng dùng nút 'Khởi Tạo Đề Mới (AI 2026)' bên cạnh!")
-
-                        else:
-
-                            st.error("Module real_exam_engine chưa được nạp.")
-
-
-
-                    if btn_ai_gen:
-
-                        if measure_phase != "practice" and not measure_student_id:
-
-                            st.error("Cần mã học sinh để ghép cặp bài đo trước–sau.")
-
-                            st.stop()
-
-                        st.session_state.exam_code = str(random.randint(1011, 9999))
-
-                        st.session_state.violation_count = 0
-
-                        st.session_state.custom_request_text = matrix_order
-
-                        st.session_state.exam_start_timestamp = time.time()
-
-
-
-                        selected_topics_str = "; ".join(chosen_topics)
-
-                        enable_blend_cfg = False
-                        exam_system, exam_prompt = build_curriculum_exam_request(subject, grade_num, chosen_topics,
-                            (num_p1, num_p2, num_p3), st.session_state.exam_code, matrix_order,
-                            st.session_state.get("curriculum_pathway", ""))
-
-                        try:
-                            raw_json_ex = call_gemini_with_fallback(
-                                exam_prompt, system_instruction=exam_system, json_mode=True
+                    except Exception as e:
+                        err = str(e)
+                        st.error(f"Lỗi khởi tạo đề thi: {err}")
+                        if is_duplicate_key_error(err) or "json" in err.casefold():
+                            st.info(
+                                "AI trả JSON chưa sạch (thường trùng khóa) sau khi thử lại một lần. "
+                                "Không phải lỗi merge/deploy. Hãy bấm **Sinh đề** để thử lại."
                             )
-                            raw_json_ex = raw_json_ex.strip()
-                            try:
-                                parsed_exam = validate_exam_data(
-                                    safe_json_loads(raw_json_ex),
-                                    subject,
-                                    None if subject == "Ngữ văn" else (num_p1, num_p2, num_p3),
-                                )
-                            except Exception as parse_err:
-                                # One bounded retry when AI emits duplicate JSON keys.
-                                if not is_duplicate_key_error(parse_err):
-                                    raise
-                                raw_json_ex = call_gemini_with_fallback(
-                                    exam_prompt + JSON_CLEAN_RETRY_SUFFIX,
-                                    system_instruction=exam_system,
-                                    json_mode=True,
-                                )
-                                raw_json_ex = raw_json_ex.strip()
-                                parsed_exam = validate_exam_data(
-                                    safe_json_loads(raw_json_ex),
-                                    subject,
-                                    None if subject == "Ngữ văn" else (num_p1, num_p2, num_p3),
-                                )
-                                st.session_state["ai_exam_json_retried"] = True
-
-                            parsed_exam["is_ai_generated"] = True
-                            parsed_exam["is_real_exam"] = False
-                            parsed_exam["exam_source_type"] = "ai_generated"
-
-                            if ree and enable_blend_cfg and not has_custom_prompt:
-                                parsed_exam = ree.blend_real_exam_with_ai(parsed_exam, subject, grade_num, chosen_topics)
-
-                            st.session_state.exam_data = enrich_exam_data(parsed_exam, custom_request=custom_matrix_prompt)
-                            if "seen_question_fps" not in st.session_state:
-                                st.session_state.seen_question_fps = set()
-                            for p_key in ("p1", "p2", "p3"):
-                                for q_new in st.session_state.exam_data.get(p_key, []):
-                                    q_txt = str(q_new.get("q", "")).strip().lower()
-                                    if q_txt:
-                                        fp_c = ree.q_fingerprint(q_new) if ree else re.sub(r'[^a-zA-Z0-9\u00C0-\u1EF9]', '', q_txt)[:80]
-                                        st.session_state.seen_question_fps.add(fp_c)
-                                        if ree and hasattr(ree, "remember_question_cooldown"):
-                                            ree.remember_question_cooldown(
-                                                (ree.q_fingerprint(q_new) if hasattr(ree, "q_fingerprint") else None)
-                                                or q_new.get("q", "").strip()
-                                            )
-
-                            save_exam_to_cache(st.session_state.exam_data, subject, grade_num, selected_topics_str)
-                            if ree and hasattr(ree, "ingest_ai_generated_exam_to_bank"):
-                                try:
-                                    ree.ingest_ai_generated_exam_to_bank(st.session_state.exam_data, subject, grade_num)
-                                except Exception:
-                                    pass
-
-                            st.session_state.attempt_id = str(uuid.uuid4())
-
-                            st.session_state.exam_start_timestamp = time.time()
-
-                            st.session_state.exam_deadline = time.time() + exam_time_mins * 60
-
-                            st.session_state.exam_context = {"name": student_name, "grade": grade, "subject": subject, "phase": measure_phase, "student_id": measure_student_id}
-
-                            st.session_state.pop("literature_grade", None)
-
-                            st.session_state.pop("exam_submitted_at", None)
-
-                            for widget_key in list(st.session_state):
-
-                                if widget_key.startswith(("t3_p1_", "t3_p2_", "t3_p3_", "nv_dh_", "nv_v_")):
-
-                                    del st.session_state[widget_key]
-
-                            st.session_state.exam_state = "testing"
-
-                            st.session_state.exam_answers = {}
-
-                            st.session_state.tram3_chat_messages = []
-
-                            st.rerun()
-
-                        except Exception as e:
-                            err = str(e)
-                            st.error(f"Lỗi khởi tạo đề thi: {err}")
-                            if is_duplicate_key_error(err) or "json" in err.casefold():
-                                st.info(
-                                    "AI trả JSON chưa sạch (thường trùng khóa) sau khi thử lại một lần. "
-                                    "Không phải lỗi merge/deploy. "
-                                    "Bấm **Trộn Siêu Đề Mới (Kho Ngân…)** để lấy đề trong kho, hoặc thử lại AI."
-                                )
 
         with tab_giao_vien:
 

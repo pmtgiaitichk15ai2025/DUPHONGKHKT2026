@@ -1,8 +1,8 @@
 # Nhật ký bàn giao — GSAI KHKT 2026
 
 > Ca sau **đọc file này trước** khi sửa Trạm 1 / Trạm 3 / Socratic / JSON đề AI.  
-> Cập nhật: **2026-11-16 ~08:45 giờ VN**. Người ghi: ca trợ lý (theo lệnh anh MINH).  
-> Repo nguồn: `ThayTriCute/CLAUDE_VIPGSAI_KHKT2026`. `main` trước PR giọng nói này = **`68ae144`** (PR **#124**).  
+> Cập nhật: **2026-11-16 ~13:10 giờ VN**. Người ghi: ca trợ lý (theo lệnh anh MINH).  
+> Repo nguồn: `pmtgiaitichk15ai2025/DUPHONGKHKT2026` (worktree `_gh_compare`; remote `duphong`). `main` trước PR giọng nói này = **`68ae144`** (PR **#124**).  
 > App Cloud: `https://claudevipgsaikhkt2026-bybgceinifcaqggqyyvatx.streamlit.app/`  
 > Worktree máy anh: `D:\CLAUDE_FINAL KHKT 2026\_gh_compare`.
 
@@ -26,7 +26,18 @@ Hàm duy nhất: `build_tram3_socratic_guide` (= `build_socratic_guide`) trong `
 
 ---
 
-## 1. Ca gần nhất — bốn luật cho nút Trộn siêu đề
+## 1. Ca gần nhất — Trạm 3 đơn giản (một nút Sinh đề)
+
+Anh chốt (cloud worker MINHTRIPC / DUPHONGKHKT2026): config Trạm 3 chỉ còn **chọn chủ đề**, môn+lớp (sidebar), **cấu trúc tùy biến**, **một nút Sinh đề**. AI sinh đề theo CT GDPT 2018 + KNTT + văn bản pháp quy Bộ (qua `exam_generation_request` + `with_academic_grounding`).
+
+- **Chỉ rút gọn phía tạo đề (`exam_state == config`)**: bỏ radio hình thức (Nguyên đề / Word / Link / Luyện tập), bỏ nút Trộn kho, bỏ checkbox phục hồi AI và khóa ma trận trên panel học sinh.
+- **Giữ nguyên** phòng làm bài (`testing`) và **toàn bộ UX sau nộp (`graded`)**: xuất PDF/LaTeX/Azota, Socratic, chấm điểm, review — không đụng.
+- Tab giáo viên (Word/PDF/…) vẫn còn trong `app.py` cho nghiệp vụ GV; không phải luồng sinh đề mặc định của HS.
+- File: `app.py`. Test: `test_tram3_exam_mode_radio_apptest`, `test_tram3_blend_button_apptest`, `test_tram3_empty_bank_apptest`, `test_tram3_link_portal_apptest`, `test_tram3_blend_harden_p0`, `test_station_ui`.
+- Remote PR: `pmtgiaitichk15ai2025/DUPHONGKHKT2026` nhánh `cursor/simplify-tram3-e547` → `main`.
+
+## 1e. Ca trước — bốn luật cho nút Trộn siêu đề
+
 
 Anh chốt 16/11: máy trộn Trạm 3 tự mâu thuẫn. Radio, panel, Ngữ văn, Tin học 12, Word/PDF, quét link, nạp đề thật và phòng làm bài **giữ nguyên**. Sửa `generate_blended_real_exam` và cổng mở đề.
 

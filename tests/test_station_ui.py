@@ -301,7 +301,7 @@ class TestStationUI(unittest.TestCase):
             response = client.return_value.__enter__.return_value.models.generate_content
             response.side_effect = [SimpleNamespace(text=json.dumps(initial), candidates=[]),
                                     SimpleNamespace(text=json.dumps({"replacement_question": replacement}), candidates=[])]
-            next(b for b in at.button if b.label == "🚀 Khởi Tạo Đề Mới (AI Sáng Tạo 2026)").click().run()
+            next(b for b in at.button if b.label == "🚀 Sinh đề").click().run()
         self.assertEqual([e.message for e in at.exception], [])
         self.assertEqual(at.session_state["exam_state"], "testing")
         self.assertEqual(at.session_state["exam_data"]["p1"][0]["q"], replacement["q"])
