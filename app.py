@@ -15177,9 +15177,20 @@ if selected_station == station_labels[2]:
 
 
 
-                # --- Trạm 3 đơn giản: chủ đề + cấu trúc + một nút Sinh đề (AI) ---
+                # Một nút: kho đề khớp chủ đề/yêu cầu, thiếu thì AI sinh và qua bộ lọc.
+                original_paper_mode = False
+                if subject == "Tin học" and grade_num == 12:
+                    bank_mode = st.radio(
+                        "Cách dùng kho đề Tin học:",
+                        ["Trộn theo cấu hình", "Đề gốc Bộ 2025 — mã 0530"],
+                        key="tin_bank_delivery_mode",
+                    )
+                    original_paper_mode = bank_mode == "Đề gốc Bộ 2025 — mã 0530"
+                    if original_paper_mode:
+                        st.caption("Đề gốc giữ khóa và thứ tự Bộ; không trộn và không gọi AI.")
                 st.caption(
-                    "Sinh đề AI theo CT GDPT 2018, bộ sách KNTT và văn bản pháp quy Bộ GD&ĐT còn hiệu lực. "
+                    "Một nút Sinh đề: lấy câu trong kho đúng môn, lớp, chủ đề và yêu cầu tùy biến. "
+                    "Kho chưa đủ cấu trúc đang chọn thì AI sinh phần còn lại và đi qua bộ lọc hiện có. "
                     "Giáo viên cần duyệt trước khi dùng đánh giá chính thức."
                 )
                 matrix_order = ree.effective_custom_prompt(custom_matrix_prompt) if ree else str(custom_matrix_prompt or "").strip()
@@ -15188,7 +15199,7 @@ if selected_station == station_labels[2]:
                     type="primary",
                     width="stretch",
                     key=f"btn_tram3_sinh_de_{current_context_key}",
-                    help="AI biên soạn đề theo môn/lớp/chủ đề và cấu trúc đã chọn. Cần giáo viên duyệt.",
+                    help="Khớp chủ đề và yêu cầu tùy biến. Ưu tiên kho đề; thiếu thì AI sinh và qua bộ lọc.",
                 )
 
                 if btn_ai_gen:
@@ -15210,46 +15221,59 @@ if selected_station == station_labels[2]:
 
 
                     selected_topics_str = "; ".join(chosen_topics)
+                    structure_counts = None if subject == "Ngữ văn" else (num_p1, num_p2, num_p3)
 
-                    enable_blend_cfg = False
                     exam_system, exam_prompt = build_curriculum_exam_request(subject, grade_num, chosen_topics,
                         (num_p1, num_p2, num_p3), st.session_state.exam_code, matrix_order,
                         st.session_state.get("curriculum_pathway", ""))
 
                     try:
-                        raw_json_ex = call_gemini_with_fallback(
-                            exam_prompt, system_instruction=exam_system, json_mode=True
-                        )
-                        raw_json_ex = raw_json_ex.strip()
-                        try:
-                            parsed_exam = validate_exam_data(
-                                safe_json_loads(raw_json_ex),
-                                subject,
-                                None if subject == "Ngữ văn" else (num_p1, num_p2, num_p3),
-                            )
-                        except Exception as parse_err:
-                            # One bounded retry when AI emits duplicate JSON keys.
-                            if not is_duplicate_key_error(parse_err):
-                                raise
-                            raw_json_ex = call_gemini_with_fallback(
-                                exam_prompt + JSON_CLEAN_RETRY_SUFFIX,
-                                system_instruction=exam_system,
-                                json_mode=True,
-                            )
-                            raw_json_ex = raw_json_ex.strip()
-                            parsed_exam = validate_exam_data(
-                                safe_json_loads(raw_json_ex),
-                                subject,
-                                None if subject == "Ngữ văn" else (num_p1, num_p2, num_p3),
-                            )
-                            st.session_state["ai_exam_json_retried"] = True
-
-                        parsed_exam["is_ai_generated"] = True
-                        parsed_exam["is_real_exam"] = False
-                        parsed_exam["exam_source_type"] = "ai_generated"
-
-                        if ree and enable_blend_cfg and not matrix_order:
-                            parsed_exam = ree.blend_real_exam_with_ai(parsed_exam, subject, grade_num, chosen_topics)
+                        parsed_exam = None
+                        if original_paper_mode:
+                            from services.official_paper import original_tin0530
+                            parsed_exam = original_tin0530(st.session_state.get("curriculum_pathway", ""))
+                            parsed_exam["exam_source_type"] = "official_paper"
+                            exam_time_mins = 50
+                            st.session_state.exam_time_mins = 50
+                        elif ree:
+                            try:
+                                if "seen_question_fps" not in st.session_state:
+                                    st.session_state.seen_question_fps = set()
+                                blended = ree.generate_blended_real_exam(
+                                    subject, grade_num, chosen_topics, structure_counts,
+                                    custom_prompt=matrix_order,
+                                    exclude_fingerprints=st.session_state.seen_question_fps,
+                                )
+                                parsed_exam = validate_exam_data(blended, subject, structure_counts)
+                                parsed_exam["exam_source_type"] = "bank"
+                            except (ValueError, TypeError, OSError, KeyError):
+                                parsed_exam = None
+                        if parsed_exam is None:
+                            def _ai_exam(extra=""):
+                                raw_json_ex = call_gemini_with_fallback(
+                                    exam_prompt + extra, system_instruction=exam_system, json_mode=True
+                                ).strip()
+                                return validate_exam_data(
+                                    safe_json_loads(raw_json_ex), subject, structure_counts
+                                )
+                            try:
+                                parsed_exam = _ai_exam()
+                            except Exception as parse_err:
+                                shortage = "chưa đúng" in str(parse_err) and "câu" in str(parse_err)
+                                if not is_duplicate_key_error(parse_err) and not shortage:
+                                    raise
+                                suffix = JSON_CLEAN_RETRY_SUFFIX if is_duplicate_key_error(parse_err) else (
+                                    "\nKho và lần sinh trước chưa đủ câu. Trả đúng một đề đủ số câu đã khóa, "
+                                    f"đúng môn {subject}, đúng lớp {grade_num}, đúng chủ đề đã chọn, "
+                                    "đúng yêu cầu tùy biến. Không trả đề thiếu câu."
+                                )
+                                parsed_exam = _ai_exam(suffix)
+                                st.session_state["ai_exam_json_retried"] = True
+                            parsed_exam["subject"] = subject
+                            parsed_exam["grade"] = grade_num
+                            parsed_exam["is_ai_generated"] = True
+                            parsed_exam["is_real_exam"] = False
+                            parsed_exam["exam_source_type"] = "ai_generated"
 
                         st.session_state.exam_data = enrich_exam_data(parsed_exam, custom_request=custom_matrix_prompt)
                         if "seen_question_fps" not in st.session_state:

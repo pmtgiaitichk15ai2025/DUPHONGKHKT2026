@@ -115,6 +115,7 @@ class Tram3SinhDeButtonAppTest(unittest.TestCase):
     def _open_tram3(self, grade_label: str, subject: str):
         at = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"), default_timeout=60)
         at.secrets["ADMIN_PASS"] = "qa-private-password"
+        at.secrets["GEMINI_API_KEY"] = "qa-fake-key"
         at.run()
         next(s for s in at.selectbox if s.label == "🎯 Chọn khối lớp:").select(grade_label).run()
         next(s for s in at.selectbox if s.label == "📚 Môn học cần hỗ trợ:").select(subject).run()
@@ -125,6 +126,13 @@ class Tram3SinhDeButtonAppTest(unittest.TestCase):
         return at
 
     def _click_sinh_de(self, at, subject, grade, counts):
+        if subject != "Ngữ văn":
+            by_label = {n.label: int(n.value) for n in at.number_input}
+            counts = (
+                by_label["Số câu TN P.I:"],
+                by_label["Số câu Đ/S P.II:"],
+                by_label["Số câu TLN P.III:"],
+            )
         fake = _fake_exam(subject, grade, counts)
 
         def _gen(*_a, **_k):

@@ -36,6 +36,7 @@ class Tram3SealedGradedAppTest(unittest.TestCase):
     def _app(self, grade_label="Lớp 12", subject="Toán học"):
         at = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"), default_timeout=60)
         at.secrets["ADMIN_PASS"] = "qa-private-password"
+        at.secrets["GEMINI_API_KEY"] = "qa-fake-key"
         at.run()
         next(s for s in at.selectbox if s.label == "🎯 Chọn khối lớp:").select(grade_label).run()
         next(s for s in at.selectbox if s.label == "📚 Môn học cần hỗ trợ:").select(subject).run()
@@ -100,8 +101,8 @@ class Tram3SealedGradedAppTest(unittest.TestCase):
         area = next(t for t in at.text_area if "Yêu cầu ma trận" in t.label)
         area.set_value("Ưu tiên đồ thị, không lộ đáp án").run()
         labels = [b.label for b in at.button]
-        self.assertTrue(any("Trích Xuất Đề Tùy Biến" in lab for lab in labels))
-        self.assertTrue(any("AI Tạo Đề Theo Tùy Biến" in lab for lab in labels))
+        self.assertEqual(sum(1 for lab in labels if lab == "🚀 Sinh đề"), 1)
+        self.assertFalse(any("Trích Xuất Đề" in lab or "Trộn Siêu Đề" in lab or "AI Tạo Đề" in lab for lab in labels))
 
         tin = self._app("Lớp 12", "Tin học")
         radios = [r.label for r in tin.radio]

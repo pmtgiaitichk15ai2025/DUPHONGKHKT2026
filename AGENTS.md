@@ -1,3 +1,7 @@
+## Owner 16/11/2026 — mọi AI làm việc với hệ thống
+
+Bám đúng căn cứ đã có trong hệ thống: chương trình, sách, văn bản còn hiệu lực, chủ đề đã chọn và yêu cầu người dùng đã nhập. Không tạo bộ căn cứ thứ hai. Không bịa trang, điều khoản, danh ngôn, đáp án hoặc trạng thái đã đọc. Không nhận đã thẩm định toàn chương trình, toàn luật hoặc toàn đề khi chỉ kiểm một phần. Không khoe, không phóng đại kết quả. Thiếu căn cứ thì ghi đúng phần thiếu.
+
 ## ⛔ QUY LUẬT NGUỒN SGK — owner 13/11/2026 (MỌI CA AI / MỌI MÔ HÌNH — ĐỌC TRƯỚC)
 
 **HD đầy đủ:** `docs/AI_TEXTBOOK_SOURCE_RULE.md` · Rule: `.cursor/rules/textbook-source-grounding.mdc` (`alwaysApply`).
