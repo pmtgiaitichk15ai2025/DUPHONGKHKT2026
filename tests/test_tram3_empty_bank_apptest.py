@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Kho đề thật trống: báo đúng môn–lớp và không mở nút luyện tập."""
+"""Kho đề trống không ảnh hưởng Trạm 3 đơn giản: vẫn một nút Sinh đề, không radio hình thức."""
 from __future__ import annotations
 
 import os
@@ -44,28 +44,28 @@ class Tram3EmptyBankAppTest(unittest.TestCase):
         self.assertEqual([e.message for e in at.exception], [])
         return at
 
-    def test_empty_bank_names_subject_and_hides_practice(self):
+    def test_empty_bank_keeps_simple_sinh_de(self):
         from services.academic_context import subjects_for_grade
 
-        needles = ("Trộn Siêu Đề", "Trích Xuất Đề", "Mở đề gốc", "Khởi Tạo Đề", "AI Tạo Đề")
         with patch("real_exam_engine.get_baseline_full_exams", return_value=[]):
-            for grade in range(6, 13):
+            for grade in (6, 9, 12):
                 subjects = subjects_for_grade(grade)
                 at = self._open(f"Lớp {grade}", subjects[0])
                 for subject in subjects:
                     with self.subTest(subject=subject, grade=grade):
                         if subject != subjects[0]:
                             next(s for s in at.selectbox if s.label == "📚 Môn học cần hỗ trợ:").select(subject).run(timeout=90)
-                        mode = next(r for r in at.radio if r.label == "Lựa chọn hình thức đề thi:")
-                        mode.set_value(next(o for o in mode.options if "Làm Nguyên Đề Thi Thật" in str(o))).run(timeout=90)
                         self.assertEqual([e.message for e in at.exception], [])
                         self.assertEqual(at.session_state.get("exam_state"), "config")
-                        infos = " ".join(str(i.value) for i in at.info)
-                        self.assertIn(subject, infos)
-                        self.assertIn(f"lớp {grade}", infos)
-                        self.assertIn("không mở đề luyện tập", infos)
-                        practice = [b.label for b in at.button if any(n in b.label for n in needles)]
-                        self.assertEqual(practice, [], msg=f"{subject} L{grade}")
+                        self.assertFalse(any(r.label == "Lựa chọn hình thức đề thi:" for r in at.radio))
+                        sinh = [b.label for b in at.button if b.label == "🚀 Sinh đề"]
+                        self.assertEqual(sinh, ["🚀 Sinh đề"], msg=f"{subject} L{grade}")
+                        old = [
+                            b.label
+                            for b in at.button
+                            if any(n in b.label for n in ("Trộn Siêu Đề", "Trích Xuất Đề", "Mở đề gốc", "Khởi Tạo Đề"))
+                        ]
+                        self.assertEqual(old, [], msg=f"{subject} L{grade}")
 
 
 if __name__ == "__main__":

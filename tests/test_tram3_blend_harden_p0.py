@@ -292,16 +292,17 @@ class AiRecoveryDefaultOffContractTests(unittest.TestCase):
         text = Path(__file__).resolve().parents[1].joinpath("app.py").read_text(
             encoding="utf-8"
         )
+        # Config UI no longer shows the recovery checkbox; default stays False.
         self.assertIn(
             'st.session_state.get("enable_ai_context_recovery", False)',
             text,
         )
-        self.assertIn('key="enable_ai_context_recovery"', text)
-        # Default checkbox value must be False (P0).
-        self.assertRegex(
+        self.assertIn(
+            'st.session_state.setdefault("enable_ai_context_recovery", False)',
             text,
-            r'Cho phép AI sinh nguyên câu thay thế[\s\S]{0,200}?value=False',
         )
+        self.assertNotIn('key="enable_ai_context_recovery"', text)
+        self.assertNotIn("Cho phép AI sinh nguyên câu thay thế", text)
 
 
 if __name__ == "__main__":
