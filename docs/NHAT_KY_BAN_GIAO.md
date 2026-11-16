@@ -1,7 +1,7 @@
 # Nhật ký bàn giao — GSAI KHKT 2026
 
 > Ca sau **đọc file này trước** khi sửa Trạm 1 / Trạm 3 / Socratic / JSON đề AI.  
-> Cập nhật: **2026-11-16 ~13:10 giờ VN**. Người ghi: ca trợ lý (theo lệnh anh MINH).  
+> Cập nhật: **2026-11-16 ~14:05 giờ VN**. Người ghi: ca trợ lý (theo lệnh anh MINH).  
 > Repo nguồn: `pmtgiaitichk15ai2025/DUPHONGKHKT2026` (worktree `_gh_compare`; remote `duphong`). `main` trước PR giọng nói này = **`68ae144`** (PR **#124**).  
 > App Cloud: `https://claudevipgsaikhkt2026-bybgceinifcaqggqyyvatx.streamlit.app/`  
 > Worktree máy anh: `D:\CLAUDE_FINAL KHKT 2026\_gh_compare`.
@@ -26,7 +26,17 @@ Hàm duy nhất: `build_tram3_socratic_guide` (= `build_socratic_guide`) trong `
 
 ---
 
-## 1. Ca gần nhất — Trạm 3 đơn giản (một nút Sinh đề)
+## 1. Ca gần nhất — vá lộ f={...} / đồ thị–BBT Trạm 3
+
+Anh báo (ảnh Cloud): stem hiện thô `f={"type":"func_3",...}` thay vì KaTeX/đồ thị. Vá trên DUPHONG only.
+
+- `services/exam_visual_sanitize.py`: gỡ JSON máy khỏi `q`/opt/stmts; coerce `f` string→dict; promote spec đã gỡ vào field `f`; bỏ bbt JSON dump.
+- Wire: `clean_question_bbt_text`, `question_visual_html`, `render_fast_visual`, `prepare_exam_for_delivery`; graded stems cũng qua sanitize KaTeX (không đụng nút xuất sau nộp).
+- Prompt: `web_question_contract` nhấn mạnh `f` là field sibling, cấm chèn `f={...}` vào chuỗi `q`.
+- Test: `tests/test_exam_visual_sanitize.py` (+ visual priority / recovery default).
+- PR cùng nhánh `cursor/simplify-tram3-e547` trên DUPHONGKHKT2026.
+
+## 1f. Ca trước — Trạm 3 đơn giản (một nút Sinh đề)
 
 Anh chốt (cloud worker MINHTRIPC / DUPHONGKHKT2026): config Trạm 3 chỉ còn **chọn chủ đề**, môn+lớp (sidebar), **cấu trúc tùy biến**, **một nút Sinh đề**. AI sinh đề theo CT GDPT 2018 + KNTT + văn bản pháp quy Bộ (qua `exam_generation_request` + `with_academic_grounding`).
 

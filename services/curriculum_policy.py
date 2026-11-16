@@ -711,6 +711,8 @@ def prepare_exam_for_delivery(exam, subject, grade, duration=45, custom_request=
     validate_exam_item_language(result, subject)
     check_current_facts("\n".join(texts))
     result = repair_exam_bbt_m_consistency(result, subject, grade)
+    from services.exam_visual_sanitize import sanitize_exam_visuals
+    result = sanitize_exam_visuals(result)
     payload = {k: result[k] for k in ("p1", "p2", "p3", "part_doc_hieu", "part_viet") if k in result}
     result["curriculum_audit"] = {
         "policy_checked_at": POLICY_DATE, "policy_evaluated_on": policy_evaluation_date(), "textbook": "Kết nối tri thức với cuộc sống",

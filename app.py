@@ -1150,7 +1150,8 @@ def clean_question_bbt_text(q_text):
 
     if not q_text: return ""
 
-    s = str(q_text)
+    from services.exam_visual_sanitize import strip_inline_plot_specs
+    s, _ = strip_inline_plot_specs(q_text)
 
 
 
@@ -3919,6 +3920,9 @@ def question_visual_html(question, exam_print=False):
     ảnh cắt đề (image_base64 scan) chỉ khi không dựng được hình cấu trúc — một luồng, không chồng kép.
     exam_print=True: profile xuất in (đen–trắng), không đổi dữ kiện hình.
     """
+    from services.exam_visual_sanitize import sanitize_question_visuals, coerce_plot_spec
+    if isinstance(question, dict):
+        question = sanitize_question_visuals(question, inplace=False)
     pieces = []
     raw_bbt = str(question.get("bbt") or "").strip()
     if raw_bbt and raw_bbt.lower() not in {"null", "none", "{}"}:
@@ -3980,7 +3984,7 @@ def question_visual_html(question, exam_print=False):
                 except Exception:
                     pass
             pieces.append(sanitize_svg_for_markdown(svg_text))
-    function = question.get("f")
+    function = coerce_plot_spec(question.get("f"))
     required = {"func_3": {"a", "b", "c", "d"}, "cubic": {"a", "b", "c", "d"}, "func_1_1": {"a", "b", "c", "d"}, "func_2_1": {"a", "b", "c", "d", "e"}, "parabola": {"a", "b", "c"}, "func_2": {"a", "b", "c"}}
     coeff_ok = isinstance(function, dict) and function.get("type") in required and required[function["type"]] <= function.keys()
     source = question.get("image_base64") or question.get("image_url") or question.get("image")
@@ -14636,6 +14640,8 @@ if selected_station == station_labels[2]:
     def render_fast_visual(q, q_id=None):
         if not isinstance(q, dict):
             return
+        from services.exam_visual_sanitize import sanitize_question_visuals
+        q = sanitize_question_visuals(q, inplace=False)
         # question_visual_html: WebP trước, SVG chỉ khi fail; đồ thị một luồng
         rendered = question_visual_html(deepcopy(q))
         if rendered:
@@ -16593,7 +16599,7 @@ if selected_station == station_labels[2]:
 
                         st.markdown(f'<div style="font-size: 11.5px; color: #38bdf8; background: rgba(56, 189, 248, 0.08); border-left: 3px solid #38bdf8; padding: 2px 8px; margin-bottom: 6px; border-radius: 3px;">🏛️ <b>Nguồn tham khảo:</b> {html.escape(str(q["source"]))}</div>', unsafe_allow_html=True)
 
-                    st.markdown(f"**Câu {original_question_number(exam, q, idx+1)}:** {q.get('q')}")
+                    st.markdown(f"**Câu {original_question_number(exam, q, idx+1)}:** {sanitize_katex_latex(clean_question_bbt_text(q.get('q')))}")
 
                     render_fast_visual(q, f"sol_p1_{idx}")
 
@@ -16628,7 +16634,7 @@ if selected_station == station_labels[2]:
                 for idx, q in enumerate(exam["p2"]):
                     if q.get("source"):
                         st.markdown(f'<div style="font-size: 11.5px; color: #38bdf8; background: rgba(56, 189, 248, 0.08); border-left: 3px solid #38bdf8; padding: 2px 8px; margin-bottom: 6px; border-radius: 3px;">🏛️ <b>Nguồn tham khảo:</b> {html.escape(str(q["source"]))}</div>', unsafe_allow_html=True)
-                    st.markdown(f"**Câu {original_question_number(exam, q, idx+1)}:** {q.get('q')}")
+                    st.markdown(f"**Câu {original_question_number(exam, q, idx+1)}:** {sanitize_katex_latex(clean_question_bbt_text(q.get('q')))}")
                     render_fast_visual(q, f"sol_p2_{idx}")
                     for s_idx, stmt in enumerate(q.get("stmts", [])):
                         user_ans_s = st.session_state.exam_answers.get(f"p2_{idx}_{s_idx}", "Chưa chọn")
@@ -16654,7 +16660,7 @@ if selected_station == station_labels[2]:
                         st.markdown(f'<div style="font-size: 11.5px; color: #38bdf8; background: rgba(56, 189, 248, 0.08); border-left: 3px solid #38bdf8; padding: 2px 8px; margin-bottom: 6px; border-radius: 3px;">🏛️ <b>Nguồn tham khảo:</b> {html.escape(str(q["source"]))}</div>', unsafe_allow_html=True)
                     user_val = str(st.session_state.exam_answers.get(f"p3_{idx}", "Chưa điền")).strip()
                     correct_val = str(q.get("ans", "")).strip()
-                    st.markdown(f"**Câu {original_question_number(exam, q, idx+1)}:** {q.get('q')}")
+                    st.markdown(f"**Câu {original_question_number(exam, q, idx+1)}:** {sanitize_katex_latex(clean_question_bbt_text(q.get('q')))}")
                     render_fast_visual(q, f"sol_p3_{idx}")
                     st.markdown(f"- **Đáp số em điền:** `{user_val}` &nbsp;|&nbsp; **Đáp số chuẩn:** `{correct_val}`")
 
