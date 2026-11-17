@@ -19,11 +19,18 @@ from copy import deepcopy
 
 MISMATCH_MARK = "_independent_answer_mismatch"
 MAX_MISMATCH_RATIO = 0.4
+UNVERIFIED_MARK = "_independent_answer_unverified"
+# Bài dễ sai khóa nhất (ca thật 17/11/2026): tối ưu, giá trị lớn/nhỏ nhất, đếm tham số m.
+HIGH_RISK_RE = re.compile(
+    r"lớn nhất|nhỏ nhất|tối đa|tối thiểu|tối ưu|cực đại|cực tiểu|tham số|giá trị nguyên|bao nhiêu giá trị|\bm\b",
+    re.IGNORECASE)
 
 SOLVER_SYSTEM = (
     "Bạn là giáo viên chấm thi độc lập, cẩn thận và chính xác. Tự giải từng câu từ đầu, "
     "không đoán. Với câu có dữ liệu hình (hàm được vẽ, bảng biến thiên), dùng đúng dữ liệu đó. "
-    "Câu nào không đủ dữ kiện để giải chắc chắn thì trả null cho câu đó. "
+    "Với bài tối ưu, giá trị lớn/nhỏ nhất hoặc đếm tham số: kiểm ngược bằng cách thế đáp số vào điều kiện "
+    "và xét đủ các đầu mút/trường hợp biên trước khi chốt. "
+    "Chỉ trả null khi đề thật sự thiếu dữ kiện, không trả null vì câu khó. "
     "Chỉ trả JSON đúng schema được yêu cầu, không giải thích."
 )
 
@@ -284,6 +291,45 @@ def find_mismatches(exam, solved):
     return found
 
 
+def is_high_risk(question):
+    """Câu tối ưu/tham số: khóa dễ sai, cần bộ giải xác nhận."""
+    return isinstance(question, dict) and bool(HIGH_RISK_RE.search(str(question.get("q") or "")))
+
+
+def find_unverified(exam, solved):
+    """Câu rủi ro cao mà bộ giải không đưa được đáp án: khóa chưa được ai xác nhận."""
+    found = []
+    for part in ("p1", "p2", "p3"):
+        answers = solved.get(part) or []
+        for idx, question in enumerate(exam.get(part) or []):
+            if not is_high_risk(question):
+                continue
+            value = answers[idx] if idx < len(answers) else None
+            missing = (value in (None, "") if part != "p2"
+                       else not isinstance(value, list) or any(v is None for v in value))
+            if missing:
+                found.append((part, idx))
+    return found
+
+
+def _mark_unverified(result, solved, report):
+    unverified = find_unverified(result, solved)
+    for part, idx in unverified:
+        result[part][idx][UNVERIFIED_MARK] = True
+    if unverified:
+        report["unverified"] = [{"part": p, "index": i} for p, i in unverified]
+
+
+def count_review_flags(exam):
+    """Số câu giáo viên cần xem lại khóa (chưa xác nhận độc lập hoặc lượt giải lệch quá nhiều)."""
+    count = sum(1 for part in ("p1", "p2", "p3") for q in (exam.get(part) or [])
+                if isinstance(q, dict) and q.get(UNVERIFIED_MARK))
+    check = exam.get("independent_answer_check") or {}
+    if isinstance(check, dict) and check.get("status") == "too_many_mismatches_teacher_review":
+        count += len(check.get("mismatches") or [])
+    return count
+
+
 def mark_independent_mismatches(exam, subject, grade, solve):
     """Trả (bản sao đề có đánh dấu câu lệch, báo cáo). `solve(system, user) -> str`."""
     result = deepcopy(exam)
@@ -302,12 +348,14 @@ def mark_independent_mismatches(exam, subject, grade, solve):
               "mismatches": [{"part": p, "index": i} for p, i in mismatches]}
     if len(mismatches) > MAX_MISMATCH_RATIO * total:
         report["status"] = "too_many_mismatches_teacher_review"
+        _mark_unverified(result, solved, report)
         leaks = mark_hint_leaks(result, solved)
         if leaks:
             report["hint_leaks"] = [{"part": p, "index": i} for p, i in leaks]
         return result, report
     for part, idx in mismatches:
         result[part][idx][MISMATCH_MARK] = True
+    _mark_unverified(result, solved, report)
     leaks = mark_hint_leaks(result, solved)
     if leaks:
         report["hint_leaks"] = [{"part": p, "index": i} for p, i in leaks]

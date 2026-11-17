@@ -714,6 +714,26 @@ def normalize_math_infinity(text):
     return _MATH_SEGMENT.sub(lambda m: _BARE_INF.sub(r"\\infty", m.group(0)), text)
 
 
+SELF_COMPOSED_MARKERS = ("bien soan", "tu sang tac", "tu bien soan", "khuyet danh", "suu tam")
+
+
+def literature_source_notice(exam):
+    """Ngữ liệu AI gán cho tác giả có thật: AI có thể chép sai chữ hoặc bịa đoạn rồi gán tên.
+
+    Hệ thống chưa có kho nguyên văn để đối chiếu, nên không tự khẳng định đúng/sai mà
+    nhắc giáo viên đối chiếu nguyên văn trước khi dùng; ngữ liệu tự biên soạn thì không nhắc.
+    """
+    reading = (exam or {}).get("part_doc_hieu")
+    if not isinstance(reading, dict):
+        return ""
+    author = str(reading.get("author") or "").strip()
+    label = folded(author + " " + str(reading.get("source") or ""))
+    if not author or any(marker in label for marker in SELF_COMPOSED_MARKERS):
+        return ""
+    return (f"Ngữ liệu đọc hiểu được AI ghi là của {author}. AI có thể chép sai chữ hoặc gán nhầm tác giả; "
+            "giáo viên đối chiếu nguyên văn với sách/nguồn in trước khi dùng cho kiểm tra.")
+
+
 def literature_textbook_notice(exam, custom_request=""):
     """Cảnh báo giáo viên khi ngữ liệu Ngữ văn tự khai là văn bản SGK mà người dùng không yêu cầu.
 
@@ -749,7 +769,8 @@ def prepare_exam_for_delivery(exam, subject, grade, duration=45, custom_request=
     result.setdefault("duration", duration)
 
     if subject == "Ngữ văn":
-        notice = literature_textbook_notice(result, custom_request)
+        notice = " ".join(n for n in (literature_textbook_notice(result, custom_request),
+                                      literature_source_notice(result)) if n)
         if notice:
             result["literature_textbook_notice"] = notice
     texts = [result.get("title", "")]
@@ -1185,7 +1206,9 @@ def exam_prompt(subject, grade, topics, counts, code, custom="", pathway=""):
         structure = ("Đọc hiểu và Viết, rubric tổng 10 điểm; ở lớp 12 tham chiếu 4/6. Số câu, độ dài văn bản và yêu cầu viết phải phù hợp lớp, không áp bài viết lớp 12 cho THCS."
                      " NGỮ LIỆU ĐỌC HIỂU: mặc định chọn văn bản NGOÀI SGK Ngữ văn (kiểm tra, đánh giá theo quy định hiện hành của Bộ)."
                      " Chỉ dùng văn bản có trong SGK khi yêu cầu tùy biến của người dùng nêu rõ tác phẩm/văn bản đó."
-                     " Trích đúng nguyên văn văn bản có thật, không chép sai chữ; khai báo trung thực trường in_textbook.")
+                     " Trích đúng nguyên văn văn bản có thật, không chép sai chữ; khai báo trung thực trường in_textbook."
+                     " CHỈ ghi tên tác giả thật khi nhớ CHÍNH XÁC nguyên văn đoạn trích; nếu không chắc, tự biên soạn ngữ liệu mới"
+                     " và ghi author = \"Ngữ liệu biên soạn\", source = \"Biên soạn phục vụ luyện tập\". Tuyệt đối không gán đoạn tự viết cho nhà văn, nhà thơ có thật.")
     else:
         schema = {"code": str(code), "subject": subject, "grade": grade,
                   "p1": [{"q": "Câu hỏi", "opt": ["A. ...", "B. ...", "C. ...", "D. ..."], "ans": "B", "topic": "Chủ đề", "explain": "Gợi ý phương pháp"}],
@@ -1213,6 +1236,10 @@ def exam_prompt(subject, grade, topics, counts, code, custom="", pathway=""):
             + "2–3 câu ngắn: (1) chỉ đúng dữ kiện của CHÍNH câu này em cần để ý (hàm số, số liệu, bảng, hình, điều kiện cụ thể); "
             + "(2) một câu hỏi dẫn em tới bước làm đầu tiên hoặc kiến thức cần nhớ lại; (3) có thể thêm một lời khích lệ ngắn. "
             + "Không viết chung chung kiểu 'hãy khảo sát hàm số', 'lập bảng xét dấu' mà không gắn dữ kiện của câu. "
+            + "Trước khi viết hint, tự nhận diện ngầm bản chất thao tác của câu (không in nhãn): "
+            + "(a) câu lý thuyết/khái niệm không có phép tính: nhắc từ khóa định nghĩa, tính chất hoặc hình ảnh trực quan để em đối chiếu, loại trừ; KHÔNG dùng các từ 'công thức', 'thay số', 'hệ số'; "
+            + "(b) câu tính 1 bước (thường ở mức Nhận biết, thay số vào một công thức là ra): nêu khung công thức và chỉ rõ dữ kiện nào trong đề ứng với ký hiệu nào, không hỏi vòng vo, không tính ra kết quả; "
+            + "(c) câu tính nhiều bước (Thông hiểu/Vận dụng): vạch lộ trình ngắn, Bước 1 cần tìm gì, Bước 2 áp kiến thức nào, chỉ mở nút thắt đầu tiên để em tự giải tiếp. "
             + "Tuyệt đối không nêu kết quả, giá trị cuối, phương án đúng, số nghiệm, kết luận Đúng/Sai của từng ý; không tính hộ, không viết lời giải."
             + structure + WEB_QUESTION_INSTRUCTION
             + "\nKHÓA CỨNG KHI SINH ĐỀ: đúng môn " + subject + ", đúng lớp " + str(grade) + ", đúng các chủ đề đã chọn (" + "; ".join(str(t) for t in topics) + "), đúng định hướng (" + (str(pathway) if pathway else "chưa khai báo") + "), và đúng nguyên văn yêu cầu tùy biến (" + (str(custom).strip() or "không có") + "). Kho thiếu câu thì sinh đủ đúng số câu của cấu trúc đã chọn. Không trả đề thiếu câu, không đổi môn, lớp, chủ đề và không bỏ yêu cầu tùy biến. Căn cứ chương trình, sách và văn bản dùng đúng bộ lọc đã có trong yêu cầu này."

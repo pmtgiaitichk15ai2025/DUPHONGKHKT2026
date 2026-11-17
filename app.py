@@ -12036,7 +12036,8 @@ def render_pedagogical_lesson_visuals(markdown_text: str, subject: str = "", gra
     if not markdown_text:
         return markdown_text
 
-    text = str(markdown_text)
+    from services.markdown_tidy import tidy_stray_bullets
+    text = tidy_stray_bullets(str(markdown_text))
     is_math_subj = any(m in str(subject).lower() for m in ['toán', 'toan', 'math']) or (str(subject).strip() == "")
 
     # Gỡ vỏ code block nếu AI lỡ bọc bảng Markdown trong ```text ... ```
@@ -16013,6 +16014,11 @@ if selected_station == station_labels[2]:
             st.warning(f"Đã để riêng {withheld} câu chưa đủ dữ kiện hoặc lệch kiểm chứng. Các câu còn lại mở để làm. Không bịa đáp án cho câu đã để riêng.")
         if isinstance(exam, dict) and exam.get("literature_textbook_notice"):
             st.warning(exam["literature_textbook_notice"])
+        if isinstance(exam, dict):
+            from services.independent_answer_check import count_review_flags
+            review_flags = count_review_flags(exam)
+            if review_flags:
+                st.info(f"Có {review_flags} câu tối ưu/tham số mà lượt giải độc lập chưa xác nhận được đáp án. Giáo viên nên xem lại khóa chấm các câu này.")
         with st.expander("📋 Đối soát nhãn mức độ câu hỏi (chưa thẩm định)"):
             cognitive_report = exam.get("cognitive_audit", {})
             st.caption("Chỉ thống kê nhãn khai báo; chưa xác nhận yêu cầu tư duy thực tế hoặc tỷ lệ điểm. Từng ý Đúng/Sai được liệt kê riêng. Không có dữ liệu là chưa xác định.")

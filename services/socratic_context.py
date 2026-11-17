@@ -1149,6 +1149,97 @@ def _three_lines(*parts) -> str:
     return '\n'.join(lines)
 
 
+_THEORY_MARKERS = ('khang dinh nao', 'menh de nao', 'phat bieu nao', 'dinh nghia', 'vi tri tuong doi',
+                   'song song', 'vuong goc', 'cheo nhau', 'thuoc mat phang', 'dieu kien de', 'tinh chat')
+_CALC_MARKERS = ('tinh', 'tim', 'bang bao nhieu', 'gia tri', 'toa do', 'bao nhieu', 'so nghiem', 'dao ham',
+                 'tich phan', 'nguyen ham', 'khoang cach', 'the tich', 'dien tich')
+
+
+def math_hint_kind(question) -> str:
+    """Bản chất thao tác của câu Toán: 'theory' | 'one_step' | 'multi_step'.
+
+    Không chia theo nhãn NB/TH/VD: câu NB vẫn có thể là tính 1 bước (thay số vào một công thức).
+    """
+    q = question if isinstance(question, dict) else {}
+    text = folded(str(q.get('q') or ''))
+    has_number = bool(re.search(r'\d', text))
+    calc = any(k in text for k in _CALC_MARKERS)
+    if any(k in text for k in _THEORY_MARKERS) and not (has_number and calc):
+        return 'theory'
+    if not calc and not has_number:
+        return 'theory'
+    level = folded(str(q.get('level') or q.get('cognitive_level') or ''))
+    if level in ('nb', 'nhan biet') or 'nhan biet' in level or level.startswith('nb'):
+        return 'one_step'
+    if ('phuong sai' in text and 'do lech chuan' in text) or ('vec ab' in text and 'toa do' in text):
+        return 'one_step'
+    return 'multi_step'
+
+
+_THEORY_CONCEPTS = (
+    (('song song', 'mat phang'), 'quan hệ song song giữa đường thẳng và mặt phẳng',
+     'Thầy hỏi em: theo định nghĩa, đường thẳng song song với mặt phẳng thì chúng có bao nhiêu điểm chung? Em thử hình dung cây bút đặt phía trên mặt bàn.'),
+    (('vuong goc', 'mat phang'), 'quan hệ vuông góc giữa đường thẳng và mặt phẳng',
+     'Thầy hỏi em: đường thẳng vuông góc với mặt phẳng thì nó phải vuông góc với những đường nào nằm trong mặt phẳng đó?'),
+    (('song song',), 'quan hệ song song',
+     'Thầy hỏi em: hai đối tượng song song thì có điểm chung không, và chúng có cùng nằm trong một mặt phẳng không?'),
+    (('cheo nhau',), 'hai đường thẳng chéo nhau',
+     'Thầy hỏi em: hai đường thẳng chéo nhau thì có cùng nằm trong một mặt phẳng nào không, có điểm chung không?'),
+    (('vuong goc',), 'quan hệ vuông góc',
+     'Thầy hỏi em: em nhớ lại định nghĩa vuông góc, góc giữa hai đối tượng khi đó bằng bao nhiêu độ?'),
+)
+
+
+_GENERIC_CONCEPT = 'một khái niệm, tính chất trong bài'
+
+
+def _theory_concept(text) -> str:
+    for keys, concept, _ in _THEORY_CONCEPTS:
+        if all(k in text for k in keys):
+            return concept
+    return _GENERIC_CONCEPT
+
+
+def _theory_question(text) -> str:
+    for keys, _, question in _THEORY_CONCEPTS:
+        if all(k in text for k in keys):
+            return question
+    return 'Thầy hỏi em: em nhớ lại định nghĩa hoặc hình dung hình vẽ của từng trường hợp, phương án nào khớp đúng định nghĩa đó?'
+
+
+def _math_hint_by_kind(q, stem, text, expr, topic) -> str:
+    kind = math_hint_kind(q)
+    if kind == 'theory':
+        return _three_lines(
+            f'Em ơi, câu này hỏi về {_theory_concept(text)}, không cần tính gì cả.',
+            _theory_question(text),
+            'Em đối chiếu từng phương án với điều vừa nhớ để loại ý sai nhé, em làm được mà.',
+        )
+    if 'phuong sai' in text and 'do lech chuan' in text:
+        return _three_lines(
+            r'Độ lệch chuẩn liên hệ với phương sai qua $s=\sqrt{s^2}$.',
+            'Em chỉ cần lấy căn bậc hai của phương sai mà đề bài đã cho.',
+            'Một bước thôi, em tự tính nhé.',
+        )
+    if 'vec ab' in text and 'toa do' in text:
+        return _three_lines(
+            r'Em dùng công thức $\vec{AB}=(x_B-x_A;\,y_B-y_A;\,z_B-z_A)$.',
+            'Em cho từng thành phần của vectơ AB bằng thành phần tương ứng của vectơ đề cho, rồi giải ra tọa độ điểm cần tìm.',
+            'Em tự lắp số vào từng thành phần nhé.',
+        )
+    if kind == 'one_step':
+        return _three_lines(
+            f'Câu này chỉ cần một công thức áp dụng trực tiếp cho {expr if expr != "hàm trong câu" else topic}.',
+            'Thầy hỏi em: công thức nào trong bài đúng với yêu cầu, và mỗi số đề cho ứng với ký hiệu nào trong công thức đó?',
+            'Em lắp đúng chỗ rồi tự tính, thầy tin em làm được.',
+        )
+    return _three_lines(
+        f'Câu này cần vài bước, em làm từ từ trên {expr if expr != "hàm trong câu" else topic} nhé.',
+        'Bước 1: em xác định cần tìm đại lượng trung gian nào trước từ dữ kiện đề cho. Bước 2: có đại lượng đó rồi thì áp vào kiến thức nào để ra yêu cầu?',
+        'Em mở được nút đầu tiên là phần còn lại sẽ dễ hơn, cố lên em.',
+    )
+
+
 def _plain_midwife(question, subject) -> str:
     """1–2 câu hỏi đỡ đẻ, xưng thầy–em, bám dữ kiện câu. Không chốt đáp."""
     q = question if isinstance(question, dict) else {}
@@ -1159,6 +1250,11 @@ def _plain_midwife(question, subject) -> str:
     topic = _topic_phrase(stem)
     negation = _is_negation_stem(stem)
     expr = _quoted_expr(stem)
+
+    if subj == 'Toán học' and not q.get('stmts'):
+        kind = math_hint_kind(q)
+        if (kind == 'theory' and _theory_concept(text) != _GENERIC_CONCEPT) or ('phuong sai' in text and 'do lech chuan' in text) or ('vec ab' in text and 'toa do' in text):
+            return _math_hint_by_kind(q, stem, text, expr, topic)
 
     if any(k in text for k in ('dong hoc phan tu', 'mo hinh dong hoc', 'phan tu khi', 'chat khi', 'khi ly tuong')):
         ask = 'không đúng' if negation else 'đúng'
@@ -1207,7 +1303,8 @@ def _plain_midwife(question, subject) -> str:
         fn, interval = _function_and_interval(stem)
         left, right = _interval_ends(interval)
         kind = 'lớn nhất' if ('lon nhat' in text or 'gtln' in text) else 'nhỏ nhất'
-        if left and right:
+        is_quadratic = bool(re.search(r'x\^\{?2\}?|x²', fn)) and not re.search(r'x\^\{?[3-9]|x[³⁴]', fn)
+        if left and right and is_quadratic:
             open_iv = f'({left};{right})'
             return _three_lines(
                 f'Em tìm giá trị {kind} của hàm bậc hai {fn} trên đoạn {interval}.',
@@ -1216,7 +1313,7 @@ def _plain_midwife(question, subject) -> str:
             )
         return _three_lines(
             f'Em tìm giá trị {kind} của {fn} trên {interval}.',
-            r'Em tính ở hai đầu mút và tại nghiệm $y\'=0$ nằm trong khoảng mở, rồi chọn số nào?',
+            r"Em tính ở hai đầu mút và tại nghiệm $y'=0$ nằm trong khoảng mở, rồi chọn số nào?",
             'Em tự so, thầy không ra số hộ.',
         )
 
@@ -1304,12 +1401,8 @@ def _plain_midwife(question, subject) -> str:
             'Ý nào trái quy luật đó thì em giữ lại, thầy không chốt hộ.',
         )
 
-    if expr != 'hàm trong câu' and subj == 'Toán học':
-        return _three_lines(
-            f'Em làm trên đúng {expr} trong câu này.',
-            'Thầy hỏi em: công thức nào khớp yêu cầu, và em thay hệ số của hàm này vào trước khi tính thế nào?',
-            'Em tự tính rồi đối chiếu, thầy không ra kết quả hộ.',
-        )
+    if subj == 'Toán học':
+        return _math_hint_by_kind(q, stem, text, expr, topic)
 
     return _three_lines(
         f'Em xem câu đang hỏi về {topic}.',
