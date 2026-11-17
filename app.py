@@ -3773,6 +3773,7 @@ from data.socratic_anchors import (
     safe_json_loads,
 )
 from services.socratic_context import build_tram3_socratic_guide, looks_like_explain_solution
+from services.hint_rating import render_hint_rating
 
 # AI exam JSON helpers — import an toàn để Cloud không sập nếu module lệch bản.
 try:
@@ -12942,6 +12943,8 @@ if selected_station == station_labels[0]:
                         expanded=False,
                     ):
                         st.markdown(chemical_display_markdown(_t1_guide))
+                        render_hint_rating(st, sync_event, key=f"t1hr_{idx}", station="Trạm 1", subject=subject, grade=grade,
+                                           question_text=str(q.get("question", "")), hint=_t1_guide, name=student_name, time_fn=get_vn_time)
 
                 if st.button(f"🔍 Kiểm tra câu {idx+1}", key=f"btn_{idx}"):
 
@@ -16214,9 +16217,10 @@ if selected_station == station_labels[2]:
 
                 if not st.session_state.get("tram3_sealed_mode"):
                     with st.expander(f"💡 Gợi mở tư duy Socratic câu {idx+1} (mở khi bí — không lộ đáp án)", expanded=False):
-                        st.info(
-                            build_tram3_socratic_guide(q, subject=subject, grade_num=grade_num)
-                        )
+                        _t3_guide_1 = build_tram3_socratic_guide(q, subject=subject, grade_num=grade_num)
+                        st.info(_t3_guide_1)
+                        render_hint_rating(st, sync_event, key=f"t3hr1_{idx}", station="Trạm 3", subject=subject, grade=grade,
+                                           question_text=str(q.get("q", "")), hint=_t3_guide_1, name=student_name, time_fn=get_vn_time)
 
                 st.markdown("---")
 
@@ -16238,9 +16242,10 @@ if selected_station == station_labels[2]:
 
                 if not st.session_state.get("tram3_sealed_mode"):
                     with st.expander(f"💡 Gợi mở tư duy Socratic câu {idx+1} (mở khi bí — không lộ đáp án)", expanded=False):
-                        st.info(
-                            build_tram3_socratic_guide(v, subject=subject, grade_num=grade_num)
-                        )
+                        _t3_guide_2 = build_tram3_socratic_guide(v, subject=subject, grade_num=grade_num)
+                        st.info(_t3_guide_2)
+                        render_hint_rating(st, sync_event, key=f"t3hr2_{idx}", station="Trạm 3", subject=subject, grade=grade,
+                                           question_text=str(v.get("q", "")), hint=_t3_guide_2, name=student_name, time_fn=get_vn_time)
 
                 st.markdown("---")
 
@@ -16278,9 +16283,10 @@ if selected_station == station_labels[2]:
 
                     if not st.session_state.get("tram3_sealed_mode"):
                         with st.expander(f"💡 Gợi mở tư duy Socratic câu {idx+1} (mở khi bí — không lộ đáp án)", expanded=False):
-                            st.info(
-                                build_tram3_socratic_guide(q, subject=subject, grade_num=grade_num)
-                            )
+                            _t3_guide_3 = build_tram3_socratic_guide(q, subject=subject, grade_num=grade_num)
+                            st.info(_t3_guide_3)
+                            render_hint_rating(st, sync_event, key=f"t3hr3_{idx}", station="Trạm 3", subject=subject, grade=grade,
+                                               question_text=str(q.get("q", "")), hint=_t3_guide_3, name=student_name, time_fn=get_vn_time)
 
                     st.markdown("---")
 
@@ -16324,9 +16330,10 @@ if selected_station == station_labels[2]:
 
                     if not st.session_state.get("tram3_sealed_mode"):
                         with st.expander(f"💡 Gợi mở tư duy Socratic câu {idx+1} (mở khi bí — không lộ đáp án)", expanded=False):
-                            st.info(
-                                build_tram3_socratic_guide(q, subject=subject, grade_num=grade_num)
-                            )
+                            _t3_guide_4 = build_tram3_socratic_guide(q, subject=subject, grade_num=grade_num)
+                            st.info(_t3_guide_4)
+                            render_hint_rating(st, sync_event, key=f"t3hr4_{idx}", station="Trạm 3", subject=subject, grade=grade,
+                                               question_text=str(q.get("q", "")), hint=_t3_guide_4, name=student_name, time_fn=get_vn_time)
 
                     st.markdown("---")
 
@@ -16370,9 +16377,10 @@ if selected_station == station_labels[2]:
 
                     if not st.session_state.get("tram3_sealed_mode"):
                         with st.expander(f"💡 Gợi mở tư duy Socratic câu {idx+1} (mở khi bí — không lộ đáp án)", expanded=False):
-                            st.info(
-                                build_tram3_socratic_guide(q, subject=subject, grade_num=grade_num)
-                            )
+                            _t3_guide_5 = build_tram3_socratic_guide(q, subject=subject, grade_num=grade_num)
+                            st.info(_t3_guide_5)
+                            render_hint_rating(st, sync_event, key=f"t3hr5_{idx}", station="Trạm 3", subject=subject, grade=grade,
+                                               question_text=str(q.get("q", "")), hint=_t3_guide_5, name=student_name, time_fn=get_vn_time)
 
                     st.markdown("---")
 
