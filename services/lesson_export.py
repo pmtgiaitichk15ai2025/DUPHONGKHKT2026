@@ -332,10 +332,23 @@ const print=document.getElementById('print');print.disabled=errors>0;print.oncli
 })();</script></body></html>'''
 
 
+def _with_owner_template(base, subject, grade, topic, lesson):
+    """Ghép mẫu prompt chữ viết tay của owner (17/11/2026) với nội dung bài và luật hệ thống.
+
+    Mẫu nằm ở services/handwritten_notebook_prompt.json; nội dung bài điền vào USER_INPUTS.
+    Các khóa cũ (purpose, content, style, rules...) giữ nguyên để luật hệ thống vẫn áp dụng.
+    """
+    from pathlib import Path
+    template = json.loads((Path(__file__).with_name("handwritten_notebook_prompt.json")).read_text(encoding="utf-8"))
+    template["USER_INPUTS"] = {"TIEU_DE": f"{topic} — {subject} lớp {grade}", "NOI_DUNG_DE_KIEM_TRA": lesson}
+    template.update(base)
+    return json.dumps(template, ensure_ascii=False, indent=2)
+
+
 def handwritten_prompt(subject, grade, topic, lesson):
     subject, grade = academic_context(subject, grade)
     lesson = student_assessment_text(lesson)
-    return json.dumps({"purpose": "STYLE REFERENCE ONLY — use deterministic HTML/PDF for authoritative text and formulas",
+    base = ({"purpose": "STYLE REFERENCE ONLY — use deterministic HTML/PDF for authoritative text and formulas",
                        "subject": subject, "grade": grade, "title": topic, "content": lesson,
                        "style": {"paper": "cream graph paper #F5EEDC", "binding": "black spiral on the left",
                                  "body_ink": "#182C73", "heading_ink": "#B51E35",
@@ -346,7 +359,8 @@ def handwritten_prompt(subject, grade, topic, lesson):
                                  "Preserve chemical, physical, mathematical and language notation for this subject",
                                  "Do not render internal author metadata OUTCOME, COGNITIVE_REASON or COGNITIVE_STEPS as student-facing text",
                                  "Keep CORRECT, HINT and EXPLAIN out of the student question sheet; answers belong to a separate teacher key. Visible interface headings and labels must be Vietnamese; preserve authentic foreign-language lesson text and quotations. Keep options A–D in order, use four columns only if all fit, otherwise two columns or one option per line after measuring rendered text and formulas; never squeeze text or detach a label from its option",
-                                 "Use multiple pages instead of cutting or shrinking content", "Render variation tables as transparent panels over the infographic background; use large green rising/red falling arrows, aligned critical values and split one-sided limits at vertical discontinuities; never substitute tiny Unicode arrows in a flat grid", "Do not copy any subject matter or identity from a style reference"]}, ensure_ascii=False, indent=2)
+                                 "Use multiple pages instead of cutting or shrinking content", "Render variation tables as transparent panels over the infographic background; use large green rising/red falling arrows, aligned critical values and split one-sided limits at vertical discontinuities; never substitute tiny Unicode arrows in a flat grid", "Do not copy any subject matter or identity from a style reference"]})
+    return _with_owner_template(base, subject, grade, topic, lesson)
 
 
 def faithful_infographic_data(subject, grade, topic, lesson):

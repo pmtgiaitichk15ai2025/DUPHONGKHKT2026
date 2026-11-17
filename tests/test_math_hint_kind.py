@@ -38,5 +38,19 @@ class MathHintKind(unittest.TestCase):
         self.assertNotIn("thay hệ số của hàm này", hint)
 
 
+class GenericHintRejected(unittest.TestCase):
+    """Ca thật web 17/11/2026: hint Đúng/Sai chung chung, không bám dữ kiện câu."""
+
+    def test_generic_hints(self):
+        from services.socratic_context import is_generic_hint
+        stem = {"q": r"Cho hàm số $y=x^3-3x$. Xét tính đúng sai của các mệnh đề sau:",
+                "stmts": [{"t": r"Hàm số nghịch biến trên khoảng $(-1;1)$."}]}
+        self.assertTrue(is_generic_hint("Em hãy ôn lại các tính chất cơ bản của đồ thị hàm bậc ba để làm từng ý nhé.", stem))
+        self.assertTrue(is_generic_hint("Em hãy giải phương trình đạo hàm và phương trình giao điểm một cách cẩn thận.", stem))
+        self.assertFalse(is_generic_hint(r"Em tính $y'$ rồi xét dấu trên $(-1;1)$ nhé.", stem))
+        theory = {"q": r"Điều kiện để đường thẳng $a$ song song với mặt phẳng $(\alpha)$ là"}
+        self.assertFalse(is_generic_hint("Em nhớ lại định nghĩa: đường thẳng song song mặt phẳng thì có điểm chung không?", theory))
+
+
 if __name__ == "__main__":
     unittest.main()

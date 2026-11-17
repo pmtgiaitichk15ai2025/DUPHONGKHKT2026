@@ -1,0 +1,302 @@
+{
+ "system_name": "MASTER_HANDWRITTEN_EXAM_NOTEBOOK_GENERATOR",
+ "version": "1.0",
+ "language": "vi-VN",
+ "role": "Chuyên gia thiết kế đề kiểm tra giáo dục, mô phỏng chữ viết tay nghệ thuật trên giấy vở ô ly, kết hợp trình bày nội dung học thuật chính xác và bố cục sư phạm chuyên nghiệp.",
+ "USER_INPUTS": {
+  "TIEU_DE": "[NGƯỜI DÙNG NHẬP TIÊU ĐỀ ĐỀ KIỂM TRA]",
+  "NOI_DUNG_DE_KIEM_TRA": "[NGƯỜI DÙNG DÁN TOÀN BỘ NỘI DUNG ĐỀ KIỂM TRA]"
+ },
+ "REFERENCE_IMAGE_POLICY": {
+  "reference_mode": "STYLE_AND_LAYOUT_ONLY",
+  "description": "Sử dụng ảnh tham chiếu làm mẫu thiết kế trực quan, tuyệt đối không sử dụng nội dung chủ thể của ảnh.",
+  "preserve": [
+   "Bố cục trang giấy vở học sinh theo chiều dọc",
+   "Nền giấy màu kem nhạt có ô vuông nhỏ",
+   "Gáy sổ lò xo kim loại bên trái",
+   "Phong cách chữ viết tay mềm mại, thanh thoát",
+   "Màu mực xanh đậm cho nội dung chính",
+   "Màu mực đỏ cho tiêu đề và phần nhấn mạnh",
+   "Các đường gạch chân màu đỏ",
+   "Cách chia các bài theo thứ tự rõ ràng",
+   "Hệ thống đánh số câu hỏi, ý nhỏ và biểu thức",
+   "Khoảng cách dòng mang cảm giác viết tay tự nhiên",
+   "Các công thức toán học được trình bày nổi bật",
+   "Phong cách trang giấy chụp từ trên xuống"
+  ],
+  "remove": [
+   "Toàn bộ nội dung đề kiểm tra gốc",
+   "Tên trường và cơ quan trong ảnh tham chiếu",
+   "Thông tin năm học của ảnh gốc",
+   "Tên tác giả và người biên soạn",
+   "Chữ ký, số điện thoại và thông tin liên hệ",
+   "Dấu hiệu nhận diện cá nhân",
+   "Hình minh họa thuộc nội dung đề cũ",
+   "Bất kỳ thông tin nào không được người dùng cung cấp"
+  ],
+  "critical_rule": "Chỉ sao chép ngôn ngữ thiết kế, tuyệt đối không sao chép nội dung."
+ },
+ "CORE_OBJECTIVE": {
+  "goal": "Biến nội dung đề kiểm tra do người dùng cung cấp thành một ảnh đề kiểm tra hoàn chỉnh, mang phong cách viết tay trên trang giấy ô ly giống ảnh tham chiếu.",
+  "requirements": [
+   "Giữ nguyên 100% nội dung đề do người dùng nhập",
+   "Không tự ý thêm, bớt hoặc thay đổi câu hỏi",
+   "Không tự ý sửa số liệu, công thức và ký hiệu",
+   "Không tự tạo tên trường, tác giả hoặc thông tin cá nhân",
+   "Tự động phân cấp tiêu đề và nội dung",
+   "Giữ phong cách trực quan nhất quán",
+   "Ưu tiên tính chính xác và khả năng đọc rõ"
+  ]
+ },
+ "CANVAS": {
+  "aspect_ratio": "2:3",
+  "orientation": "portrait",
+  "recommended_resolution": "2048x3072",
+  "quality": "high_resolution",
+  "composition": "single_notebook_page",
+  "camera": "top_down_flat_lay",
+  "perspective": "front_facing_minimal_distortion",
+  "margin": {
+   "top": "4%",
+   "bottom": "4%",
+   "left": "8%",
+   "right": "5%"
+  }
+ },
+ "VISUAL_STYLE": {
+  "main_style": "Realistic handwritten educational notebook",
+  "sub_style": "Vietnamese school examination handwritten aesthetic",
+  "paper": {
+   "type": "Cream graph paper",
+   "color": "#F5EEDC",
+   "grid": "Fine square grid",
+   "grid_color": "#D8D2C2",
+   "grid_opacity": 0.45,
+   "texture": "Subtle natural paper fibers",
+   "aging": "Very subtle warm vintage tone"
+  },
+  "notebook_binding": {
+   "position": "left",
+   "type": "Black metallic spiral binding",
+   "visibility": "Partially visible along the edge",
+   "shadow": "Soft realistic shadows"
+  },
+  "lighting": {
+   "type": "Soft natural daylight",
+   "direction": "top-left",
+   "contrast": "low",
+   "shadows": "Subtle"
+  }
+ },
+ "TYPOGRAPHY": {
+  "primary_font_style": "Elegant Vietnamese handwritten cursive",
+  "handwriting_features": [
+   "Chữ viết tay nghiêng nhẹ về bên phải",
+   "Nét bút thanh đậm tự nhiên",
+   "Ký tự tròn, mềm mại và dễ đọc",
+   "Dấu tiếng Việt đầy đủ, đúng vị trí",
+   "Chiều cao chữ tương đối đồng đều",
+   "Giữ cảm giác chữ được viết bằng bút mực thật",
+   "Không dùng kiểu chữ máy cứng nhắc"
+  ],
+  "title": {
+   "color": "#B51E35",
+   "style": "Bold handwritten uppercase",
+   "alignment": "center",
+   "size": "large",
+   "emphasis": "Red underline or thin red rectangular border"
+  },
+  "section_heading": {
+   "color": "#B51E35",
+   "style": "Bold handwritten",
+   "size": "medium_large",
+   "underline": true,
+   "alignment": "left"
+  },
+  "body_text": {
+   "color": "#182C73",
+   "style": "Smooth blue ink handwriting",
+   "size": "medium",
+   "line_spacing": "comfortable"
+  },
+  "question_numbering": {
+   "color": "#B51E35",
+   "style": "Handwritten",
+   "weight": "bold"
+  },
+  "mathematical_expressions": {
+   "color": "#172A70",
+   "style": "Precise handwritten mathematical notation",
+   "alignment": "natural",
+   "rendering": "Accurate fractions, exponents, radicals and symbols"
+  }
+ },
+ "LAYOUT_ENGINE": {
+  "mode": "AUTOMATIC_CONTENT_ADAPTATION",
+  "header": {
+   "source": "USER_INPUTS.TIEU_DE",
+   "position": "top_center",
+   "style": "Prominent red handwritten heading",
+   "layout": "Automatically arrange long titles into balanced lines",
+   "decorative_element": "Optional thin red border or underline"
+  },
+  "body": {
+   "source": "USER_INPUTS.NOI_DUNG_DE_KIEM_TRA",
+   "alignment": "left",
+   "text_flow": "top_to_bottom",
+   "section_spacing": "moderate",
+   "paragraph_spacing": "comfortable",
+   "auto_detection": [
+    "Tên bài và số điểm",
+    "Câu hỏi chính",
+    "Ý nhỏ a, b, c, d",
+    "Biểu thức đại số",
+    "Phân thức và phương trình",
+    "Hình học",
+    "Dữ kiện bài toán",
+    "Yêu cầu chứng minh",
+    "Các ghi chú cuối đề"
+   ],
+   "hierarchy_rules": [
+    "Tên bài được viết đỏ và gạch chân",
+    "Số thứ tự câu dùng mực đỏ",
+    "Nội dung câu hỏi dùng mực xanh",
+    "Các ý nhỏ thụt đầu dòng",
+    "Công thức dài được xuống dòng hợp lý",
+    "Không tách một biểu thức thành hai phần sai nghĩa",
+    "Không tách dữ kiện và hình minh họa quá xa nhau"
+   ]
+  },
+  "footer": {
+   "content": "Only user-provided footer text",
+   "default": "none",
+   "rule": "Không thêm chữ ký, tác giả, số điện thoại hoặc thương hiệu"
+  }
+ },
+ "MATHEMATICAL_RENDERING": {
+  "enabled": true,
+  "supported": [
+   "Phân số",
+   "Lũy thừa",
+   "Căn bậc hai",
+   "Đa thức",
+   "Hằng đẳng thức",
+   "Phương trình",
+   "Bất phương trình",
+   "Hệ phương trình",
+   "Biểu thức hình học",
+   "Ký hiệu góc",
+   "Ký hiệu song song và vuông góc",
+   "Đơn vị đo",
+   "Ký hiệu tập hợp"
+  ],
+  "accuracy_rules": [
+   "Giữ đúng vị trí chỉ số trên và chỉ số dưới",
+   "Phân số phải có tử số và mẫu số chính xác",
+   "Dấu âm không được bỏ sót",
+   "Không nhầm phép nhân với biến x",
+   "Giữ nguyên dấu ngoặc",
+   "Không tự biến đổi biểu thức",
+   "Không tự giải bài toán",
+   "Ưu tiên cú pháp toán học chính xác hơn hiệu ứng trang trí"
+  ]
+ },
+ "GEOMETRY_ILLUSTRATION": {
+  "enabled": "Only when required by user content",
+  "diagram_style": "Clean educational vector line drawing",
+  "drawing_engine": "TikZ-inspired precise geometry",
+  "rules": [
+   "Vẽ đúng theo giả thiết bài toán",
+   "Bảo toàn quan hệ hình học",
+   "Đặt tên các điểm chính xác",
+   "Biểu diễn góc vuông rõ ràng",
+   "Giữ đúng vị trí trung điểm",
+   "Đường song song phải chính xác",
+   "Đường vuông góc phải chính xác",
+   "Không tự thêm yếu tố hình học không có trong đề",
+   "Hình minh họa sử dụng nét xanh đậm và nhãn đỏ khi cần",
+   "Bố trí hình gần nội dung câu hỏi",
+   "Hình vẽ phải phù hợp với bố cục trang giấy"
+  ]
+ },
+ "REAL_WORLD_PROBLEM_ILLUSTRATION": {
+  "enabled": "When context requires",
+  "style": "Elegant small artistic educational illustration",
+  "rules": [
+   "Minh họa đúng bối cảnh bài toán",
+   "Ưu tiên hình ảnh nghệ thuật dễ hiểu",
+   "Không làm giảm khả năng đọc chữ",
+   "Không tự thêm dữ kiện bằng hình ảnh",
+   "Đặt hình ở vùng trống phù hợp"
+  ]
+ },
+ "CONTENT_OVERFLOW_POLICY": {
+  "strategy": "MULTI_PAGE_WHEN_NEEDED",
+  "rules": [
+   "Tự động đánh giá độ dài nội dung",
+   "Không ép một đề quá dài lên một trang",
+   "Không thu nhỏ chữ đến mức khó đọc",
+   "Không cắt câu hỏi",
+   "Không bỏ sót dữ liệu",
+   "Nếu vượt quá một trang, tự động chia thành nhiều trang",
+   "Giữ nguyên màu sắc và chữ viết trên mọi trang",
+   "Ưu tiên ngắt trang giữa hai câu hỏi",
+   "Không lặp lại nội dung giữa các trang"
+  ],
+  "continuity": {
+   "same_paper": true,
+   "same_handwriting": true,
+   "same_color_palette": true,
+   "same_spiral_binding": true,
+   "same_grid_spacing": true
+  }
+ },
+ "QUALITY_CONTROL": {
+  "text_validation": [
+   "Kiểm tra đầy đủ nội dung đề",
+   "Kiểm tra chính tả tiếng Việt",
+   "Kiểm tra dấu tiếng Việt",
+   "Kiểm tra số thứ tự",
+   "Kiểm tra số điểm",
+   "Kiểm tra biểu thức toán học",
+   "Kiểm tra tính chính xác của hình vẽ",
+   "Kiểm tra không có thông tin dư thừa"
+  ],
+  "visual_validation": [
+   "Chữ viết rõ ràng",
+   "Tiêu đề nổi bật",
+   "Bố cục cân đối",
+   "Không chồng chữ",
+   "Không tràn lề",
+   "Không cắt mất biểu thức",
+   "Không sai lệch phối cảnh",
+   "Giữ đúng phong cách ảnh tham chiếu"
+  ]
+ },
+ "NEGATIVE_PROMPT": [
+  "Do not copy original examination content",
+  "No original personal identity",
+  "No original school name",
+  "No phone number",
+  "No signature",
+  "No watermark",
+  "No logo",
+  "No random generated content",
+  "No missing questions",
+  "No invented equations",
+  "No mathematical symbol distortion",
+  "No incorrect Vietnamese accents",
+  "No blurry handwriting",
+  "No overlapping text",
+  "No printed textbook typography",
+  "No unnecessary decorative objects"
+ ],
+ "OUTPUT": {
+  "type": "IMAGE",
+  "format": "PNG",
+  "aspect_ratio": "2:3",
+  "quality": "high",
+  "pages": "automatic",
+  "final_instruction": "Create a high-resolution realistic handwritten Vietnamese examination sheet using only the supplied title and examination content. Reproduce the reference image's visual design system: cream graph-paper notebook, black spiral binding on the left, elegant blue handwritten body text, emphasized red handwritten headings, clean question hierarchy and accurate mathematical notation. Do not reuse any original examination content or personal information. Preserve all user-provided content exactly. Ensure excellent readability, balanced spacing and consistent design across all generated pages."
+ }
+}

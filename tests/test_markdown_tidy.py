@@ -23,3 +23,13 @@ class TidyStrayBullets(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class VietnameseInMath(unittest.TestCase):
+    def test_wraps_vietnamese_words(self):
+        from services.markdown_tidy import wrap_vietnamese_in_math
+        out = wrap_vietnamese_in_math(r"$\left[\begin{array}{l}x=-1 \text{ (loại)}\x=3 (thỏa mãn)\end{array}\right.$")
+        self.assertIn(r"\text{thỏa mãn}", out)
+        self.assertIn(r"\text{ (loại)}", out)  # đã bọc sẵn thì giữ nguyên
+        self.assertEqual(wrap_vietnamese_in_math(r"$y=x^3-3x+\frac{1}{2}$"), r"$y=x^3-3x+\frac{1}{2}$")
+        self.assertEqual(wrap_vietnamese_in_math("Không có công thức"), "Không có công thức")

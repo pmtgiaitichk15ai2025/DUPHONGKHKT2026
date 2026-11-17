@@ -12036,8 +12036,8 @@ def render_pedagogical_lesson_visuals(markdown_text: str, subject: str = "", gra
     if not markdown_text:
         return markdown_text
 
-    from services.markdown_tidy import tidy_stray_bullets
-    text = tidy_stray_bullets(str(markdown_text))
+    from services.markdown_tidy import tidy_stray_bullets, wrap_vietnamese_in_math
+    text = wrap_vietnamese_in_math(tidy_stray_bullets(str(markdown_text)))
     is_math_subj = any(m in str(subject).lower() for m in ['toán', 'toan', 'math']) or (str(subject).strip() == "")
 
     # Gỡ vỏ code block nếu AI lỡ bọc bảng Markdown trong ```text ... ```
@@ -12592,7 +12592,16 @@ if selected_station == station_labels[0]:
                 components.html(export_html, height=790, scrolling=True)
                 st.download_button("📥 Tải phiếu HTML để xem / In PDF", export_html.encode("utf-8"), file_name=f"Bai_hoc_{t1_indexing_data['index_code']}_{export_style}.html", mime="text/html", key="download_lesson_html", on_click="ignore")
                 st.download_button("📄 Tải nội dung gốc Markdown", cleaned_p1.encode("utf-8"), file_name=f"Bai_hoc_{t1_indexing_data['index_code']}.md", mime="text/markdown", key="download_lesson_source", on_click="ignore")
-                st.download_button("🖋️ Tải prompt phong cách chữ viết tay", handwritten_prompt(subject, grade_num, current_topic_name, cleaned_p1).encode("utf-8"), file_name=f"Prompt_{t1_indexing_data['index_code']}.json", mime="application/json", key="download_handwritten_prompt", on_click="ignore")
+                handwritten_prompt_bytes = handwritten_prompt(subject, grade_num, current_topic_name, cleaned_p1).encode("utf-8")
+                st.download_button("🖋️ Tải prompt phong cách chữ viết tay", handwritten_prompt_bytes, file_name=f"Prompt_{t1_indexing_data['index_code']}.json", mime="application/json", key="download_handwritten_prompt", on_click="ignore")
+                # Nút tải của Streamlit lấy file từ bộ nhớ phiên; phiên kết nối lại thì báo "File not found".
+                # Link dự phòng nhúng thẳng dữ liệu nên luôn tải được.
+                from services.inline_download import inline_download_links
+                st.markdown(inline_download_links([
+                    ("Phiếu HTML", export_html.encode("utf-8"), f"Bai_hoc_{t1_indexing_data['index_code']}_{export_style}.html", "text/html"),
+                    ("Markdown", cleaned_p1.encode("utf-8"), f"Bai_hoc_{t1_indexing_data['index_code']}.md", "text/markdown"),
+                    ("Prompt chữ viết tay", handwritten_prompt_bytes, f"Prompt_{t1_indexing_data['index_code']}.json", "application/json"),
+                ]), unsafe_allow_html=True)
 
             # --- NÚT ĐỌC BÀI GIẢNG TTS SƯ PHẠM CHUẨN GDPT 2018 & TIẾNG ANH BẢN NGỮ ---
             create_pedagogical_tts_component(cleaned_p1, subject, "tram1_lesson")

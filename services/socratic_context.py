@@ -1418,6 +1418,27 @@ def _hint_norm(text) -> str:
     return value
 
 
+_GENERIC_STOP = {'ham', 'so', 'hamso', 'tinh', 'cua', 'cac', 'nhung', 'trong', 'nhe', 'hay', 'thay', 'dung',
+                 'sai', 'menh', 'de', 'sau', 'cho', 'xet', 'mot', 'nay', 'duoc', 'khong', 'nhu', 'the', 'nao',
+                 'voi', 'tung', 'can', 'than', 'lai', 'cach', 'tren', 'bang', 'chat', 'phuong'}
+
+
+def is_generic_hint(hint, question) -> bool:
+    """Hint không bám dữ kiện riêng của câu (không công thức, không số, gần như không chung từ với đề).
+
+    Ca thật 17/11/2026: "Em hãy ôn lại các tính chất cơ bản của đồ thị hàm bậc ba để làm từng ý nhé."
+    """
+    text = str(hint or '')
+    if '$' in text or re.search(r'\d', text):
+        return False
+    q = question if isinstance(question, dict) else {}
+    source = ' '.join([str(q.get('q') or '')] + [str(o) for o in q.get('opt') or []]
+                      + [str((st or {}).get('t') or '') for st in q.get('stmts') or [] if isinstance(st, dict)])
+    words = lambda value: {w for w in folded(value).split() if len(w) >= 4 and w not in _GENERIC_STOP}
+    # Đề quá ngắn (ít từ nội dung) thì không đòi trùng từ, tránh loại oan hint hợp lệ.
+    return len(words(text) & words(source)) < min(2, len(words(source)))
+
+
 def safe_ai_hint(question) -> str:
     """Trả hint do AI viết cho chính câu này nếu không lộ đáp án/lời giải; ngược lại trả chuỗi rỗng.
 
@@ -1433,6 +1454,8 @@ def safe_ai_hint(question) -> str:
     if len(hint) < 15 or len(hint) > 600:
         return ''
     if looks_like_explain_solution(hint):
+        return ''
+    if is_generic_hint(hint, q):
         return ''
     # Gợi chữ cái đầu / số chữ cái của đáp án là lộ đáp án (ca thật: "tên bắt đầu bằng chữ 'S'").
     if re.search(r'(?i)(?:bắt\s*đầu|mở\s*đầu|kết\s*thúc)\s*bằng\s*(?:chữ|chữ\s*cái|ký\s*tự|âm)\b'
@@ -1518,6 +1541,11 @@ def build_tram3_socratic_guide(question, subject='Toán học', grade_num=12) ->
         q = dict(q)
         q['opt'] = q.get('options')
     opts = q.get('opt') or []
+    if q.get('stmts'):
+        # Đúng/Sai: hint riêng từng ý bám dữ kiện hơn một hint chung cho cả câu.
+        per_statement = statement_hints_guide(q)
+        if per_statement:
+            return per_statement
     ai_hint = safe_ai_hint(q)
     if ai_hint:
         return '\n'.join([ln.strip() for ln in ai_hint.splitlines() if ln.strip()][:4])
