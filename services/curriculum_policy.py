@@ -687,6 +687,17 @@ def repair_exam_bbt_m_consistency(exam, subject, grade):
     return result
 
 
+_MATH_SEGMENT = re.compile(r"\$[^$]+\$")
+_BARE_INF = re.compile(r"(?<![\\A-Za-z])inf(?:ty)?\b")
+
+
+def normalize_math_infinity(text):
+    """Trong công thức $...$, 'inf'/'+inf'/'-infty' viết trần thành \\infty để KaTeX hiện ∞."""
+    if not isinstance(text, str) or "inf" not in text:
+        return text
+    return _MATH_SEGMENT.sub(lambda m: _BARE_INF.sub(r"\\infty", m.group(0)), text)
+
+
 def prepare_exam_for_delivery(exam, subject, grade, duration=45, custom_request=""):
     """Preserve academic payload; only apply proven BBT↔m consistency repairs."""
     subject, grade = validate_exam_context(exam, subject, grade)
@@ -711,6 +722,17 @@ def prepare_exam_for_delivery(exam, subject, grade, duration=45, custom_request=
     validate_exam_item_language(result, subject)
     check_current_facts("\n".join(texts))
     result = repair_exam_bbt_m_consistency(result, subject, grade)
+    for _, questions in question_groups(result):
+        for question in questions:
+            question.pop("_independent_answer_mismatch", None)
+            question["q"] = normalize_math_infinity(question.get("q", ""))
+            if isinstance(question.get("opt"), list):
+                # Bỏ ký tự '|' lạc ở đầu phương án (ca thật: '|D. $y = x + 2$.').
+                question["opt"] = [normalize_math_infinity(re.sub(r"^\s*\|+\s*", "", o) if isinstance(o, str) else o)
+                                   for o in question["opt"]]
+            for stmt in question.get("stmts") or []:
+                if isinstance(stmt, dict) and "t" in stmt:
+                    stmt["t"] = normalize_math_infinity(stmt["t"])
     payload = {k: result[k] for k in ("p1", "p2", "p3", "part_doc_hieu", "part_viet") if k in result}
     result["curriculum_audit"] = {
         "policy_checked_at": POLICY_DATE, "policy_evaluated_on": policy_evaluation_date(), "textbook": "Kết nối tri thức với cuộc sống",
@@ -1101,6 +1123,11 @@ def exam_prompt(subject, grade, topics, counts, code, custom="", pathway=""):
     from services.request_scope import explicit_request_scope, request_scope_prompt
     return (policy_prompt(subject, grade, 3, "; ".join(topics), pathway) + LEVEL_GUIDANCE + request_scope_prompt(explicit_request_scope(subject, custom)) + "\n"
             + "\nTrường hint là gợi mở Socratic độc lập; explain và ans dành cho giải thích/chấm bài, không dùng thay hint. Không tiết lộ đáp án hoặc giải hộ trong hint."
+            + "\nCÁCH VIẾT HINT (mỗi câu, mỗi ý Đúng/Sai): viết như người thầy tâm huyết ngồi cạnh học sinh, xưng thầy – em, giọng ân cần, động viên để em không nản. "
+            + "2–3 câu ngắn: (1) chỉ đúng dữ kiện của CHÍNH câu này em cần để ý (hàm số, số liệu, bảng, hình, điều kiện cụ thể); "
+            + "(2) một câu hỏi dẫn em tới bước làm đầu tiên hoặc kiến thức cần nhớ lại; (3) có thể thêm một lời khích lệ ngắn. "
+            + "Không viết chung chung kiểu 'hãy khảo sát hàm số', 'lập bảng xét dấu' mà không gắn dữ kiện của câu. "
+            + "Tuyệt đối không nêu kết quả, giá trị cuối, phương án đúng, số nghiệm, kết luận Đúng/Sai của từng ý; không tính hộ, không viết lời giải."
             + structure + WEB_QUESTION_INSTRUCTION
             + "\nKHÓA CỨNG KHI SINH ĐỀ: đúng môn " + subject + ", đúng lớp " + str(grade) + ", đúng các chủ đề đã chọn (" + "; ".join(str(t) for t in topics) + "), đúng định hướng (" + (str(pathway) if pathway else "chưa khai báo") + "), và đúng nguyên văn yêu cầu tùy biến (" + (str(custom).strip() or "không có") + "). Kho thiếu câu thì sinh đủ đúng số câu của cấu trúc đã chọn. Không trả đề thiếu câu, không đổi môn, lớp, chủ đề và không bỏ yêu cầu tùy biến. Căn cứ chương trình, sách và văn bản dùng đúng bộ lọc đã có trong yêu cầu này."
             + "\nYêu cầu tùy biến trong phạm vi môn/lớp đã chọn: " + str(custom)

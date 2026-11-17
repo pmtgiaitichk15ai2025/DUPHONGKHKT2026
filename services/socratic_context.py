@@ -1318,6 +1318,95 @@ def _plain_midwife(question, subject) -> str:
     )
 
 
+def _hint_norm(text) -> str:
+    value = str(text or '').lower()
+    value = re.sub(r'\\(?:dfrac|frac|left|right|,|;|!)', '', value)
+    value = re.sub(r'[\s$\\{}().,;:]+', '', value)
+    return value
+
+
+def safe_ai_hint(question) -> str:
+    """Trả hint do AI viết cho chính câu này nếu không lộ đáp án/lời giải; ngược lại trả chuỗi rỗng.
+
+    Hint của AI bám dữ kiện riêng của câu (số, hàm, bảng) nên được ưu tiên hơn câu mẫu.
+    Bị chặn khi: giống lời giải, chứa nội dung phương án đúng, chứa đáp số Phần III,
+    phán Đúng/Sai cho từng ý, hoặc chép nguyên một đoạn dài của phần giải thích.
+    """
+    q = question if isinstance(question, dict) else {}
+    hint = str(q.get('hint') or q.get('socratic_hint') or '').strip()
+    if len(hint) < 15 or len(hint) > 600:
+        return ''
+    if looks_like_explain_solution(hint):
+        return ''
+    stem = str(q.get('q') or q.get('question') or '')
+    opts = q.get('opt') or q.get('options') or []
+    ans = str(q.get('ans') or q.get('correct') or '').strip()
+
+    def _math_segments(text):
+        return {_hint_norm(m) for m in re.findall(r'\$([^$]+)\$', str(text or '')) if _hint_norm(m)}
+
+    def _plain(text):
+        return re.sub(r'\$[^$]*\$', ' ', str(text or '')).replace(',', '.')
+
+    def _says_value(value):
+        """Giá trị xuất hiện nguyên vẹn trong hint (một công thức trọn vẹn hoặc một số trong lời thường)
+        mà đề không tự cho sẵn đúng như vậy."""
+        norm = _hint_norm(value)
+        if not norm:
+            return False
+        if norm in _math_segments(hint) and norm not in _math_segments(stem):
+            return True
+        if re.fullmatch(r'-?\d+(?:\.\d+)?', norm.replace(',', '.')):
+            number = r'(?<![\d.])' + re.escape(norm.replace(',', '.')) + r'(?![\d])'
+            if re.search(number, _plain(hint)) and not re.search(number, _plain(stem)):
+                return True
+        plain_value = re.sub(r'\s+', ' ', _plain(value)).strip(' .').lower()
+        if len(plain_value) >= 6 and plain_value in _plain(hint).lower() and plain_value not in _plain(stem).lower():
+            return True
+        return False
+
+    if opts and re.fullmatch(r'[A-Da-d]', ans):
+        if re.search(r'(?i)(?:phương\s*án|đáp(?:\s*án)?|chọn)\s*' + ans + r'\b', hint):
+            return ''
+        for opt in opts:
+            if str(opt).strip()[:1].upper() == ans.upper():
+                content = re.sub(r'^[A-D][.):]\s*', '', str(opt).strip(), flags=re.I).strip().rstrip('.')
+                inner = re.findall(r'\$([^$]+)\$', content)
+                if _says_value(inner[0] if len(inner) == 1 and content.strip('$ ') == inner[0].strip() else content):
+                    return ''
+    elif ans and not opts:
+        if _says_value(ans):
+            return ''
+    if q.get('stmts') and re.search(
+            r'(?i)(?:\bý\s*[a-d]\b|mệnh\s*đề|khẳng\s*định)[^.\n?]{0,20}\b(?:là\s*)?(?:đúng|sai)\b(?!\s*(?:hay|hoặc|không))',
+            hint):
+        return ''
+    explain = re.sub(r'\s+', ' ', str(q.get('explain') or ''))
+    flat_hint = re.sub(r'\s+', ' ', hint)
+    # Chỉ coi là chép lời giải khi trùng một đoạn dài; gọi tên cùng phương pháp thì không chặn.
+    for start in range(0, max(0, len(explain) - 80), 20):
+        if explain[start:start + 80] in flat_hint:
+            return ''
+    return hint
+
+
+def statement_hints_guide(question) -> str:
+    """Phần Đúng/Sai: ghép hint AI viết riêng cho từng ý, mỗi ý đều qua bộ kiểm lộ đáp án."""
+    q = question if isinstance(question, dict) else {}
+    stem = str(q.get('q') or '')
+    lines = []
+    for index, stmt in enumerate(q.get('stmts') or []):
+        if not isinstance(stmt, dict):
+            continue
+        probe = {'q': stem + ' ' + str(stmt.get('t') or ''), 'stmts': [stmt],
+                 'hint': stmt.get('hint') or stmt.get('socratic_hint') or '',
+                 'explain': q.get('explain') or ''}
+        safe = safe_ai_hint(probe)
+        if safe:
+            lines.append('**Ý ' + chr(97 + index) + ')** ' + re.sub(r'\s+', ' ', safe).strip())
+    return '\n\n'.join(lines)
+
+
 def build_tram3_socratic_guide(question, subject='Toán học', grade_num=12) -> str:
     """HD Socratic Trạm 1 và 3: 1–2 câu thầy hỏi, tối đa 3 dòng. Không lộ đáp, không lấy explain."""
     q = question if isinstance(question, dict) else {}
@@ -1328,6 +1417,12 @@ def build_tram3_socratic_guide(question, subject='Toán học', grade_num=12) ->
         q = dict(q)
         q['opt'] = q.get('options')
     opts = q.get('opt') or []
+    ai_hint = safe_ai_hint(q)
+    if ai_hint:
+        return '\n'.join([ln.strip() for ln in ai_hint.splitlines() if ln.strip()][:4])
+    per_statement = statement_hints_guide(q)
+    if per_statement:
+        return per_statement
     body = _plain_midwife(q, subject)
     body = _SOLUTION_LEAK.sub('', body)
     stem = str(q.get('q') or '')

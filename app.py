@@ -14615,14 +14615,24 @@ if selected_station == station_labels[2]:
 
 
 
-    def enrich_exam_data(exam, custom_request=""):
+    def enrich_exam_data(exam, custom_request="", allow_ai_recovery=False):
         validate_exam_context(exam, subject, grade_num)
-        use_ai_recovery = st.session_state.get("enable_ai_context_recovery", False)
+        # Nút Sinh đề đã cam kết "thiếu thì AI sinh đủ": cho phép AI thay câu bị chặn (tối đa 6 câu).
+        use_ai_recovery = allow_ai_recovery or st.session_state.get("enable_ai_context_recovery", False)
         generator = (lambda prompt: call_gemini_with_fallback(prompt, json_mode=True)) if use_ai_recovery else None
+        if allow_ai_recovery and exam.get("exam_source_type") == "ai_generated":
+            # Lượt giải độc lập: câu có khóa lệch được đánh dấu để thay bằng câu mới.
+            from services.independent_answer_check import mark_independent_mismatches
+            exam, answer_check = mark_independent_mismatches(
+                exam, subject, grade_num,
+                lambda solver_system, solver_user: call_gemini_with_fallback(
+                    solver_user, system_instruction=solver_system, json_mode=True),
+            )
+            exam["independent_answer_check"] = answer_check
         draft = repair_exam_context(exam, subject, grade_num,
             topics=st.session_state.get("policy_selected_topics", []),
             bank_provider=ree.get_baseline_questions_pool if ree else None,
-            ai_generator=generator, max_ai_questions=2, custom_request=custom_request)
+            ai_generator=generator, max_ai_questions=(6 if allow_ai_recovery else 2), custom_request=custom_request)
         st.session_state.last_context_recovery = draft.get("context_recovery", {})
         if draft.get("context_recovery", {}).get("unresolved"):
             from services.recovery_diagnostics import log_recovery_failure
@@ -15308,7 +15318,10 @@ if selected_station == station_labels[2]:
                         if parsed_exam is None:
                             # Bản nháp kho đã bị từ chối và lỗi đã hiển thị; giữ nguyên đề cũ.
                             raise _BankDraftRejected()
-                        st.session_state.exam_data = enrich_exam_data(parsed_exam, custom_request=custom_matrix_prompt)
+                        st.session_state.exam_data = enrich_exam_data(
+                            parsed_exam, custom_request=custom_matrix_prompt,
+                            allow_ai_recovery=parsed_exam.get("exam_source_type") != "official_paper",
+                        )
                         if "seen_question_fps" not in st.session_state:
                             st.session_state.seen_question_fps = set()
                         for p_key in ("p1", "p2", "p3"):
@@ -16223,9 +16236,13 @@ if selected_station == station_labels[2]:
 
                     render_question_source_badge(q, idx)
 
-                    st.markdown(f"**Câu {original_question_number(exam, q, idx+1)}:** {sanitize_katex_latex(clean_question_bbt_text(q.get('q')))}")
+                    from services.visual_placement import split_stem_at_visual
+                    _stem_lead, _stem_after = split_stem_at_visual(sanitize_katex_latex(clean_question_bbt_text(q.get('q'))))
+                    st.markdown(f"**Câu {original_question_number(exam, q, idx+1)}:** {_stem_lead}")
 
                     render_fast_visual(q, f"test_p1_{idx}")
+                    if _stem_after:
+                        st.markdown(_stem_after)
 
                     choice_key = f"t3_p1_{idx}"
                     previous = st.session_state.exam_answers.get(f"p1_{idx}")
@@ -16256,9 +16273,13 @@ if selected_station == station_labels[2]:
 
                     render_question_source_badge(q, idx)
 
-                    st.markdown(f"**Câu {original_question_number(exam, q, idx+1)}:** {sanitize_katex_latex(clean_question_bbt_text(q.get('q')))}")
+                    from services.visual_placement import split_stem_at_visual
+                    _stem_lead, _stem_after = split_stem_at_visual(sanitize_katex_latex(clean_question_bbt_text(q.get('q'))))
+                    st.markdown(f"**Câu {original_question_number(exam, q, idx+1)}:** {_stem_lead}")
 
                     render_fast_visual(q, f"test_p2_{idx}")
+                    if _stem_after:
+                        st.markdown(_stem_after)
 
                     for s_idx, stmt in enumerate(q.get("stmts", [])):
 
@@ -16295,9 +16316,13 @@ if selected_station == station_labels[2]:
 
                     render_question_source_badge(q, idx)
 
-                    st.markdown(f"**Câu {original_question_number(exam, q, idx+1)}:** {sanitize_katex_latex(clean_question_bbt_text(q.get('q')))}")
+                    from services.visual_placement import split_stem_at_visual
+                    _stem_lead, _stem_after = split_stem_at_visual(sanitize_katex_latex(clean_question_bbt_text(q.get('q'))))
+                    st.markdown(f"**Câu {original_question_number(exam, q, idx+1)}:** {_stem_lead}")
 
                     render_fast_visual(q, f"test_p3_{idx}")
+                    if _stem_after:
+                        st.markdown(_stem_after)
 
                     short_key = f"t3_p3_{idx}"
                     previous = st.session_state.exam_answers.get(f"p3_{idx}")

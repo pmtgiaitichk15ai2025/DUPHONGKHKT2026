@@ -299,7 +299,9 @@ class TestStationUI(unittest.TestCase):
         replacement = {"subject": "Toán học", "grade": 12, "topic": "Hàm số", "q": "Đồ thị như hình bên của $y=x^3+2$. Tung độ giao Oy bằng bao nhiêu?", "opt": ["A. 1", "B. 2", "C. 3", "D. 4"], "ans": "B"}
         with patch("google.genai.Client") as client, patch.object(engine, "get_baseline_questions_pool", return_value={"p1": [], "p2": [], "p3": []}):
             response = client.return_value.__enter__.return_value.models.generate_content
+            # Lượt 2: bộ giải độc lập đối chiếu khóa (đồng ý khóa B), lượt 3: câu thay thế.
             response.side_effect = [SimpleNamespace(text=json.dumps(initial), candidates=[]),
+                                    SimpleNamespace(text=json.dumps({"p1": [{"work": "", "ans": "B"}], "p2": [], "p3": []}), candidates=[]),
                                     SimpleNamespace(text=json.dumps({"replacement_question": replacement}), candidates=[])]
             next(b for b in at.button if b.label == "🚀 Sinh đề").click().run()
         self.assertEqual([e.message for e in at.exception], [])

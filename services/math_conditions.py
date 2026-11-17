@@ -135,16 +135,21 @@ def _unbounded_integer_parameter_count(raw, text):
     prefix, separator, _ = text.partition('de ham so')
     if not separator or not re.fullmatch(r'(?:co )?bao nhieu gia tri nguyen cua (?:tham so )?m', prefix.strip()):
         return ''  # Unknown qualifiers may bound the integer parameter.
-    match = re.search(r'khong co (?:diem )?cuc tri', text)
+    # Cùng bản chất Δ' ≤ 0: "không có cực trị" và "đồng biến/nghịch biến trên R" (ca thật 17/11/2026).
+    tail_pattern = (r'khong co (?:diem )?cuc tri'
+                    r'|(?:dong|nghich) bien tren (?:mathbb r|r|khoang infty infty|infty infty)')
+    match = re.search(tail_pattern, text)
     if not match or text[match.end():].strip():
         return ''
+    requirement = 'increasing' if match.group(0).startswith('dong') else (
+        'decreasing' if match.group(0).startswith('nghich') else 'no_extrema')
     if (re.search(r'\bm\s*(?:\\in\b|∈|[<>≤≥=])', raw)
             or any(t in text for t in ('nguyen duong', 'nguyen am', 'm thuoc',
                                         'm duong', 'm am', 'trong doan', 'trong khoang'))):
         return ''
     expressions = list(re.finditer(r'(?:\by|\bf\s*\(\s*x\s*\))\s*=\s*([^$\n;]+)', raw))
     for expression_match in expressions[:3]:
-        if not re.fullmatch(r'khong co (?:diem )?cuc tri', folded(raw[expression_match.end():])):
+        if not re.fullmatch(tail_pattern, folded(raw[expression_match.end():])):
             continue
         expression = expression_match.group(1)
         expression = re.sub(r'^f\s*\(\s*x\s*\)\s*=\s*', '', expression).strip()
@@ -160,6 +165,9 @@ def _unbounded_integer_parameter_count(raw, text):
                 continue
             a, b, c, d = [sp.expand(polynomial).coeff(x, i) for i in (3, 2, 1, 0)]
             if any(v.free_symbols for v in (a, b, d)) or a == 0 or sp.degree(c, t) != 1:
+                continue
+            # Hệ số x^3 ngược chiều yêu cầu: không m nào thỏa, đếm được bằng 0 — hợp lệ.
+            if (requirement == 'increasing' and a < 0) or (requirement == 'decreasing' and a > 0):
                 continue
             # Derivative discriminant <=0 is a nonempty half-line in m.
             # Either direction contains infinitely many unrestricted integers.
@@ -431,9 +439,171 @@ def _rational_monotonic_statement_conflict(question):
     return ''
 
 
+_BBT_ARROWS = {'->', '→', '↗', '↘', '\\nearrow', '\\searrow', 'nearrow', 'searrow', '/', '\\'}
+
+
+def _bbt_direction_conflict(question):
+    """Mũi tên/giá trị của BBT phải khớp dấu đạo hàm trên từng khoảng.
+
+    Ca thật 17/11/2026: y' dương trên (1; +∞) nhưng dòng y đi từ 3 xuống 1.
+    Chỉ kết luận khi đọc được đủ dòng dấu và dòng giá trị dạng số/vô cực; còn lại bỏ qua.
+    """
+    raws = [question.get('bbt')]
+    stem = _question_stem(question)
+    if '|' in stem:
+        raws.append(stem)
+    for raw in raws:
+        if not raw:
+            continue
+        lines = [ln for ln in str(raw).splitlines() if '|' in ln and not re.fullmatch(r'[\s|:\-]+', ln)]
+        rows = []
+        for ln in lines:
+            cells = [c.strip() for c in ln.replace('||', '|‖|').split('|')]
+            cells = [c for c in cells if c]
+            if cells:
+                rows.append(cells)
+        sign_at = next((i for i, r in enumerate(rows) if "'" in r[0] or '′' in r[0]), None)
+        if sign_at is None or sign_at + 1 >= len(rows):
+            continue
+        sign_tokens = [c.replace('$', '') for c in rows[sign_at][1:]]
+        signs, bounds = [], []
+        for tok in sign_tokens:
+            if tok in ('+', '-', '−'):
+                if signs and len(bounds) < len(signs):
+                    bounds.append('0')
+                signs.append('+' if tok == '+' else '-')
+            elif tok in ('0', '‖') and signs and len(bounds) < len(signs):
+                bounds.append(tok)
+        values = [c for c in rows[sign_at + 1][1:] if c.replace('$', '') not in _BBT_ARROWS and c != '‖']
+        if len(signs) < 1 or len(values) != len(signs) + 1 + bounds.count('‖'):
+            continue
+        parsed = [_parse_numeric_cell(v) for v in values]
+        idx = 0
+        for k, sign in enumerate(signs):
+            a, b = parsed[idx], parsed[idx + 1]
+            if a is not None and b is not None and a != b:
+                if (sign == '+' and not b > a) or (sign == '-' and not b < a):
+                    return 'bbt_direction_contradicts_derivative_sign'
+            elif a is not None and b is not None and a == b:
+                return 'bbt_direction_contradicts_derivative_sign'
+            idx += 1
+            if k < len(bounds) and bounds[k] == '‖':
+                idx += 1
+    return ''
+
+
+def _graph_function_expr(spec):
+    """Biểu thức SymPy của hàm được vẽ từ trường f (chỉ các kiểu đã biết)."""
+    if not isinstance(spec, dict):
+        return None
+    x = sp.Symbol('x', real=True)
+    try:
+        k = {name: sp.nsimplify(spec.get(name, 0) or 0) for name in 'abcde'}
+    except (TypeError, ValueError, sp.SympifyError):
+        return None
+    kind = spec.get('type')
+    if kind == 'func_3':
+        return x, k['a'] * x**3 + k['b'] * x**2 + k['c'] * x + k['d']
+    if kind == 'func_1_1':
+        return x, (k['a'] * x + k['b']) / (k['c'] * x + k['d'])
+    if kind == 'func_2_1':
+        return x, (k['a'] * x**2 + k['b'] * x + k['c']) / (k['d'] * x + k['e'])
+    return None
+
+
+def _graph_interval_extrema_conflict(question):
+    """Câu GTLN/GTNN trên đoạn [a; b] đọc từ đồ thị: tự tính M, m từ chính hàm được vẽ và đối chiếu khóa.
+
+    Ca thật 17/11/2026: đồ thị y = x³ − 3x² + 2 trên [−1; 2] cho M + m = 0, khóa ghi 2.
+    Chỉ kết luận khi hàm liên tục trên đoạn, đọc được yêu cầu (M, m, M+m, M−m, M·m)
+    và đúng một phương án khác khớp giá trị tính được.
+    """
+    stem = _question_stem(question)
+    low = stem.lower()
+    if 'lớn nhất' not in low and 'nhỏ nhất' not in low:
+        return ''
+    built = _graph_function_expr(question.get('f'))
+    if not built:
+        return ''
+    match = re.search(r'đoạn\s*\$?\s*\[\s*(-?\d+(?:[.,]\d+)?)\s*;\s*(-?\d+(?:[.,]\d+)?)\s*\]', stem)
+    if not match:
+        return ''
+    x, expr = built
+    lo, hi = (sp.Rational(v.replace(',', '.')) for v in match.groups())
+    if not lo < hi:
+        return ''
+    denominator = sp.denom(sp.together(expr))
+    if denominator.free_symbols and any(lo <= r <= hi for r in sp.real_roots(sp.Poly(denominator, x))):
+        return ''
+    points = {lo, hi}
+    derivative = sp.together(sp.diff(expr, x))
+    numerator = sp.numer(derivative)
+    if numerator.free_symbols:
+        points.update(r for r in sp.real_roots(sp.Poly(numerator, x)) if lo <= r <= hi)
+    values = [sp.nsimplify(expr.subs(x, p)) for p in points]
+    big, small = max(values), min(values)
+    plain = stem.replace(' ', '')
+    if re.search(r'M\+m', plain):
+        target = big + small
+    elif re.search(r'M-m', plain):
+        target = big - small
+    elif re.search(r'M(?:\.|\\cdot|\\times)m', plain):
+        target = big * small
+    elif 'lớn nhất' in low and 'nhỏ nhất' not in low:
+        target = big
+    elif 'nhỏ nhất' in low and 'lớn nhất' not in low:
+        target = small
+    else:
+        return ''
+    options = _question_options(question)
+    key = _question_answer_key(question)
+    if options and key:
+        parsed = [_parse_numeric_cell(_strip_option_label(o).rstrip('.')) for o in options]
+        index = ord(key) - ord('A')
+        if index >= len(parsed) or parsed[index] is None:
+            return ''
+        if parsed[index] == target:
+            return ''
+        if sum(1 for value in parsed if value == target) == 1:
+            return 'graph_interval_extrema_answer_mismatch'
+        return ''
+    answer = _parse_numeric_cell(str(question.get('ans') or '').replace(',', '.'))
+    if answer is not None and not options and answer != target:
+        return 'graph_interval_extrema_answer_mismatch'
+    return ''
+
+
+def _graph_type_mismatch(question):
+    """Loại hàm của dữ liệu hình (trường f) phải khớp loại hàm đề nêu, nếu không sẽ vẽ sai đồ thị.
+
+    Ca thật 17/11/2026: đề nêu y = (ax+b)/(cx+d) nhưng f khai báo func_3 nên app vẽ đường bậc ba.
+    """
+    spec = question.get('f')
+    if not isinstance(spec, dict) or not spec.get('type'):
+        return ''
+    kind = spec['type']
+    stem = _question_stem(question)
+    if re.search(r'\\[dt]?frac\s*\{\s*ax\s*\+\s*b\s*\}\s*\{\s*cx\s*\+\s*d\s*\}', stem) and kind != 'func_1_1':
+        return 'graph_type_mismatch'
+    if re.search(r'ax\^\{?3\}?\s*\+\s*bx\^\{?2\}?|hàm\s+(?:số\s+)?bậc\s+ba', stem, re.I) and kind != 'func_3':
+        return 'graph_type_mismatch'
+    return ''
+
+
 def math_condition_conflict(question):
     if not isinstance(question, dict):
         return ""
+    if question.get('subject') and canonical_subject(question['subject']) != 'Toán học':
+        return ""
+    type_issue = _graph_type_mismatch(question)
+    if type_issue:
+        return type_issue
+    direction_issue = _bbt_direction_conflict(question)
+    if direction_issue:
+        return direction_issue
+    extrema_issue = _graph_interval_extrema_conflict(question)
+    if extrema_issue:
+        return extrema_issue
     if question.get('subject') and canonical_subject(question['subject']) != 'Toán học':
         return ""
     raw = _question_stem(question)

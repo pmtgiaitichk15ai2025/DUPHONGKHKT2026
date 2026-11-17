@@ -216,10 +216,48 @@ def _apply_reviewed_visual(result, question, subject, grade):
     return None
 
 
+def _markdown_bbt_block(lines, allow_sign_table=False):
+    """Bảng biến thiên viết dạng markdown trong thân câu (có dòng |---|, ô trống, mũi tên ->).
+
+    Trả (dòng đầu, dòng cuối, bảng BBT 3 dòng) hoặc None. Không có bước này, bảng bị
+    làm sạch khỏi thân câu khi hiển thị nhưng không được vẽ lại — học sinh mất bảng.
+    """
+    rows = [i for i, line in enumerate(lines) if "|" in line]
+    if not rows or rows != list(range(rows[0], rows[-1] + 1)):
+        return None
+    body = [lines[i] for i in rows if not re.fullmatch(r"[\s|:\-]+", lines[i])]
+    # 3 dòng: bảng biến thiên; 2 dòng (x, f'): bảng xét dấu — bộ vẽ sẵn có nhận cả hai qua trường bbt.
+    if len(body) not in ((2, 3) if allow_sign_table else (3,)):
+        return None
+
+    def compact(line):
+        text = line.strip().strip("|").replace("||", "|‖|")
+        cells = [c.strip() for c in text.split("|")]
+        cells = [c for c in cells if c and c not in ("->", "→", "↗", "↘")]
+        return " | ".join(cells).replace(" | ‖ | ", " || ")
+
+    table = "\n".join(compact(line) for line in body)
+    first, second = table.splitlines()[0], table.splitlines()[1]
+    if not first.split("|")[0].strip().lower().startswith("x") or "'" not in second.split("|")[0]:
+        return None
+    return rows[0], rows[-1], table
+
+
 def recover_visual(question, subject, grade):
     """Leave complete supplied payloads alone; reconstruct explicit formulas only."""
     subject, grade = academic_context(subject, grade)
     result = deepcopy(question)
+    stem = result.get("q")
+    if isinstance(stem, str) and re.search(r'"\s*\+\s*"', stem):
+        # AI đôi khi viết nhầm kiểu nối chuỗi: 'như sau:\n\n" + "x | ...'. Bỏ phần rác, giữ nội dung.
+        result["q"] = re.sub(r'"\s*\+\s*"', "", stem)
+    if subject == "Toán học" and result.get("bbt") and isinstance(result.get("q"), str):
+        # Đã có trường bbt để vẽ: gỡ bản chữ của cùng bảng còn sót trong thân câu (tránh hiện hai lần).
+        stem_lines = result["q"].splitlines()
+        duplicate = _markdown_bbt_block(stem_lines, "xét dấu" in result["q"].lower())
+        if duplicate:
+            start, end, _ = duplicate
+            result["q"] = "\n".join(stem_lines[:start] + [""] + stem_lines[end + 1:]).strip()
     if subject == "Toán học" and not has_visual(result) and not result.get("bbt"):
         from services.bbt_display_contract import aligned_bbt_rows
         raw = str(result.get("q", ""))
@@ -231,6 +269,13 @@ def recover_visual(question, subject, grade):
             result["bbt"] = table
             result["q"] = "\n".join(lines[:start] + lines[start+3:]).strip()
             result["visual_recovery"] = {"method": "supplied_inline_table", "input_sha256": _digest(question)}
+        elif not candidates:
+            markdown = _markdown_bbt_block(lines, "xét dấu" in raw.lower())
+            if markdown:
+                start, end, table = markdown
+                result["bbt"] = table
+                result["q"] = "\n".join(lines[:start] + lines[end + 1:]).strip()
+                result["visual_recovery"] = {"method": "supplied_inline_table", "input_sha256": _digest(question)}
     if has_visual(result) or not needs_visual(result):
         return result
     if subject == "Toán học" and grade >= 10:
@@ -256,6 +301,9 @@ def recover_visual(question, subject, grade):
     return result
 
 def _question_issue(question, part, subject, grade):
+    from services.independent_answer_check import MISMATCH_MARK
+    if question.get(MISMATCH_MARK):
+        return "independent_answer_mismatch"
     try:
         validate_exam_context({part: [question]}, subject, grade)
         validate_exam_structure({part: [question]}, subject)
