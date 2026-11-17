@@ -1207,6 +1207,52 @@ def _theory_question(text) -> str:
     return 'Thầy hỏi em: em nhớ lại định nghĩa hoặc hình dung hình vẽ của từng trường hợp, phương án nào khớp đúng định nghĩa đó?'
 
 
+def _oxyz_hint(stem, text) -> str:
+    """Gợi mở như thầy dạy cho các phép toán tọa độ trong không gian (ca thật web 17/11/2026, Toán 12 Bài 8).
+
+    Hỏi để học sinh tự nhớ ra quy tắc, không đưa sẵn công thức trọn vẹn.
+    """
+    if 'oxyz' not in text and 'vec' not in text and 'vecto' not in text:
+        return ''
+    if 'goc' in text and ('vec' in text or 'vecto' in text):
+        return _three_lines(
+            'Em ơi, câu này hỏi góc giữa hai vectơ, mà góc thì mình không đo trực tiếp bằng tọa độ được.',
+            'Thầy hỏi em: trong bài, đại lượng nào nối góc giữa hai vectơ với tọa độ của chúng? Để dùng được nó, em cần tính trước những gì từ hai vectơ đề cho?',
+            'Tính xong từng thứ, em tự hỏi: cosin ra bao nhiêu thì góc là bao nhiêu độ. Thầy tin em làm được.',
+        )
+    if 'trung diem' in text:
+        return _three_lines(
+            'Em ơi, trung điểm nằm chính giữa hai đầu mút.',
+            'Thầy hỏi em: trên trục $Ox$, số nằm chính giữa $x_A$ và $x_B$ thì em tìm thế nào? Rồi trục $Oy$, $Oz$ có làm giống vậy không?',
+            'Em tự làm từng tọa độ nhé.',
+        )
+    if 'trong tam' in text:
+        return _three_lines(
+            'Em ơi, trọng tâm tam giác là điểm "cân bằng" của ba đỉnh.',
+            'Thầy hỏi em: mỗi tọa độ của trọng tâm liên quan thế nào với ba tọa độ cùng tên của ba đỉnh?',
+            'Em làm lần lượt $x$, $y$, $z$ nhé.',
+        )
+    if 'tich vo huong' in text or re.search(r'\\cdot', stem):
+        return _three_lines(
+            'Em ơi, tích vô hướng của hai vectơ ra một con số, không phải một vectơ.',
+            'Thầy hỏi em: các thành phần cùng vị trí của hai vectơ được ghép với nhau bằng phép tính gì, rồi các kết quả đó gộp lại thế nào?',
+            'Em tự tính nhé, cẩn thận dấu âm.',
+        )
+    if 'do dai' in text or re.search(r'\\left\|\s*\\vec|\|\s*\\vec', stem):
+        return _three_lines(
+            'Em ơi, độ dài vectơ trong không gian giống định lí Pi-ta-go mở rộng ra ba chiều.',
+            'Thầy hỏi em: độ dài vectơ được tính từ ba thành phần của nó thế nào — bình phương, cộng, rồi làm gì tiếp?',
+            'Em tự lắp số nhé.',
+        )
+    if re.search(r'\\vec\{?\w+\}?\s*[+-]\s*\d*\s*\\vec', stem) or 'tong' in text or 'hieu' in text:
+        return _three_lines(
+            'Em ơi, cộng hay trừ hai vectơ trong không gian làm theo từng thành phần.',
+            'Thầy hỏi em: hoành độ của kết quả lấy từ những số nào của hai vectơ? Tung độ và cao độ có làm giống vậy không?',
+            'Em làm từng thành phần một, chú ý dấu âm nhé.',
+        )
+    return ''
+
+
 def _math_hint_by_kind(q, stem, text, expr, topic) -> str:
     kind = math_hint_kind(q)
     if kind == 'theory':
@@ -1252,6 +1298,9 @@ def _plain_midwife(question, subject) -> str:
     expr = _quoted_expr(stem)
 
     if subj == 'Toán học' and not q.get('stmts'):
+        oxyz = _oxyz_hint(stem, text)
+        if oxyz:
+            return oxyz
         kind = math_hint_kind(q)
         if (kind == 'theory' and _theory_concept(text) != _GENERIC_CONCEPT) or ('phuong sai' in text and 'do lech chuan' in text) or ('vec ab' in text and 'toa do' in text):
             return _math_hint_by_kind(q, stem, text, expr, topic)

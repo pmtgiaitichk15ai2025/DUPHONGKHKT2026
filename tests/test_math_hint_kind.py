@@ -52,5 +52,30 @@ class GenericHintRejected(unittest.TestCase):
         self.assertFalse(is_generic_hint("Em nhớ lại định nghĩa: đường thẳng song song mặt phẳng thì có điểm chung không?", theory))
 
 
+class OxyzTeacherHint(unittest.TestCase):
+    """Ca thật web 17/11/2026 (Toán 12 Bài 8): câu u+v nhận câu mẫu chung 'một công thức áp dụng trực tiếp'."""
+
+    def test_vector_sum(self):
+        from services.socratic_context import build_tram3_socratic_guide
+        q = {"q": r"Trong không gian $Oxyz$, cho hai vectơ $\vec{u}=(1;-2;3)$ và $\vec{v}=(2;1;-1)$. Tọa độ của vectơ $\vec{u}+\vec{v}$ là",
+             "opt": ["A. $(3;-1;2)$.", "B. $(2;-2;-3)$.", "C. $(1;3;-4)$.", "D. $(-1;-3;4)$."], "ans": "A", "level": "NB"}
+        hint = build_tram3_socratic_guide(q, subject="Toán học")
+        self.assertIn("từng thành phần", hint)
+        self.assertIn("?", hint)
+        self.assertNotIn("một công thức áp dụng trực tiếp", hint)
+        self.assertNotIn("3;-1;2", hint)
+
+    def test_angle_and_midpoint(self):
+        from services.socratic_context import build_tram3_socratic_guide
+        angle = {"q": r"Trong không gian $Oxyz$, cho $\vec{a}=(1;0;1)$ và $\vec{b}=(0;1;1)$. Góc giữa hai vectơ $\vec{a}$ và $\vec{b}$ bằng",
+                 "opt": [r"A. $30^\circ$.", r"B. $45^\circ$.", r"C. $90^\circ$.", r"D. $60^\circ$."], "ans": "D"}
+        self.assertIn("góc giữa hai vectơ", build_tram3_socratic_guide(angle))
+        mid = {"q": r"Trong không gian $Oxyz$, cho $A(1;3;-2)$ và $B(3;-1;4)$. Tọa độ trung điểm $M$ của đoạn thẳng $AB$ là",
+               "opt": ["A. $(1;-2;3)$.", "B. $(2;1;1)$.", "C. $(4;2;2)$.", "D. $(2;2;2)$."], "ans": "B"}
+        hint = build_tram3_socratic_guide(mid)
+        self.assertIn("chính giữa", hint)
+        self.assertNotIn("2;1;1", hint)
+
+
 if __name__ == "__main__":
     unittest.main()
