@@ -1230,8 +1230,7 @@ def get_local_img_as_base64(file_path):
 
 @st.cache_data(show_spinner=False)
 
-def generate_local_qr_base64(data_url: str, fill_color: str = "#0f172a", back_color: str = "#ffffff") -> str:
-    # Chuẩn QR: chấm tối trên nền sáng, viền yên tĩnh 4 ô để Zalo/Android/iPhone đều quét được.
+def generate_local_qr_base64(data_url: str, fill_color: str = "#38bdf8", back_color: str = "#0f172a", border: int = 2) -> str:
 
     if qrcode is not None:
 
@@ -1245,7 +1244,7 @@ def generate_local_qr_base64(data_url: str, fill_color: str = "#0f172a", back_co
 
                 box_size=8,
 
-                border=4,
+                border=border,
 
             )
 
@@ -1446,7 +1445,8 @@ st.sidebar.markdown(sidebar_badge_html, unsafe_allow_html=True)
 
 with st.sidebar.expander("📱 Quét mã QR vào app trên điện thoại", expanded=False):
 
-    qr_img_data = generate_local_qr_base64(APP_URL)
+    # QR vào app: chấm tối trên nền trắng, viền 4 ô để Zalo/Android/iPhone đều quét được.
+    qr_img_data = generate_local_qr_base64(APP_URL, fill_color="#0f172a", back_color="#ffffff", border=4)
 
     st.image(qr_img_data, caption="Bật camera Zalo/iPhone quét mượt mà!", width="stretch")
 
@@ -14752,7 +14752,7 @@ if selected_station == station_labels[2]:
 
             app_share_url = f"{APP_URL}?exam_code={ex_c}&subject={urllib.parse.quote(subject_nm)}"
 
-            qr_base64_img = generate_local_qr_base64(app_share_url, fill_color="#0f172a", back_color="#ffffff")
+            qr_base64_img = generate_local_qr_base64(app_share_url, fill_color="#0284c7", back_color="#0f172a")
 
 
 
