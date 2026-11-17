@@ -11,6 +11,9 @@ __all__ = (
 )
 
 DUP_KEY_MESSAGE = "JSON có khóa trùng; chưa sử dụng vì có thể làm mất câu hỏi."
+# Đánh dấu object có khóa trùng mâu thuẫn (vd hai "ans" khác nhau trong MỘT câu). Câu đó được
+# cách ly để đi vào luồng thay câu sẵn có, các câu khác vẫn dùng; khóa trùng ở cấp gốc vẫn bị từ chối.
+DUP_CONFLICT_MARK = "_duplicate_key_conflict"
 
 # Prompt contract for exam JSON: forbid duplicate keys in every object.
 JSON_UNIQUE_KEYS_RULE = (
@@ -65,10 +68,42 @@ def _unique_object(pairs):
     result = {}
     for key, value in pairs:
         if key in result:
-            result[key] = _merge_duplicate_values(result[key], value)
+            try:
+                result[key] = _merge_duplicate_values(result[key], value)
+            except ValueError:
+                result[DUP_CONFLICT_MARK] = True
         else:
             result[key] = value
     return result
+
+
+def _has_conflict(value):
+    if isinstance(value, dict):
+        return bool(value.get(DUP_CONFLICT_MARK)) or any(_has_conflict(v) for v in value.values())
+    if isinstance(value, list):
+        return any(_has_conflict(v) for v in value)
+    return False
+
+
+def _reject_root_conflict(data):
+    """Khóa trùng mâu thuẫn ngoài danh sách câu p1/p2/p3 (cấp đề, ngữ liệu Ngữ văn...) vẫn bị từ chối."""
+    if isinstance(data, dict):
+        if data.get(DUP_CONFLICT_MARK):
+            raise ValueError(DUP_KEY_MESSAGE)
+        for key, value in data.items():
+            if key in ("p1", "p2", "p3") and isinstance(value, list):
+                continue
+            if key == "replacement_question" and isinstance(value, dict):
+                continue
+            if _has_conflict(value):
+                raise ValueError(DUP_KEY_MESSAGE)
+    elif _has_conflict(data):
+        raise ValueError(DUP_KEY_MESSAGE)
+    return data
+
+
+def question_has_duplicate_conflict(question):
+    return _has_conflict(question)
 
 
 def _trailing_commas(text):
@@ -172,13 +207,13 @@ def parse_ai_json(raw, prepare=lambda value: value):
             text = text[start:]
     text = prepare(text)
     try:
-        return _decode_with_commas(text)
+        return _reject_root_conflict(_decode_with_commas(text))
     except RecursionError as error:
         raise ValueError("JSON lồng quá sâu; chưa sử dụng bản nháp.") from error
     except json.JSONDecodeError:
         pass
     try:
-        return _decode_with_commas(_inner_quotes(text))
+        return _reject_root_conflict(_decode_with_commas(_inner_quotes(text)))
     except json.JSONDecodeError as error:
         raise ValueError(
             f"JSON của AI chưa hợp lệ tại dòng {error.lineno}, cột {error.colno}. "

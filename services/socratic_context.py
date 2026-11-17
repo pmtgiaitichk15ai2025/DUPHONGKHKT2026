@@ -1333,10 +1333,17 @@ def safe_ai_hint(question) -> str:
     phán Đúng/Sai cho từng ý, hoặc chép nguyên một đoạn dài của phần giải thích.
     """
     q = question if isinstance(question, dict) else {}
+    if q.get('hint_leak_detected'):
+        # Lượt giải độc lập thấy hint trỏ thẳng đáp án (kể cả diễn đạt lại nội dung phương án đúng).
+        return ''
     hint = str(q.get('hint') or q.get('socratic_hint') or '').strip()
     if len(hint) < 15 or len(hint) > 600:
         return ''
     if looks_like_explain_solution(hint):
+        return ''
+    # Gợi chữ cái đầu / số chữ cái của đáp án là lộ đáp án (ca thật: "tên bắt đầu bằng chữ 'S'").
+    if re.search(r'(?i)(?:bắt\s*đầu|mở\s*đầu|kết\s*thúc)\s*bằng\s*(?:chữ|chữ\s*cái|ký\s*tự|âm)\b'
+                 r'|chữ\s*cái\s*(?:đầu|cuối)|có\s*\d+\s*chữ\s*cái', hint):
         return ''
     stem = str(q.get('q') or q.get('question') or '')
     opts = q.get('opt') or q.get('options') or []
@@ -1400,7 +1407,8 @@ def statement_hints_guide(question) -> str:
             continue
         probe = {'q': stem + ' ' + str(stmt.get('t') or ''), 'stmts': [stmt],
                  'hint': stmt.get('hint') or stmt.get('socratic_hint') or '',
-                 'explain': q.get('explain') or ''}
+                 'explain': q.get('explain') or '',
+                 'hint_leak_detected': stmt.get('hint_leak_detected')}
         safe = safe_ai_hint(probe)
         if safe:
             lines.append('**Ý ' + chr(97 + index) + ')** ' + re.sub(r'\s+', ' ', safe).strip())

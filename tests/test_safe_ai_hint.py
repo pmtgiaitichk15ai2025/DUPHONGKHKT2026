@@ -140,5 +140,16 @@ class StemTableCleanupTests(unittest.TestCase):
         self.assertEqual(split_stem_at_visual(r["q"]), ("Cho hàm số có bảng biến thiên:", "Xét các mệnh đề sau:"))
 
 
+class FirstLetterLeakTests(unittest.TestCase):
+    def test_first_letter_of_answer_is_a_leak(self):
+        # Ca thật Hóa 12 (17/11/2026).
+        q = {"q": "Tên gọi của acid béo $C_{17}H_{35}COOH$ là", "ans": "B",
+             "opt": ["A. Acid palmitic", "B. Acid stearic", "C. Acid oleic", "D. Acid linoleic"],
+             "hint": "Acid này có 18 carbon và no (gốc $C_{n}H_{2n+1}$). Thầy gợi ý tên của nó bắt đầu bằng chữ 'S' nhé."}
+        self.assertEqual(safe_ai_hint(q), "")
+        q["hint"] = "Em đếm số nguyên tử carbon trong gốc $C_{17}H_{35}$ cộng thêm carbon của nhóm COOH, rồi nhớ lại acid béo no nào có đúng số carbon đó nhé."
+        self.assertTrue(safe_ai_hint(q))
+
+
 if __name__ == "__main__":
     unittest.main()

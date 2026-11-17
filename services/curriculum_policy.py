@@ -63,6 +63,19 @@ def _strip_math_for_language_scan(text):
     return s
 
 
+# Hệ chữ không thuộc đề tiếng Việt/tiếng Anh: Kirin, Hebrew, Ả Rập, Devanagari, Thái, Lào,
+# Hangul, Kana, Hán. Không chặn chữ Hy Lạp (α, β, ω, π dùng trong Toán/Lý).
+_FOREIGN_SCRIPT_RE = re.compile(
+    "[\u0400-\u04FF\u0590-\u05FF\u0600-\u06FF\u0900-\u097F\u0E00-\u0E7F\u0E80-\u0EFF"
+    "\u1100-\u11FF\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uAC00-\uD7AF]"
+)
+# Ngữ văn có thể dẫn nguyên văn thơ chữ Hán: không chặn chữ Hán ở môn này.
+_FOREIGN_SCRIPT_NO_HAN_RE = re.compile(
+    "[\u0400-\u04FF\u0590-\u05FF\u0600-\u06FF\u0900-\u097F\u0E00-\u0E7F\u0E80-\u0EFF"
+    "\u1100-\u11FF\u3040-\u30FF\uAC00-\uD7AF]"
+)
+
+
 def item_display_language_issue(text, subject):
     """Trả mã lỗi nếu stem/mệnh đề lệch ngôn ngữ môn; '' nếu chấp nhận được.
 
@@ -72,6 +85,9 @@ def item_display_language_issue(text, subject):
     fixture có thể lẫn Việt; chất lượng stem TA đi qua prompt, không qua gate này.
     """
     subject = canonical_subject(subject)
+    if (_FOREIGN_SCRIPT_NO_HAN_RE if subject == "Ngữ văn" else _FOREIGN_SCRIPT_RE).search(str(text or "")):
+        # Ca thật Lịch sử 12 (17/11/2026): "Hội nghị Xan Phรานซิสโก" — AI trộn chữ Thái vào đề.
+        return "foreign_script_contamination"
     cleaned = _strip_math_for_language_scan(text)
     if not cleaned.strip():
         return ""
@@ -698,6 +714,27 @@ def normalize_math_infinity(text):
     return _MATH_SEGMENT.sub(lambda m: _BARE_INF.sub(r"\\infty", m.group(0)), text)
 
 
+def literature_textbook_notice(exam, custom_request=""):
+    """Cảnh báo giáo viên khi ngữ liệu Ngữ văn tự khai là văn bản SGK mà người dùng không yêu cầu.
+
+    Chưa có danh mục văn bản SGK đã đối chiếu ba cổng sách, nên chỉ dựa trên khai báo in_textbook
+    của AI và không tự chặn đề.
+    """
+    reading = (exam or {}).get("part_doc_hieu")
+    if not isinstance(reading, dict):
+        return ""
+    if normalize_bool(reading.get("in_textbook")) is not True:
+        return ""
+    request = folded(str(custom_request or ""))
+    names = [folded(str(reading.get(k) or "")) for k in ("source", "author")]
+    if request and any(len(n) >= 4 and any(w in request for w in n.split() if len(w) >= 4) for n in names):
+        return ""
+    if any(token in request for token in ("sgk", "sach giao khoa", "trong sach", "da hoc")):
+        return ""
+    return ("Ngữ liệu đọc hiểu được AI khai là văn bản có trong SGK, trong khi yêu cầu không nêu văn bản này. "
+            "Kiểm tra, đánh giá nên dùng ngữ liệu ngoài SGK; giáo viên cân nhắc đổi đề hoặc nêu rõ văn bản trong yêu cầu tùy biến.")
+
+
 def prepare_exam_for_delivery(exam, subject, grade, duration=45, custom_request=""):
     """Preserve academic payload; only apply proven BBT↔m consistency repairs."""
     subject, grade = validate_exam_context(exam, subject, grade)
@@ -710,6 +747,11 @@ def prepare_exam_for_delivery(exam, subject, grade, duration=45, custom_request=
         raise ValueError("Đề khai báo bộ sách khác KNTT; cần đối chiếu và chọn lại nguồn.")
     result.update(subject=subject, grade=grade)
     result.setdefault("duration", duration)
+
+    if subject == "Ngữ văn":
+        notice = literature_textbook_notice(result, custom_request)
+        if notice:
+            result["literature_textbook_notice"] = notice
     texts = [result.get("title", "")]
     for _, questions in question_groups(result):
         for question in questions:
@@ -745,8 +787,33 @@ def prepare_exam_for_delivery(exam, subject, grade, duration=45, custom_request=
     return audit_exam_levels(result)
 
 
-def validate_exam_structure(exam, subject, counts=None):
-    """Reject missing keys instead of inventing A, True, zero or a statement."""
+_MCQ_KEY = re.compile(r"(?i)^\s*(?:(?:đáp\s*án|phương\s*án)\s*[:\-]?\s*)?\(?([A-D])\)?(?:[.):]|\s|$)")
+
+
+def strict_mcq_letter(answer, options):
+    """Chữ cái đáp án đọc chặt: 'B', 'B.', '(B)', 'B) ...', 'Đáp án: B' hoặc nguyên văn phương án. Không đoán."""
+    text = str(answer or "").strip()
+    if not text:
+        return ""
+    match = _MCQ_KEY.match(text)
+    if match:
+        return match.group(1).upper()
+    if isinstance(options, list) and text in options:
+        return "ABCD"[options.index(text)] if options.index(text) < 4 else ""
+    if isinstance(options, list):
+        bodies = [re.sub(r"^\s*\(?[A-Da-d][.):]\s*", "", str(o)).strip().rstrip(".").strip() for o in options[:4]]
+        hits = [i for i, body in enumerate(bodies) if body and body == text.rstrip(".").strip()]
+        if len(hits) == 1:
+            return "ABCD"[hits[0]]
+    return ""
+
+
+def validate_exam_structure(exam, subject, counts=None, isolate_items=False):
+    """Reject missing keys instead of inventing A, True, zero or a statement.
+
+    isolate_items=True (chỉ lúc nhận đề AI): câu lỗi cấu trúc không hủy cả đề mà được để lại
+    cho luồng thay câu (context_recovery) xử lý; hỏng hết thì vẫn từ chối.
+    """
     if not isinstance(exam, dict):
         raise ValueError("Đề thi phải là JSON object.")
     if subject == "Ngữ văn":
@@ -759,27 +826,42 @@ def validate_exam_structure(exam, subject, counts=None):
         for part, expected in zip(("p1", "p2", "p3"), counts):
             if not isinstance(exam.get(part, []), list) or len(exam.get(part, [])) != expected:
                 raise ValueError(f"Phần {part} chưa đúng {expected} câu theo cấu hình; không tự cắt hoặc bù câu khác.")
+    item_errors, item_total = [], 0
     for part, questions in question_groups(exam):
         for q in questions:
-            if not isinstance(q, dict) or not isinstance(q.get("q"), str) or not q["q"].strip():
-                raise ValueError("Câu hỏi thiếu nội dung.")
-            if part == "p1":
-                opts = q.get("opt")
-                answer = str(q.get("ans", "")).strip()
-                if not isinstance(opts, list) or len(opts) != 4 or not all(str(o).strip() for o in opts):
-                    raise ValueError("Câu trắc nghiệm phải có đúng 4 phương án có nội dung.")
-                if not answer or (answer.upper() not in {"A", "B", "C", "D"} and answer not in opts):
-                    raise ValueError("Thiếu đáp án trắc nghiệm hợp lệ; không tự gán A.")
-            elif part == "p2":
-                stmts = q.get("stmts")
-                if not isinstance(stmts, list) or len(stmts) != 4:
-                    raise ValueError("Câu Đúng/Sai phải có đúng 4 mệnh đề.")
-                for stmt in stmts:
-                    if not isinstance(stmt, dict) or not str(stmt.get("t", "")).strip() or normalize_bool(stmt.get("a", stmt.get("ans"))) is None:
-                        raise ValueError("Mệnh đề thiếu nội dung/đáp án xác định; không tự gán Đúng.")
-            elif part == "p3" and (q.get("ans") is None or not str(q.get("ans", "")).strip()):
-                raise ValueError("Thiếu đáp số trả lời ngắn; không tự gán 0.")
+            item_total += 1
+            try:
+                _validate_item(part, q)
+            except ValueError as error:
+                if not isolate_items:
+                    raise
+                item_errors.append(error)
+    if item_errors and len(item_errors) >= item_total:
+        raise item_errors[0]
     return exam
+
+
+def _validate_item(part, q):
+    """Kiểm một câu; lỗi ném ValueError, không tự bịa đáp án."""
+    if not isinstance(q, dict) or not isinstance(q.get("q"), str) or not q["q"].strip():
+        raise ValueError("Câu hỏi thiếu nội dung.")
+    if part == "p1":
+        opts = q.get("opt")
+        if not isinstance(opts, list) or len(opts) != 4 or not all(str(o).strip() for o in opts):
+            raise ValueError("Câu trắc nghiệm phải có đúng 4 phương án có nội dung.")
+        letter = strict_mcq_letter(q.get("ans"), opts)
+        if not letter:
+            raise ValueError("Thiếu đáp án trắc nghiệm hợp lệ; không tự gán A.")
+        q["ans"] = letter
+    elif part == "p2":
+        stmts = q.get("stmts")
+        if not isinstance(stmts, list) or len(stmts) != 4:
+            raise ValueError("Câu Đúng/Sai phải có đúng 4 mệnh đề.")
+        for stmt in stmts:
+            if not isinstance(stmt, dict) or not str(stmt.get("t", "")).strip() or normalize_bool(stmt.get("a", stmt.get("ans"))) is None:
+                raise ValueError("Mệnh đề thiếu nội dung/đáp án xác định; không tự gán Đúng.")
+    elif part == "p3" and (q.get("ans") is None or not str(q.get("ans", "")).strip()):
+        raise ValueError("Thiếu đáp số trả lời ngắn; không tự gán 0.")
 
 
 def matrix_html(subject, grade):
@@ -1097,9 +1179,13 @@ def exam_prompt(subject, grade, topics, counts, code, custom="", pathway=""):
     if subject == "Ngữ văn":
         schema = {"code": str(code), "subject": subject, "grade": grade,
                   "part_doc_hieu": {"text": "Ngữ liệu mới có nguồn thật; nếu tự sáng tác ghi rõ tự sáng tác", "author": "", "source": "",
+                                     "in_textbook": "true nếu văn bản này có trong SGK Ngữ văn 6–12, false nếu không",
                                      "questions": [{"q": "Câu đọc hiểu", "ans": "Hướng dẫn chấm", "point": 1.0, "explain": "Gợi ý"}]},
                   "part_viet": [{"q": "Đề viết theo lớp", "ans": "Rubric chấm", "point": 6.0, "explain": "Gợi ý"}]}
-        structure = "Đọc hiểu và Viết, rubric tổng 10 điểm; ở lớp 12 tham chiếu 4/6. Số câu, độ dài văn bản và yêu cầu viết phải phù hợp lớp, không áp bài viết lớp 12 cho THCS."
+        structure = ("Đọc hiểu và Viết, rubric tổng 10 điểm; ở lớp 12 tham chiếu 4/6. Số câu, độ dài văn bản và yêu cầu viết phải phù hợp lớp, không áp bài viết lớp 12 cho THCS."
+                     " NGỮ LIỆU ĐỌC HIỂU: mặc định chọn văn bản NGOÀI SGK Ngữ văn (kiểm tra, đánh giá theo quy định hiện hành của Bộ)."
+                     " Chỉ dùng văn bản có trong SGK khi yêu cầu tùy biến của người dùng nêu rõ tác phẩm/văn bản đó."
+                     " Trích đúng nguyên văn văn bản có thật, không chép sai chữ; khai báo trung thực trường in_textbook.")
     else:
         schema = {"code": str(code), "subject": subject, "grade": grade,
                   "p1": [{"q": "Câu hỏi", "opt": ["A. ...", "B. ...", "C. ...", "D. ..."], "ans": "B", "topic": "Chủ đề", "explain": "Gợi ý phương pháp"}],

@@ -3122,8 +3122,8 @@ def is_natural_science_subject(sub: str) -> bool:
 
 
 
-def validate_exam_data(exam, subject_name, counts=None):
-    return validate_exam_structure(exam, canonical_subject(subject_name), counts)
+def validate_exam_data(exam, subject_name, counts=None, isolate_items=False):
+    return validate_exam_structure(exam, canonical_subject(subject_name), counts, isolate_items=isolate_items)
 
 
 
@@ -15290,7 +15290,8 @@ if selected_station == station_labels[2]:
                         if parsed_exam is None and not bank_rejected:
                             def _validate_ai_exam(raw_json_ex):
                                 return validate_exam_data(
-                                    safe_json_loads(raw_json_ex.strip()), subject, structure_counts
+                                    safe_json_loads(raw_json_ex.strip()), subject, structure_counts,
+                                    isolate_items=True,  # câu lỗi đi vào luồng thay câu, không hủy cả đề
                                 )
                             try:
                                 parsed_exam = _validate_ai_exam(call_gemini_with_fallback(
@@ -15298,9 +15299,15 @@ if selected_station == station_labels[2]:
                                 ))
                             except Exception as parse_err:
                                 shortage = "chưa đúng" in str(parse_err) and "câu" in str(parse_err)
-                                if not is_duplicate_key_error(parse_err) and not shortage:
+                                # JSON sai cú pháp (thường do model dự phòng khi quá tải) dùng chung đúng một lượt thử lại sẵn có.
+                                broken_json = "JSON của AI chưa hợp lệ" in str(parse_err)
+                                if not is_duplicate_key_error(parse_err) and not shortage and not broken_json:
                                     raise
                                 suffix = JSON_CLEAN_RETRY_SUFFIX if is_duplicate_key_error(parse_err) else (
+                                    "\n[RETRY — JSON SẠCH]\nBản trước sai cú pháp JSON. Xuất LẠI đúng một JSON hợp lệ theo schema: "
+                                    "đủ dấu phẩy giữa các phần tử, chuỗi đủ ngoặc kép, dấu \\ trong LaTeX được escape. "
+                                    "Không markdown, không giải thích ngoài JSON."
+                                ) if broken_json else (
                                     "\nKho và lần sinh trước chưa đủ câu. Trả đúng một đề đủ số câu đã khóa, "
                                     f"đúng môn {subject}, đúng lớp {grade_num}, đúng chủ đề đã chọn, "
                                     "đúng yêu cầu tùy biến. Không trả đề thiếu câu."
@@ -16004,6 +16011,8 @@ if selected_station == station_labels[2]:
         withheld = recovery_meta.get("withheld") if isinstance(recovery_meta, dict) else 0
         if isinstance(withheld, int) and withheld > 0:
             st.warning(f"Đã để riêng {withheld} câu chưa đủ dữ kiện hoặc lệch kiểm chứng. Các câu còn lại mở để làm. Không bịa đáp án cho câu đã để riêng.")
+        if isinstance(exam, dict) and exam.get("literature_textbook_notice"):
+            st.warning(exam["literature_textbook_notice"])
         with st.expander("📋 Đối soát nhãn mức độ câu hỏi (chưa thẩm định)"):
             cognitive_report = exam.get("cognitive_audit", {})
             st.caption("Chỉ thống kê nhãn khai báo; chưa xác nhận yêu cầu tư duy thực tế hoặc tỷ lệ điểm. Từng ý Đúng/Sai được liệt kê riêng. Không có dữ liệu là chưa xác định.")

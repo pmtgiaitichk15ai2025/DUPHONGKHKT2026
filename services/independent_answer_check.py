@@ -46,8 +46,13 @@ def _figure_note(question):
 
 
 def solver_request(exam, subject, grade):
-    """(system, user) cho lượt giải độc lập; không chứa khóa, lời giải, hint."""
+    """(system, user) cho lượt giải độc lập; không chứa khóa, lời giải.
+
+    Hint được gửi ở phần riêng, đọc SAU khi tự giải, để cùng lượt này kiểm hint có trỏ thẳng
+    vào đáp án không (không thêm lượt gọi AI).
+    """
     items = {}
+    hints = {}
     for part in ("p1", "p2", "p3"):
         rows = []
         for question in exam.get(part) or []:
@@ -63,19 +68,29 @@ def solver_request(exam, subject, grade):
             if part == "p2":
                 row["statements"] = [str((s or {}).get("t", "")) for s in question.get("stmts") or []]
             rows.append(row)
+            if part == "p2":
+                hints.setdefault(part, []).append([str((s or {}).get("hint") or "") for s in question.get("stmts") or []])
+            else:
+                hints.setdefault(part, []).append(str(question.get("hint") or question.get("socratic_hint") or ""))
         if rows:
             items[part] = rows
     example = {
-        "p1": [{"work": "tính nháp ngắn", "ans": "C"}],
-        "p2": [{"work": "tính nháp ngắn", "ans": [True, False, True, False]}],
-        "p3": [{"work": "tính nháp ngắn", "ans": "4.9"}],
+        "p1": [{"work": "tính nháp ngắn", "ans": "C", "hint_points_to": None}],
+        "p2": [{"work": "tính nháp ngắn", "ans": [True, False, True, False], "hint_reveals": [False, True, False, False]}],
+        "p3": [{"work": "tính nháp ngắn", "ans": "4.9", "hint_reveals": False}],
     }
     user = (f"Môn {subject}, lớp {grade}. Tự giải độc lập các câu sau.\n"
             + json.dumps(items, ensure_ascii=False)
             + "\nVới MỖI câu, ghi tính nháp ngắn (1–3 dòng: phép tính then chốt) vào 'work' TRƯỚC, rồi mới chốt 'ans'. "
             + "Phần p1: ans là một chữ cái A/B/C/D. Phần p2: ans là mảng true/false cho từng ý theo thứ tự. "
             + "Phần p3: ans là đáp số dạng chuỗi. Không chắc chắn thì ans = null. "
-            + "Trả đúng một object JSON có đủ ba khóa p1, p2, p3 (phần không có câu thì để mảng rỗng), ví dụ: "
+            + "\n\nSAU KHI đã tự giải xong, mới đọc phần GỢI Ý dành cho học sinh dưới đây (cùng thứ tự câu/ý). "
+            + "Không dùng gợi ý để đổi 'ans'. Với mỗi gợi ý, xét: một học sinh CHƯA biết làm, chỉ đọc gợi ý, có chọn ngay được đáp án mà không cần tự suy luận không? "
+            + "Phần p1: 'hint_points_to' là chữ cái phương án mà gợi ý chỉ thẳng tới (nêu, diễn đạt lại nội dung, hoặc loại trừ hết phương án khác), null nếu gợi ý chỉ hướng dẫn cách nghĩ. "
+            + "Phần p2: 'hint_reveals' là mảng true/false cho từng ý, true nếu gợi ý của ý đó đã nói ra ý đúng hay sai. "
+            + "Phần p3: 'hint_reveals' là true nếu gợi ý đã nêu hoặc gần như nêu đáp số.\nGỢI Ý: "
+            + json.dumps(hints, ensure_ascii=False)
+            + "\nTrả đúng một object JSON có đủ ba khóa p1, p2, p3 (phần không có câu thì để mảng rỗng), ví dụ: "
             + json.dumps(example, ensure_ascii=False))
     return SOLVER_SYSTEM, user
 
@@ -165,7 +180,78 @@ def parse_solver_answers(raw):
         return None
     has_answer = any(v is not None for v in out.get("p1", []) + out.get("p3", [])) or any(
         v is not None for row in out.get("p2", []) for v in row)
-    return out if has_answer else None
+    if not has_answer:
+        return None
+    out["hint"] = _parse_hint_signals(data)
+    return out
+
+
+def _parse_hint_signals(data):
+    """Tín hiệu 'hint trỏ thẳng đáp án' từ cùng lượt giải; dạng lạ thì bỏ qua (không ảnh hưởng đối chiếu khóa)."""
+    signals = {"p1": [], "p2": [], "p3": []}
+    for entry in data.get("p1") or []:
+        value = entry.get("hint_points_to") if isinstance(entry, dict) else None
+        text = str(value or "").strip().strip(".").upper()
+        signals["p1"].append(text if text in ("A", "B", "C", "D") else None)
+    for entry in data.get("p2") or []:
+        row = entry.get("hint_reveals") if isinstance(entry, dict) else None
+        flags = []
+        for value in row if isinstance(row, list) else []:
+            try:
+                flags.append(bool(_bool_value(value)))
+            except ValueError:
+                flags.append(False)
+        signals["p2"].append(flags)
+    for entry in data.get("p3") or []:
+        value = entry.get("hint_reveals") if isinstance(entry, dict) else None
+        try:
+            signals["p3"].append(bool(_bool_value(value)))
+        except ValueError:
+            signals["p3"].append(False)
+    return signals
+
+
+HINT_LEAK_MARK = "hint_leak_detected"
+# Thử thật 17/11/2026: model nhẹ gắn cờ 100% hint (kể cả hint tốt) — không phân biệt được.
+# Chỉ tin tín hiệu khi bộ giải gắn cờ CHỌN LỌC (không quá 30% số hint), nếu không thì bỏ qua toàn bộ.
+MAX_HINT_LEAK_RATIO = 0.3
+
+
+def mark_hint_leaks(exam, solved):
+    """Đánh dấu hint mà bộ giải thấy trỏ thẳng vào đáp án đúng; app sẽ không hiện hint đó."""
+    from qa_runtime import canonicalize_mcq_key
+    signals = (solved or {}).get("hint") or {}
+    candidates = _hint_leak_candidates(exam, signals, canonicalize_mcq_key)
+    hint_total = sum(1 for q in exam.get("p1") or [] if isinstance(q, dict) and (q.get("hint") or q.get("socratic_hint")))
+    hint_total += sum(1 for q in exam.get("p2") or [] if isinstance(q, dict) for s in q.get("stmts") or [] if isinstance(s, dict) and s.get("hint"))
+    hint_total += sum(1 for q in exam.get("p3") or [] if isinstance(q, dict) and (q.get("hint") or q.get("socratic_hint")))
+    if not candidates or not hint_total or len(candidates) > MAX_HINT_LEAK_RATIO * hint_total:
+        return []
+    marked = []
+    for target, part, idx in candidates:
+        target[HINT_LEAK_MARK] = True
+        marked.append((part, idx))
+    return marked
+
+
+def _hint_leak_candidates(exam, signals, canonicalize_mcq_key):
+    found = []
+    for idx, question in enumerate(exam.get("p1") or []):
+        points = signals.get("p1") or []
+        if idx < len(points) and points[idx] and isinstance(question, dict) and points[idx] == canonicalize_mcq_key(question):
+            found.append((question, "p1", idx))
+    for idx, question in enumerate(exam.get("p2") or []):
+        rows = signals.get("p2") or []
+        if idx >= len(rows) or not isinstance(question, dict):
+            continue
+        for s_idx, stmt in enumerate(question.get("stmts") or []):
+            if s_idx < len(rows[idx]) and rows[idx][s_idx] and isinstance(stmt, dict):
+                found.append((stmt, "p2", idx))
+    for idx, question in enumerate(exam.get("p3") or []):
+        flags = signals.get("p3") or []
+        if idx < len(flags) and flags[idx] and isinstance(question, dict):
+            found.append((question, "p3", idx))
+    return found
 
 
 def find_mismatches(exam, solved):
@@ -216,7 +302,13 @@ def mark_independent_mismatches(exam, subject, grade, solve):
               "mismatches": [{"part": p, "index": i} for p, i in mismatches]}
     if len(mismatches) > MAX_MISMATCH_RATIO * total:
         report["status"] = "too_many_mismatches_teacher_review"
+        leaks = mark_hint_leaks(result, solved)
+        if leaks:
+            report["hint_leaks"] = [{"part": p, "index": i} for p, i in leaks]
         return result, report
     for part, idx in mismatches:
         result[part][idx][MISMATCH_MARK] = True
+    leaks = mark_hint_leaks(result, solved)
+    if leaks:
+        report["hint_leaks"] = [{"part": p, "index": i} for p, i in leaks]
     return result, report
