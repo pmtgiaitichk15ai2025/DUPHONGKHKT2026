@@ -2113,8 +2113,8 @@ MODELS_PROFILE_OPTIMIZED = [
     "gemini-flash-latest",           # 🛡️ Dự phòng chung Google (Từ chuyên gia)
     "gemini-3.8-flash",              # 🛡️ Khuyến nghị Google thay thế 2.5-flash
     "gemini-3.1-pro-preview",        # 🛡️ Dự phòng suy luận sâu (Từ chuyên gia)
-    "gemini-2.5-flash",              # 🛡️ Dự phòng kênh đặc quyền legacy
-    "gemini-2.5-flash-lite",         # 🛡️ Dự phòng kênh đặc quyền legacy
+    "gemini-3.1-flash-lite",         # 🛡️ Bản ổn định (kiểm 17/11/2026: 2.5-flash trả 404)
+    "gemini-3.7-flash",              # 🛡️ Dự phòng thế hệ 3
 ]
 
 # PHƯƠNG ÁN 2: ĐỐI CHIẾU CHUYÊN GIA (22/10/2026) - Đã xếp lại theo độ trễ từ nhanh nhất
@@ -2124,8 +2124,8 @@ MODELS_PROFILE_EXPERT = [
     "gemini-3.1-flash-lite-preview", # 🔄 5.34s: Dự phòng nhẹ
     "gemini-flash-latest",           # 🛡️ Dự phòng chung Google
     "gemini-3.1-pro-preview",        # 🛡️ Dự phòng suy luận sâu
-    "gemini-2.5-flash",              # 🛡️ Dự phòng tài khoản đặc quyền legacy
-    "gemini-2.5-flash-lite",         # 🛡️ Dự phòng tài khoản đặc quyền legacy
+    "gemini-3.1-flash-lite",         # 🛡️ Bản ổn định (kiểm 17/11/2026: 2.5-flash trả 404)
+    "gemini-3.6-flash",              # 🛡️ Dự phòng thế hệ 3
 ]
 
 def get_active_model_queue():
