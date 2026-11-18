@@ -8661,6 +8661,11 @@ def create_pedagogical_tts_component(raw_text: str, subject_name: str, comp_key:
 
     lang_code = "en" if subject_name == "Tiếng Anh" else "vi"
     audio_data = generate_pedagogical_tts_audio_bytes(clean_speech, lang=lang_code)
+    # Giọng nam (owner 18/11/2026): MP3 tạo trên máy chủ khi người học bấm nút, phát được mọi thiết bị.
+    import hashlib
+    _male_key = hashlib.sha1(clean_speech.encode("utf-8")).hexdigest()[:16]
+    _male_store = st.session_state.setdefault("male_voice_mp3", {})
+    _male_mp3 = _male_store.get(_male_key, b"") if lang_code == "vi" else b""
 
     # Render giao diện Thuyết minh chuẩn sư phạm Nam Bộ: Có cả Nút giọng Nam Bộ trực tiếp và Player MP3
     safe_clean_speech = clean_speech.replace('</script>', '').replace('<script>', '')
@@ -8792,6 +8797,7 @@ def create_pedagogical_tts_component(raw_text: str, subject_name: str, comp_key:
         voice_config = json.dumps({
             "raw": raw_text, "subject": subject_name,
             "endpoint": get_voice_public_url(),
+            "male": ("data:audio/mpeg;base64," + base64.b64encode(_male_mp3).decode("ascii")) if _male_mp3 else "",
         }, ensure_ascii=False).replace("</", "<\\/")
         selfhost_script = r"""
         <script>
@@ -8807,8 +8813,9 @@ def create_pedagogical_tts_component(raw_text: str, subject_name: str, comp_key:
             if (!player) return;
             const femaleSource = player.querySelector('source')?.src || '';
             const sources = new Map(femaleSource ? [['female', femaleSource]] : []);
+            if (config.male) sources.set('nam_bo', config.male);
             let selected = femaleSource ? 'female' : null;
-            let available = femaleSource ? ['female'] : [];
+            let available = [...(femaleSource ? ['female'] : []), ...(config.male ? ['nam_bo'] : [])];
             let voiceServiceReady = false;
             // Keep ready voices usable while CPU synthesis is pending. A late
             // response must never replace a newer choice or start playback.
@@ -8874,11 +8881,11 @@ def create_pedagogical_tts_component(raw_text: str, subject_name: str, comp_key:
                     return r.json();
                 }).then(info => {
                     voiceServiceReady = true;
-                    available = [...(femaleSource ? ['female'] : []), ...(info.available_voices || []).filter(v => ['thay_tri', 'nam_bo'].includes(v))];
+                    available = [...(femaleSource ? ['female'] : []), ...(config.male ? ['nam_bo'] : []), ...(info.available_voices || []).filter(v => ['thay_tri', 'nam_bo'].includes(v))];
                     sync();
                     status.textContent = info.owner_voice_state === 'preview_B' ? 'Chọn Giọng nữ, Giọng Thầy Trí (mẫu B) hoặc Giọng nam' : (available.length > (femaleSource ? 1 : 0) ? 'Chọn giọng đọc • Bản thử cần thẩm định' : 'Hai giọng nam đang hiệu chỉnh sau thẩm định');
                 }).catch(() => { status.textContent = 'Hai giọng nam chưa kết nối; giữ giọng hiện tại'; });
-            } else status.textContent = 'Chưa cấu hình dịch vụ giọng Thầy Trí/giọng nam; giọng nữ vẫn dùng được';
+            } else status.textContent = config.male ? 'Chọn Giọng nữ hoặc Giọng nam • Giọng Thầy Trí đang thiết lập' : 'Giọng nam: bấm nút tạo bên dưới • Giọng Thầy Trí đang thiết lập';
             window.addEventListener('pagehide', () => {
                 player.pause(); sources.forEach(url => {if(url.startsWith('blob:')) URL.revokeObjectURL(url)});
             });
@@ -8889,6 +8896,17 @@ def create_pedagogical_tts_component(raw_text: str, subject_name: str, comp_key:
     # One shared audio bar; the ordered voice row scrolls horizontally on phones.
     comp_height = 230 if lang_code == "vi" else (135 if audio_data else 85)
     components.html(tts_ui_html, height=comp_height)
+    if lang_code == "vi" and not _male_mp3:
+        if st.button("🎙️ Tạo giọng nam đọc bài (miễn phí, mọi thiết bị)", key=f"male_voice_{comp_key}",
+                     help="Máy chủ tạo file MP3 giọng nam; Android, iPhone, Mac, Windows đều nghe được."):
+            from services.male_voice import synthesize_male_mp3
+            with st.spinner("Đang tạo giọng nam… bài dài có thể mất 10–30 giây."):
+                _mp3 = synthesize_male_mp3(clean_speech)
+            if _mp3:
+                _male_store[_male_key] = _mp3
+                st.rerun()
+            else:
+                st.warning("Dịch vụ giọng nam đang bận hoặc từ chối; thầy cô thử lại sau ít phút. Giọng nữ vẫn dùng bình thường.")
 
 
 
