@@ -12159,6 +12159,7 @@ def render_pedagogical_lesson_visuals(markdown_text: str, subject: str = "", gra
     if not illustrations:
         return text
     from services.station1_scope import lesson_illustrations, illustration_caption, illustration_note
+    from services.station1_scope import flight_paragraph as _t1_flight_para
     source = text
     keys = lesson_illustrations(source, subject, grade)
     if not keys:
@@ -12177,7 +12178,7 @@ def render_pedagogical_lesson_visuals(markdown_text: str, subject: str = "", gra
         'gas_c2h4': lambda: pve.build_gas_preparation_model("C2H4"),
         # Truyền nguyên văn (không hạ chữ thường) để đọc đúng tên điểm A, B, C, M, N.
         'oxyz_tetra': lambda: pve.build_oxyz_tetrahedron_model(source),
-        'oxyz_flight': lambda: pve.build_oxyz_flight_path_model(source),
+        'oxyz_flight': lambda: pve.build_oxyz_flight_path_model(_t1_flight_para(source)),
     }
     for key in keys:
         try:
@@ -12579,8 +12580,9 @@ if selected_station == station_labels[0]:
                 try:
                     from services.station1_scope import lesson_illustrations as _t1_ill
                     from services.oxyz_interactive import lesson_oxyz_figure
+                    from services.station1_scope import flight_paragraph
                     import precision_visual_engine as _pve3d
-                    _oxyz_builders = {"oxyz_flight": _pve3d.build_oxyz_flight_path_model, "oxyz_tetra": _pve3d.build_oxyz_tetrahedron_model}
+                    _oxyz_builders = {"oxyz_flight": lambda _src: _pve3d.build_oxyz_flight_path_model(flight_paragraph(_src)), "oxyz_tetra": _pve3d.build_oxyz_tetrahedron_model}
                     for _ok in _t1_ill(cleaned_p1, subject, grade_num):
                         if _ok in _oxyz_builders:
                             _fig3d = lesson_oxyz_figure(_ok, _oxyz_builders[_ok](cleaned_p1))

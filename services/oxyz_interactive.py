@@ -16,6 +16,29 @@ def _label(name, p):
     return f'{name}({_num(p[0])};{_num(p[1])};{_num(p[2])})'
 
 
+_EYES = ((1.55, 1.45, 0.95), (2.0, 0.55, 0.85), (0.55, 2.0, 0.85), (1.9, -0.8, 0.9), (-0.8, 1.9, 0.9))
+
+
+def _camera_eye(points, ext):
+    """Góc nhìn ban đầu để không điểm nào (ngoài trục Oz) bị che chồng lên trục z.
+
+    Ca thật 18/11/2026: P(30;40;120), Q(50;70;160) nằm đúng hướng nhìn mặc định nên dính vào trục z.
+    """
+    import math
+
+    def worst(eye):
+        ex, ey = eye[0], eye[1]
+        n = math.hypot(ex, ey) or 1.0
+        score = float('inf')
+        for x, y, _ in points.values():
+            u, v = x / (ext[0] or 1.0), y / (ext[1] or 1.0)   # khung lập phương: chuẩn hóa theo trục
+            if abs(u) > 1e-9 or abs(v) > 1e-9:
+                score = min(score, abs(u * ey - v * ex) / n)
+        return score
+    best = max(_EYES, key=worst)
+    return dict(x=best[0], y=best[1], z=best[2])
+
+
 def oxyz_figure(points, segments=(), arrow=None, title=''):
     """points: {tên: (x,y,z)}; segments: [(tên1, tên2)]; arrow: (gốc, ngọn) vẽ có mũi tên."""
     import plotly.graph_objects as go
@@ -67,19 +90,34 @@ def oxyz_figure(points, segments=(), arrow=None, title=''):
         scene=dict(xaxis=dict(title='Ox', **axis_style), yaxis=dict(title='Oy', **axis_style),
                    # Khung lập phương như Lab tọa độ sẵn có: trục dài/ngắn khác nhau vẫn đọc rõ; số trên trục giữ đúng tọa độ.
                    zaxis=dict(title='Oz', **axis_style), aspectmode='cube',
-                   camera=dict(eye=dict(x=1.55, y=1.45, z=0.95))),
+                   camera=dict(eye=_camera_eye(points, ext))),
     )
+    return fig
+
+
+def _add_cone(fig, pa, pb, points):
+    import plotly.graph_objects as go
+    span = max(abs(c) for p in points.values() for c in p) or 1.0
+    fig.add_trace(go.Cone(x=[pb[0]], y=[pb[1]], z=[pb[2]], u=[pb[0] - pa[0]], v=[pb[1] - pa[1]], w=[pb[2] - pa[2]],
+                          sizemode='absolute', sizeref=span * 0.08, anchor='tip', showscale=False,
+                          colorscale=[[0, '#38bdf8'], [1, '#38bdf8']], hoverinfo='skip'))
     return fig
 
 
 def lesson_oxyz_figure(key, model):
     """Từ model của precision_visual_engine (oxyz_flight / oxyz_tetra) → hình xoay được, hoặc None."""
     pts = (model or {}).get('points') or {}
-    if key == 'oxyz_flight' and {'M', 'N'} <= set(pts):
-        show = {'M': pts['M'], 'N': pts['N']}
-        if '>H<' in str(model.get('svg') or '') or '"H"' in str(model.get('svg') or ''):
+    path = (model or {}).get('path') or []
+    if key == 'oxyz_flight' and len(path) >= 2:
+        show = {name: p for name, p in path}
+        if model.get('draw_h'):
             show['H'] = pts['H']
-        return oxyz_figure(show, segments=[('M', 'N')], arrow=('M', 'N'))
+        names = [name for name, _ in path]
+        legs = list(zip(names, names[1:]))
+        fig = oxyz_figure(show, segments=legs, arrow=legs[-1])
+        for a, b in legs[:-1]:
+            fig = _add_cone(fig, show[a], show[b], show)
+        return fig
     if key == 'oxyz_tetra' and {'A', 'B', 'C'} <= set(pts):
         show = {'O': (0.0, 0.0, 0.0), 'A': pts['A'], 'B': pts['B'], 'C': pts['C']}
         return oxyz_figure(show, segments=[('A', 'B'), ('B', 'C'), ('C', 'A'), ('O', 'A'), ('O', 'B'), ('O', 'C')])

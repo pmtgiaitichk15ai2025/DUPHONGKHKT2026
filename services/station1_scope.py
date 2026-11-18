@@ -40,6 +40,25 @@ _ILLUSTRATIONS = (
 _POINT = r'([A-Z])\s*\(\s*(-?\d+(?:\.\d+)?)\s*[;,]\s*(-?\d+(?:\.\d+)?)\s*[;,]\s*(-?\d+(?:\.\d+)?)\s*\)'
 
 
+_FLIGHT = r'đường\s+bay|thiết\s+bị\s+bay|trạm\s+phát\s+sóng|flycam|drone|máy\s+bay|bay\s+(?:thẳng\s+)?(?:từ|đến)'
+
+
+def flight_paragraph(text):
+    """Đoạn đề có thiết bị bay và ít nhất hai điểm tọa độ — hình bay chỉ dựng từ đúng đoạn này.
+
+    Ca thật web 18/11/2026: đề Vận dụng O→P(30;40;120)→Q(50;70;160) mà hình lấy M, N của ví dụ khác.
+    """
+    for block in re.split(r'\n\s*\n', str(text or '')):
+        if re.search(_FLIGHT, block.lower()):
+            names = []
+            for name, *_ in re.findall(_POINT, block):
+                if name not in names:
+                    names.append(name)
+            if len(names) >= 2:
+                return block
+    return ''
+
+
 def lesson_illustrations(text, subject, grade):
     """Return ordered illustration keys allowed for this exact subject/grade/content.
 
@@ -62,8 +81,8 @@ def lesson_illustrations(text, subject, grade):
         points = {}
         for name, *xyz in re.findall(_POINT, value):
             points[name] = tuple(float(v) for v in xyz)  # engine giữ điểm cuối cùng cùng tên
-        flight = re.search(r'đường\s+bay|thiết\s+bị\s+bay|trạm\s+phát\s+sóng', lower)
-        if flight and {'M', 'N'} <= set(points):
+        flight = re.search(_FLIGHT, lower)
+        if flight and flight_paragraph(value):
             keys.append('oxyz_flight')
         elif not flight and _axial_tetrahedron(points) and re.search(
                 r'oxyz|tọa\s+độ\s+không\s+gian|hệ\s+trục|mặt\s+cầu|tứ\s+diện', lower):

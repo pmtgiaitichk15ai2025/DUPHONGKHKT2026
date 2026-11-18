@@ -65,11 +65,17 @@ def render_hint_rating(st, sync_event, *, key, station, subject, grade, question
         finally:
             done[hid] = entry["rating"]
 
-    cols = st.columns([1, 1, 8])
-    if cols[0].button("👍", key=f"{key}_up", help=TOOLTIP_UP):
+    # Một hàng ngang cố định (owner 18/11/2026: st.columns tự xếp dọc khi khung hẹp) và nhãn
+    # luôn hiện, không chỉ dựa vào tooltip khi rê chuột.
+    row = st.container(horizontal=True, wrap=False, vertical_alignment="center", gap="small")
+    with row:
+        st.caption("Đánh giá lời hướng dẫn của hệ thống:")
+        up = st.button("👍", key=f"{key}_up", help=TOOLTIP_UP, width="content")
+        down = st.button("👎", key=f"{key}_down", help=TOOLTIP_DOWN, width="content")
+    if up:
         send(True)
         st.rerun()
-    if cols[1].button("👎", key=f"{key}_down", help=TOOLTIP_DOWN):
+    if down:
         st.session_state[f"{key}_down_open"] = True
     if st.session_state.get(f"{key}_down_open"):
         reason = st.radio("Gợi ý này chưa đạt vì:", DOWN_REASONS, key=f"{key}_reason", horizontal=True)

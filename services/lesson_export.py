@@ -209,11 +209,12 @@ def _oxyz_print_figures(lesson, subject, grade):
     Cùng bộ dựng với màn hình Trạm 1 (precision_visual_engine); SVG do mã sinh, không lấy từ AI.
     """
     try:
-        from services.station1_scope import lesson_illustrations, illustration_caption
+        from services.station1_scope import lesson_illustrations, illustration_caption, flight_paragraph
         import precision_visual_engine as pve
     except Exception:
         return ''
-    builders = {'oxyz_flight': pve.build_oxyz_flight_path_model, 'oxyz_tetra': pve.build_oxyz_tetrahedron_model}
+    builders = {'oxyz_flight': lambda src: pve.build_oxyz_flight_path_model(flight_paragraph(src)),
+                'oxyz_tetra': pve.build_oxyz_tetrahedron_model}
     out = []
     for key in lesson_illustrations(lesson, subject, grade):
         if key not in builders:

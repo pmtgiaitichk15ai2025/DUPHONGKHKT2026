@@ -1316,10 +1316,18 @@ def _oxyz_guides(proj, P, name):
 
 def build_oxyz_flight_path_model(q_text):
     """Phục dựng trực quan bài toán quỹ đạo bay thiết bị và khoảng cách từ gốc O tới đường thẳng MN."""
-    m_M = re.search(r'M\s*\(\s*(-?\d+(?:\.\d+)?)\s*;\s*(-?\d+(?:\.\d+)?)\s*;\s*(-?\d+(?:\.\d+)?)\s*\)', str(q_text))
-    m_N = re.search(r'N\s*\(\s*(-?\d+(?:\.\d+)?)\s*;\s*(-?\d+(?:\.\d+)?)\s*;\s*(-?\d+(?:\.\d+)?)\s*\)', str(q_text))
-    M = (float(m_M.group(1)), float(m_M.group(2)), float(m_M.group(3))) if m_M else (1.0, 3.0, 4.0)
-    N = (float(m_N.group(1)), float(m_N.group(2)), float(m_N.group(3))) if m_N else (5.0, 7.0, 12.0)
+    # Đường bay theo đúng thứ tự điểm trong đề (O→P→Q, M→N, ...), không chỉ riêng tên M, N
+    # (ca thật web 18/11/2026: đề O→P→Q nhưng hình vẽ M, N của ví dụ khác).
+    path = []
+    for name, *xyz in re.findall(r"(?<![A-Za-z])([A-Z])\s*\(\s*(-?\d+(?:\.\d+)?)\s*[;,]\s*(-?\d+(?:\.\d+)?)\s*[;,]\s*(-?\d+(?:\.\d+)?)\s*\)", str(q_text)):
+        if name not in [n for n, _ in path]:
+            path.append((name, tuple(float(v) for v in xyz)))
+    if len(path) < 2:
+        m_M = re.search(r'M\s*\(\s*(-?\d+(?:\.\d+)?)\s*;\s*(-?\d+(?:\.\d+)?)\s*;\s*(-?\d+(?:\.\d+)?)\s*\)', str(q_text))
+        m_N = re.search(r'N\s*\(\s*(-?\d+(?:\.\d+)?)\s*;\s*(-?\d+(?:\.\d+)?)\s*;\s*(-?\d+(?:\.\d+)?)\s*\)', str(q_text))
+        path = [('M', (float(m_M.group(1)), float(m_M.group(2)), float(m_M.group(3))) if m_M else (1.0, 3.0, 4.0)),
+                ('N', (float(m_N.group(1)), float(m_N.group(2)), float(m_N.group(3))) if m_N else (5.0, 7.0, 12.0))]
+    M, N = path[0][1], path[1][1]
     O = (0.0, 0.0, 0.0)
     
     # Tính chân đường vuông góc H từ O xuống đường thẳng MN:
@@ -1336,7 +1344,8 @@ def build_oxyz_flight_path_model(q_text):
     ox, oy = 80.0, 140.0
     max_val = max(abs(M[0]), abs(M[1]), abs(M[2]), abs(N[0]), abs(N[1]), abs(N[2]),
                   *((abs(H[0]), abs(H[1]), abs(H[2])) if draw_h else ()), 4.0)
-    shown = [M, N] + ([H] if draw_h else [])
+    draw_h = draw_h and len(path) == 2
+    shown = [p for _, p in path] + ([H] if draw_h else [])
     max_xy = max([abs(p[0]) for p in shown] + [abs(p[1]) for p in shown] + [1.0])
     max_z = max([abs(p[2]) for p in shown] + [1.0])
     # Nén trục z khi độ cao lớn hơn nhiều so với x, y (ca thật z=30, x≤12): hình không dựng đứng thành một vạch.
@@ -1355,7 +1364,14 @@ def build_oxyz_flight_path_model(q_text):
     pN = proj(N)
     pH = proj(H)
     # Nét gióng kiểu SGK: điểm → chân trên (Oxy) → hai trục Ox, Oy.
-    guides = ''.join(_oxyz_guides(proj, P, name) for name, P in (('M', M), ('N', N)))
+    guides = ''.join(_oxyz_guides(proj, P, name) for name, P in path if any(abs(c) > 1e-9 for c in P))
+    legs = '\n  '.join(
+        f'<line x1="{proj(a)[0]:.1f}" y1="{proj(a)[1]:.1f}" x2="{proj(b)[0]:.1f}" y2="{proj(b)[1]:.1f}" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr_flight)"/>'
+        for (_, a), (_, b) in zip(path, path[1:]))
+    marks = '\n  '.join(
+        f'<circle cx="{proj(P)[0]:.1f}" cy="{proj(P)[1]:.1f}" r="3" fill="#0284c7"/>'
+        f'<text x="{proj(P)[0] + 6:.1f}" y="{proj(P)[1] + 4:.1f}" font-size="10.5" font-weight="bold" fill="#0284c7">{name}({_num(P[0])};{_num(P[1])};{_num(P[2])})</text>'
+        for name, P in path if any(abs(c) > 1e-9 for c in P))
     h_part = (f'\n  <line x1="{pO[0]:.1f}" y1="{pO[1]:.1f}" x2="{pH[0]:.1f}" y2="{pH[1]:.1f}" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3,3"/>'
               f'\n  <circle cx="{pH[0]:.1f}" cy="{pH[1]:.1f}" r="2.5" fill="#f59e0b"/>'
               f'\n  <text x="{pH[0] + 6:.1f}" y="{pH[1] - 4:.1f}" font-size="10" font-weight="bold" fill="#d97706">H</text>') if draw_h else ''
@@ -1375,18 +1391,13 @@ def build_oxyz_flight_path_model(q_text):
   <text x="{ox - 4}" y="{oy - 114}" fill="#334155" font-size="11" font-style="italic">z</text>
   <text x="{xa[0] - 12:.1f}" y="{xa[1] + 2:.1f}" fill="#334155" font-size="11" font-style="italic">x</text>
   {guides}
-  <!-- Quỹ đạo bay MN -->
-  <line x1="{pM[0]:.1f}" y1="{pM[1]:.1f}" x2="{pN[0]:.1f}" y2="{pN[1]:.1f}" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr_flight)"/>{h_part}
+  <!-- Quỹ đạo bay theo thứ tự điểm trong đề -->
+  {legs}{h_part}
 
   <!-- Các điểm và nhãn -->
   <circle cx="{pO[0]:.1f}" cy="{pO[1]:.1f}" r="3" fill="#0f172a"/>
   <text x="{pO[0] + 4:.1f}" y="{pO[1] + 13:.1f}" font-size="11" font-weight="bold" fill="#0f172a">O</text>
-
-  <circle cx="{pM[0]:.1f}" cy="{pM[1]:.1f}" r="3" fill="#0284c7"/>
-  <text x="{pM[0] + 6:.1f}" y="{pM[1] + 4:.1f}" font-size="10.5" font-weight="bold" fill="#0284c7">M({_num(M[0])};{_num(M[1])};{_num(M[2])})</text>
-
-  <circle cx="{pN[0]:.1f}" cy="{pN[1]:.1f}" r="3" fill="#0284c7"/>
-  <text x="{pN[0] + 6:.1f}" y="{pN[1] + 4:.1f}" font-size="10.5" font-weight="bold" fill="#0284c7">N({_num(N[0])};{_num(N[1])};{_num(N[2])})</text>
+  {marks}
 </svg>"""
 
     tikz = rf"""\begin{{tikzpicture}}[scale=0.75, >=stealth]
@@ -1416,6 +1427,8 @@ def build_oxyz_flight_path_model(q_text):
         "dim": "3d",
         "has_oxyz": True,
         "points": {"O": O, "M": M, "N": N, "H": H},
+        "path": path,
+        "draw_h": draw_h,
         "distance": dist_OH,
         "svg": svg,
         "tikz": tikz,

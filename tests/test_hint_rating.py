@@ -32,5 +32,36 @@ class HintRatingEntry(unittest.TestCase):
             self.assertIn("Đánh giá lời hướng dẫn của hệ thống", tip)
 
 
+class HintRatingLayout(unittest.TestCase):
+    """Owner 18/11/2026: hai nút phải nằm ngang hàng, có nhãn luôn hiện (không chỉ tooltip)."""
+
+    def test_buttons_in_one_horizontal_row_with_visible_label(self):
+        import contextlib
+        from services.hint_rating import render_hint_rating
+        calls = []
+
+        class FakeSt:
+            session_state = {}
+
+            def container(self, **kw):
+                calls.append(('container', kw))
+                return contextlib.nullcontext()
+
+            def caption(self, text):
+                calls.append(('caption', text))
+
+            def button(self, label, key=None, help=None, width=None):
+                calls.append(('button', label, help))
+                return False
+
+        render_hint_rating(FakeSt(), lambda e: None, key="k", station="Trạm 1", subject="Toán học",
+                           grade="Lớp 12", question_text="q", hint="Em ơi?")
+        container = [c for c in calls if c[0] == 'container'][0][1]
+        self.assertTrue(container.get('horizontal'))
+        self.assertFalse(container.get('wrap'))
+        self.assertIn(('caption', 'Đánh giá lời hướng dẫn của hệ thống:'), calls)
+        self.assertEqual([c[2] for c in calls if c[0] == 'button'], [TOOLTIP_UP, TOOLTIP_DOWN])
+
+
 if __name__ == "__main__":
     unittest.main()
