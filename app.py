@@ -12849,6 +12849,12 @@ if selected_station == station_labels[0]:
             st.session_state.parsed_quiz = quiz_list
             st.session_state.quiz_key_recovery_checked = quiz_recovery_key
 
+        _t1_lang_bad = [i + 1 for i, _q in enumerate(quiz_list)
+                        if item_display_language_issue(str(_q.get('question', '')), subject)]
+        if _t1_lang_bad:
+            # Web 18/11/2026: Toán 12 sinh 3 câu Phần 2 bằng tiếng Anh dù bài học tiếng Việt.
+            st.warning("⚠️ Câu " + ", ".join(map(str, _t1_lang_bad)) + " đang viết bằng **tiếng Anh** trong khi môn "
+                       "không phải Tiếng Anh. Thầy cô bấm **🚀 Soạn bài học** để sinh lại bản tiếng Việt.")
         if quiz_list:
             from services.cognitive_runtime import independent_lesson_quiz_audit
             st.session_state["t1_independent_cognitive_audit"] = independent_lesson_quiz_audit(
