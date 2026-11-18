@@ -47,8 +47,9 @@ class HintRatingLayout(unittest.TestCase):
                 calls.append(('container', kw))
                 return contextlib.nullcontext()
 
-            def caption(self, text):
+            def caption(self, text, width=None):
                 calls.append(('caption', text))
+                calls.append(('caption_width', width))
 
             def button(self, label, key=None, help=None, width=None):
                 calls.append(('button', label, help))
@@ -59,6 +60,7 @@ class HintRatingLayout(unittest.TestCase):
         container = [c for c in calls if c[0] == 'container'][0][1]
         self.assertTrue(container.get('horizontal'))
         self.assertFalse(container.get('wrap'))
+        self.assertIn(('caption_width', 'content'), calls)  # web 18/11: nhãn giãn hết hàng đẩy nút ra mép
         self.assertIn(('caption', 'Đánh giá lời hướng dẫn của hệ thống:'), calls)
         self.assertEqual([c[2] for c in calls if c[0] == 'button'], [TOOLTIP_UP, TOOLTIP_DOWN])
 

@@ -69,7 +69,7 @@ def render_hint_rating(st, sync_event, *, key, station, subject, grade, question
     # luôn hiện, không chỉ dựa vào tooltip khi rê chuột.
     row = st.container(horizontal=True, wrap=False, vertical_alignment="center", gap="small")
     with row:
-        st.caption("Đánh giá lời hướng dẫn của hệ thống:")
+        st.caption("Đánh giá lời hướng dẫn của hệ thống:", width="content")
         up = st.button("👍", key=f"{key}_up", help=TOOLTIP_UP, width="content")
         down = st.button("👎", key=f"{key}_down", help=TOOLTIP_DOWN, width="content")
     if up:
