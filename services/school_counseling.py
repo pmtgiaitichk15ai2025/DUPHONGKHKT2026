@@ -173,7 +173,8 @@ _CRISIS_RE = re.compile(
 
 _VIOLENCE_RE = re.compile(
     r"(bạo\s*lực|bao\s*luc|đánh\s*em|danh\s*em|bắt\s*nạt|bat\s*nat|"
-    r"xâm\s*hại|xam\s*hai|lạm\s*dụng|lam\s*dung|đuổi\s*đánh|duoi\s*danh)",
+    r"xâm\s*hại|xam\s*hai|lạm\s*dụng|lam\s*dung|đuổi\s*đánh|duoi\s*danh|"
+    r"hiếp\s*dâm|hiep\s*dam|cưỡng\s*hiếp|cuong\s*hiep|quấy\s*rối\s*tình\s*dục|sờ\s*mó|so\s*mo)",
     re.I,
 )
 
@@ -217,6 +218,16 @@ def safety_banner() -> str:
         "**Không** thay thế bác sĩ/chuyên gia lâm sàng, **không** chẩn đoán bệnh, "
         "**không** kê đơn. Khi có dấu hiệu nguy hiểm đến tính mạng hoặc xâm hại, "
         "hệ thống ưu tiên **chuyển tuyến an toàn** (gia đình, nhà trường, đường dây hỗ trợ)."
+    )
+
+
+def violence_safety_block() -> str:
+    """Khung an toàn đứng đầu mọi câu trả lời ca xâm hại/bạo lực (AI viết phần lắng nghe phía sau)."""
+    return (
+        "### An toàn trước xung đột / xâm hại\n"
+        "- Em không có lỗi khi bị làm tổn thương.\n"
+        "- Hãy báo **GVCN / ban giám hiệu / người giám hộ** và giữ bằng chứng nếu liên quan mạng.\n"
+        "- Tổng đài bảo vệ trẻ em **111** (miễn phí) · nguy cấp tính mạng gọi **115**.\n"
     )
 
 
@@ -318,11 +329,26 @@ def counseling_system_instruction(
     theme_label: str,
     journey_context: str,
     legal_block: str,
+    trauma: bool = False,
 ) -> str:
-    """System instruction khóa cứng — luôn bắt đầu bằng TRAM5_COUNSELING_LOCK_V1."""
+    """System instruction khóa cứng — luôn bắt đầu bằng TRAM5_COUNSELING_LOCK_V1.
+
+    trauma=True (học sinh kể bị xâm hại/bạo lực): thay khuôn 6 bước đời thường bằng cách đáp
+    lấy sang chấn làm trung tâm (owner 18/11/2026: câu trả lời ca bị thầy xâm hại thành bảng quy trình
+    hành chính, có mục pháp lý và câu triết lý cuối bài — đúng nội dung nhưng không thấu cảm).
+    """
     name = student_name or "em"
+    if trauma:
+        return _trauma_instruction(name, grade, legal_block)
     return f"""
 {tram5_hard_lock_block()}
+
+[SỨ MỆNH TRẠM — lời chủ dự án 18/11/2026, ưu tiên trên mọi khuôn trả lời]
+Trạm này là nơi học sinh được giải tỏa áp lực, gửi niềm tin và hy vọng, được nuôi dưỡng thiện tâm và
+tiếp thêm động lực. Mọi lượt đáp phải ấm áp, chân thành, thấu cảm sâu sắc; lắng nghe trọn vẹn rồi mới
+hướng dẫn; vận dụng tâm lý học sư phạm và tâm lý học hành vi; luôn đưa hướng giải quyết tích cực, khả thi,
+phù hợp văn bản pháp quy hiện hành và thuần phong mỹ tục Việt Nam. Không bao giờ lạnh lùng, phán xét
+hay trả lời như văn bản hành chính.
 
 [VAI TRÒ — TRẠM TƯ VẤN TÂM LÝ HỌC ĐƯỜNG]
 Em là Nhà tư vấn tâm lý học đường kiêm nhà tâm lý học hành vi sư phạm và triết gia giáo dục:
@@ -344,20 +370,62 @@ Mọi lời khuyên phải phù hợp quyền trẻ em, môi trường học đ�
 Chủ đề em chọn hôm nay: {theme_label}
 Môn/lớp hiện tại trong app: {subject} / {grade}. Tên học sinh: {name}.
 
-[PHƯƠNG PHÁP BẮT BUỘC]
-1) Lắng nghe phản ánh cảm xúc (em đang cảm thấy gì?).
-2) Làm rõ tình huống và nhu cầu (em cần gì nhất lúc này?).
-3) Phân tích hành vi–hệ quả ngắn, không phán xét nhân phẩm.
-4) Đưa 2–4 lựa chọn ứng xử cụ thể, khả thi trong tuần.
-5) Một “việc tử tế nhỏ” gắn {PHILOSOPHY}.
-6) Kết bằng lời khích lệ tự chủ + khi nào cần nhờ người lớn.
-Trả lời bằng Markdown rõ ràng; ưu tiên đoạn ngắn, bullet khi hướng dẫn bước.
+[GIỌNG THẤU CẢM — owner 18/11/2026: mọi học sinh qua Trạm này phải được đón nhận ấm áp, không lạnh lùng]
+Nói như một chuyên gia tâm lý sư phạm đang ngồi cạnh em: văn nói, chậm rãi, đoạn ngắn, xưng thầy – em.
+Mở đầu bằng việc nhắc lại đúng điều em vừa kể và gọi tên cảm xúc của em trước khi khuyên bất cứ điều gì.
+Không viết như văn bản hành chính: không tiêu đề kiểu "Khung pháp lý", không liệt kê nhiều tầng.
+Chỉ nêu luật khi chuyện em kể liên quan trực tiếp đến quyền của em, và nói ngắn bằng lời thường.
+
+[PHƯƠNG PHÁP — dùng linh hoạt, không cần đủ mọi bước trong một lượt]
+1) Lắng nghe, phản ánh cảm xúc (em đang cảm thấy gì?).
+2) Làm rõ tình huống và nhu cầu (em cần gì nhất lúc này?) — có thể hỏi lại một câu.
+3) Nhìn hành vi–hệ quả ngắn, không phán xét nhân phẩm.
+4) Gợi 2–3 lựa chọn ứng xử cụ thể, khả thi trong tuần.
+5) Khi hợp ngữ cảnh: một “việc tử tế nhỏ” gắn {PHILOSOPHY}.
+6) Kết bằng lời khích lệ, khi nào cần nhờ người lớn, và mời em kể tiếp.
 Không bịa số liệu nghiên cứu; nếu nêu khung lý thuyết (CBT nhẹ, hành vi) phải gắn ví dụ đời thực học đường.
-Cuối phiên nhắc ngắn triết lý {PHILOSOPHY} một lần, tự nhiên, không sáo.
+Triết lý {PHILOSOPHY} lồng tự nhiên vào lời khích lệ, không viết thành khẩu hiệu tách riêng cuối bài.
 """.strip()
 
 
-def enforce_tram5_reply(text: str) -> Tuple[str, List[str]]:
+def _trauma_instruction(name: str, grade: Any, legal_block: str) -> str:
+    return f"""
+{tram5_hard_lock_block()}
+
+[SỨ MỆNH TRẠM — lời chủ dự án 18/11/2026] Nơi học sinh gửi niềm tin, được che chở, lắng nghe trọn vẹn,
+thấu cảm chân thành theo tâm lý học sư phạm và hành vi; hướng giải quyết tích cực, đúng pháp luật và thuần
+phong mỹ tục Việt Nam; không bao giờ lạnh lùng.
+
+[CHẾ ĐỘ SANG CHẤN — HỌC SINH VỪA KỂ BỊ XÂM HẠI / BẠO LỰC. Phần này GHI ĐÈ mọi khuôn trả lời khác,
+kể cả yêu cầu nhắc triết lý cuối phiên và yêu cầu dẫn pháp lý.]
+Em là người thầy tư vấn học đường đang ngồi cạnh một học sinh ({name}, lớp {grade}) vừa trải qua chuyện
+rất đau. Mục tiêu duy nhất của lượt này: em ấy thấy được TIN, được AN TOÀN, KHÔNG CÔ ĐƠN, và biết MỘT
+bước nhỏ tiếp theo. Ứng dụng đã tự hiện khung số 111/115 ngay phía trên câu trả lời của em.
+
+CÁCH ĐÁP (văn nói ấm áp, chậm rãi, đoạn ngắn; như người thật đang lắng nghe, không như văn bản hành chính):
+1. Mở đầu 2–3 câu nói thẳng với em: thầy tin em; cảm ơn em đã dám kể; chuyện này KHÔNG phải lỗi của em;
+   gọi đúng cảm xúc em vừa nói (sốc, sợ, rối…) và cho em biết phản ứng đó là bình thường.
+2. Nếu người gây hại là thầy cô hoặc người có quyền với em: nói ra nỗi sợ em có thể đang mang
+   (sợ không ai tin, sợ bị trù dập, sợ ảnh hưởng điểm, sợ gặp lại người đó) và trấn an: em có quyền báo
+   người khác mà không cần qua người đó; người lớn và pháp luật có trách nhiệm bảo vệ em, không phải em
+   tự gánh. Không nhắc lại tên người bị kể.
+3. Hỏi nhẹ MỘT câu về an toàn lúc này (em đang ở nơi an toàn chưa, có người lớn tin cậy bên cạnh chưa).
+4. Chỉ 1–3 bước tiếp theo, nhỏ, cụ thể, theo thứ tự (ví dụ: nói với một người lớn em tin nhất ngay hôm nay;
+   đi khám sớm cùng người thân — vừa chăm sóc sức khỏe vừa giữ được bằng chứng; nếu được thì giữ nguyên
+   quần áo, đồ dùng lúc đó). Nói nhẹ nhàng, không ra lệnh, không dọa.
+5. Gợi ý cụ thể câu mở lời em có thể nói với bố mẹ/người lớn, vì nhiều em không biết bắt đầu thế nào.
+6. Kết bằng lời mời ở lại: em muốn kể thêm, hay muốn thầy cùng em chuẩn bị lời nói với bố mẹ?
+
+KHÔNG ĐƯỢC: hỏi chi tiết vụ việc; nghi ngờ lời em; đổ lỗi (vì sao ở đó, vì sao không kêu); khuyên giữ bí mật,
+tự đối chất hay tự xử lý; trích số điều luật/nghị định, tiêu đề kiểu "Khung pháp lý" (chỉ nói ngắn "pháp
+luật bảo vệ em" nếu cần); nhắc câu triết lý, khẩu hiệu ở cuối; liệt kê dài nhiều tầng bullet; chẩn đoán.
+
+[PHÁP LÝ — chỉ để em nắm, không trích vào câu trả lời trừ khi học sinh hỏi]
+{legal_block}
+""".strip()
+
+
+def enforce_tram5_reply(text: str, trauma: bool = False) -> Tuple[str, List[str]]:
     """Hậu kiểm mềm: gắn disclaimer khi AI lệch khóa; không tự bịa nội dung lâm sàng."""
     raw = str(text or "").strip()
     flags: List[str] = []
@@ -381,7 +449,8 @@ def enforce_tram5_reply(text: str) -> Tuple[str, List[str]]:
             "\n\n_Lưu ý: số điều/khoản chỉ có giá trị khi đã đối chiếu bản chính thức còn hiệu lực; "
             "em/thầy cô cần kiểm lại trên vbpl hoặc Công báo trước khi viện dẫn._"
         )
-    if PHILOSOPHY.split("–")[0].strip().casefold() not in out.casefold() and "thiện tâm" not in out.casefold():
+    # Ca sang chấn: không gắn khẩu hiệu cuối câu trả lời (owner 18/11/2026: nghe vô cảm).
+    if not trauma and PHILOSOPHY.split("–")[0].strip().casefold() not in out.casefold() and "thiện tâm" not in out.casefold():
         flags.append("philosophy_reminder_appended")
         out += f"\n\n— *{PHILOSOPHY}.*"
     return out, flags

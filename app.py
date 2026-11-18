@@ -2723,7 +2723,7 @@ Học sinh: {student_nm} | Môn: {subject_name} | Lớp: {grade_level}.
 
 
 
-def call_gemini_with_fallback(prompt_or_contents, system_instruction=None, json_mode=False):
+def call_gemini_with_fallback(prompt_or_contents, system_instruction=None, json_mode=False, safety_settings=None):
 
     model_queue = get_active_model_queue()
 
@@ -2816,6 +2816,9 @@ def call_gemini_with_fallback(prompt_or_contents, system_instruction=None, json_
 
                         )
 
+                        if safety_settings:
+                            cfg.safety_settings = safety_settings
+
                         if json_mode:
 
                             cfg.response_mime_type = "application/json"
@@ -2840,6 +2843,9 @@ def call_gemini_with_fallback(prompt_or_contents, system_instruction=None, json_
                             candidates = getattr(response, "candidates", None) or []
 
                             reason = str(getattr(candidates[0], "finish_reason", "không có nội dung")) if candidates else "không có nội dung"
+                            _blocked = getattr(getattr(response, "prompt_feedback", None), "block_reason", None)
+                            if _blocked:
+                                reason = f"bộ lọc an toàn chặn câu hỏi: {_blocked}"
 
                             raise ValueError(f"AI trả phản hồi rỗng ({reason}).")
 
@@ -17727,6 +17733,7 @@ if selected_station == station_labels[3]:
         counseling_system_instruction,
         crisis_resources_md,
         enforce_tram5_reply,
+        violence_safety_block,
         growth_micro_plan,
         is_crisis_text,
         is_violence_disclosure,
@@ -17880,15 +17887,10 @@ background:linear-gradient(135deg, rgba(6,78,59,0.35), rgba(15,23,42,0.65));marg
         st.session_state.counseling_messages.append({"role": "user", "content": _user_msg})
         _crisis = is_crisis_text(_user_msg)
         _violence = is_violence_disclosure(_user_msg)
-        if _crisis or _violence:
+        # Owner 18/11/2026: ca xâm hại/bạo lực vẫn cần AI lắng nghe, thấu cảm (như ca "hiếp dâm" owner từng
+        # thử); khung an toàn 111/115 luôn đứng đầu câu trả lời. Chỉ ca nguy hiểm tính mạng dừng ở khung cố định.
+        if _crisis:
             _safe = crisis_resources_md()
-            if _violence and not _crisis:
-                _safe = (
-                    "### An toàn trước xung đột / xâm hại\n"
-                    "- Em không có lỗi khi bị làm tổn thương.\n"
-                    "- Hãy báo **GVCN / ban giám hiệu / người giám hộ** và giữ bằng chứng nếu liên quan mạng.\n"
-                    "- Tổng đài bảo vệ trẻ em **111**.\n\n"
-                ) + _safe
             st.session_state.counseling_messages.append({"role": "assistant", "content": _safe})
             _packet = build_research_packet(
                 student_name=student_name,
@@ -17914,6 +17916,7 @@ background:linear-gradient(135deg, rgba(6,78,59,0.35), rgba(15,23,42,0.65));marg
                 theme_label=theme_choice,
                 journey_context=_journey_full,
                 legal_block=_legal,
+                trauma=_violence,
             )
             _history_txt = "\n".join(
                 f"{'Học sinh' if m.get('role')=='user' else 'Thầy tư vấn'}: {m.get('content')}"
@@ -17925,16 +17928,23 @@ background:linear-gradient(135deg, rgba(6,78,59,0.35), rgba(15,23,42,0.65));marg
             )
             try:
                 with st.spinner("Thầy đang lắng nghe và suy nghĩ cùng em…"):
-                    _reply = call_gemini_with_fallback(_prompt, system_instruction=_sys, json_mode=False)
+                    # Web 18/11/2026: chuyện thầy cô đối xử bất công, áp lực học thêm… bị bộ lọc mặc định
+                    # trả rỗng ở mọi model. Tư vấn học đường phải bàn được chủ đề nhạy cảm; khủng hoảng/bạo lực
+                    # đã chặn cứng phía trên bằng is_crisis_text / is_violence_disclosure trước khi gọi AI.
+                    from services.counseling_safety import COUNSELING_SAFETY_SETTINGS
+                    _reply = call_gemini_with_fallback(_prompt, system_instruction=_sys, json_mode=False,
+                                                       safety_settings=COUNSELING_SAFETY_SETTINGS)
                 if not isinstance(_reply, str):
                     _reply = str(_reply)
-                _reply, _enforce_flags = enforce_tram5_reply(_reply)
+                _reply, _enforce_flags = enforce_tram5_reply(_reply, trauma=_violence)
             except Exception as _ce:
                 _reply = (
                     "Thầy tạm thời chưa kết nối được AI trong phiên này. "
                     f"Em vẫn có thể làm các bước trưởng thành phía trên và nói chuyện với người lớn tin cậy.\n\n"
                     f"(Chi tiết kỹ thuật cho GV: {_ce})"
                 )
+            if _violence:
+                _reply = violence_safety_block() + "\n\n" + _reply
             st.session_state.counseling_messages.append({"role": "assistant", "content": _reply})
             _packet = build_research_packet(
                 student_name=student_name,
@@ -17945,7 +17955,7 @@ background:linear-gradient(135deg, rgba(6,78,59,0.35), rgba(15,23,42,0.65));marg
                 user_message=_user_msg,
                 assistant_message=_reply,
                 journey_context=_journey_full,
-                safety_flags={"crisis": False, "violence": False},
+                safety_flags={"crisis": False, "violence": _violence},
                 enforcement_flags=list(locals().get("_enforce_flags") or []),
             )
             st.session_state.counseling_logs.append(_packet)
