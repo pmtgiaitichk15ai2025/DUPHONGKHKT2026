@@ -12574,6 +12574,21 @@ if selected_station == station_labels[0]:
             if subject == "Toán học":
                 cleaned_p1_vis = _t1_with_function_visuals(cleaned_p1_vis, st.session_state.get('current_topic', ''), cleaned_p1)
             st.markdown(chemical_display_markdown(cleaned_p1_vis), unsafe_allow_html=True)
+            # Hình Oxyz xoay được (owner 18/11/2026): cùng tọa độ với hình tĩnh, hình tĩnh vẫn giữ cho bản in.
+            if subject == "Toán học":
+                try:
+                    from services.station1_scope import lesson_illustrations as _t1_ill
+                    from services.oxyz_interactive import lesson_oxyz_figure
+                    import precision_visual_engine as _pve3d
+                    _oxyz_builders = {"oxyz_flight": _pve3d.build_oxyz_flight_path_model, "oxyz_tetra": _pve3d.build_oxyz_tetrahedron_model}
+                    for _ok in _t1_ill(cleaned_p1, subject, grade_num):
+                        if _ok in _oxyz_builders:
+                            _fig3d = lesson_oxyz_figure(_ok, _oxyz_builders[_ok](cleaned_p1))
+                            if _fig3d is not None:
+                                st.caption("🧭 Hình không gian Oxyz 3D dựng đúng tọa độ trong bài — giữ chuột để xoay, cuộn để phóng to/thu nhỏ.")
+                                st.plotly_chart(_fig3d, width="stretch", key=f"t1_oxyz3d_{_ok}")
+                except Exception as _e_oxyz3d:
+                    logging.warning("Không dựng được hình Oxyz 3D: %s", type(_e_oxyz3d).__name__)
 
             # ==============================================================================
             # BẢO CHỨNG ĐỊNH VỊ CHỈ MỤC ADN BÀI HỌC SGK KNTT & VIDEO YOUTUBE ĐA MÔN ĂN KHỚP 100%

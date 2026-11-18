@@ -203,6 +203,32 @@ def saved_markdown_html(payload, subject, grade, topic, style="handwritten"):
     return build_lesson_html(subject, grade, topic, lesson, style)
 
 
+def _oxyz_print_figures(lesson, subject, grade):
+    """Hình Oxyz dựng từ tọa độ trong bài cũng có trên bản in (owner 18/11/2026: in ra mất hình).
+
+    Cùng bộ dựng với màn hình Trạm 1 (precision_visual_engine); SVG do mã sinh, không lấy từ AI.
+    """
+    try:
+        from services.station1_scope import lesson_illustrations, illustration_caption
+        import precision_visual_engine as pve
+    except Exception:
+        return ''
+    builders = {'oxyz_flight': pve.build_oxyz_flight_path_model, 'oxyz_tetra': pve.build_oxyz_tetrahedron_model}
+    out = []
+    for key in lesson_illustrations(lesson, subject, grade):
+        if key not in builders:
+            continue
+        try:
+            svg = builders[key](lesson).get('svg') or ''
+        except Exception:
+            continue
+        if svg.startswith('<svg') and '<script' not in svg.lower():
+            out.append('<figure class="oxyz-figure" style="text-align:center;margin:1em auto">' + svg +
+                       '<figcaption style="font-size:.7em">' + html.escape(illustration_caption(key).lstrip('📐 ')) +
+                       '</figcaption></figure>')
+    return ''.join(out)
+
+
 def build_lesson_html(subject, grade, topic, lesson, style="handwritten"):
     subject, grade = academic_context(subject, grade)
     if not isinstance(lesson, str) or not lesson.strip():
@@ -241,6 +267,7 @@ def build_lesson_html(subject, grade, topic, lesson, style="handwritten"):
     if subject == 'Toán học':
         from services.function_visuals import with_function_visuals
         body = with_function_visuals(body, topic, lesson)
+        body += _oxyz_print_figures(lesson, subject, grade)
     return r'''<!doctype html><html lang="vi"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>''' + title + r'''</title>
 <style>''' + css + r'''
@@ -269,7 +296,7 @@ article .verified-function-visuals svg{background:transparent!important}article 
 .lesson-source-review{margin-top:18px;padding-top:12px;border-top:1px solid #94a3b8;font:14px/1.5 Arial,'Segoe UI',sans-serif;color:#334155}.monochrome .lesson-source-review{color:#111}
 .handwritten .lesson-source-review{font-family:GSAIHand,cursive;font-size:18px;line-height:1.4}
 @media(max-width:600px){.paper{margin:10px 8px;padding:20px}.handwritten .paper{padding:24px 18px 28px 48px}.handwritten article{font-size:22px}.handwritten .notebook-header{grid-template-columns:1fr;gap:14px}.notebook-identity span{margin-top:2px}.notebook-heading h1{font-size:28px}}
-@page{size:A4;margin:10mm}@media print{body{background:#fff}.toolbar{display:none}.paper{margin:0;max-width:none;min-height:0;padding:10mm 7mm 10mm 12mm;box-shadow:none}.handwritten .paper{padding:5mm 5mm 7mm 16mm;box-shadow:none;print-color-adjust:exact;-webkit-print-color-adjust:exact;box-decoration-break:clone;-webkit-box-decoration-break:clone}.handwritten .notebook-header{grid-template-columns:minmax(120px,1fr) minmax(0,2fr);break-inside:avoid}.handwritten article{font-size:23px}.handwritten .source-note{font-size:16px}article{orphans:3;widows:3}p,li{break-inside:avoid}pre{break-inside:auto}thead{display:table-header-group}tr{break-inside:avoid}.katex-display{overflow:visible}a{color:inherit;text-decoration:none}}
+@page{size:A4;margin:10mm}@media print{body{background:#fff}.toolbar{display:none}.paper{margin:0;max-width:none;min-height:0;padding:10mm 7mm 10mm 12mm;box-shadow:none}.handwritten .paper{padding:5mm 5mm 7mm 16mm;box-shadow:none;print-color-adjust:exact;-webkit-print-color-adjust:exact;box-decoration-break:clone;-webkit-box-decoration-break:clone}.handwritten .notebook-header{grid-template-columns:minmax(120px,1fr) minmax(0,2fr);break-inside:avoid}.handwritten article{font-size:23px}.handwritten .source-note{font-size:16px}article{orphans:3;widows:3}p,li:not(:has(ul,ol,.katex-display,table)){break-inside:avoid}li:has(ul,ol,.katex-display,table){break-inside:auto}.oxyz-figure{break-inside:avoid}pre{break-inside:auto}thead{display:table-header-group}tr{break-inside:avoid}.katex-display{overflow:visible}a{color:inherit;text-decoration:none}}
 </style></head><body class="''' + style + r'''">
 <div class="toolbar"><button id="print" disabled>In / Lưu PDF</button><span id="render-status">Đang dựng công thức…</span></div>
 <main class="paper"><header class="notebook-header"><div class="notebook-identity"><strong>SỔ TAY HỌC TẬP</strong><span>KẾT NỐI TRI THỨC</span></div><div class="notebook-heading"><h1>''' + title + r'''</h1><div class="context">''' + html.escape(subject) + f" · Lớp {grade}" + r'''</div></div></header>

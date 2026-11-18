@@ -1273,6 +1273,47 @@ def build_oxyz_tetrahedron_model(q_text):
         "title": title
     }
 
+def _num(v):
+    v = float(v)
+    return str(int(v)) if v.is_integer() else f'{v:g}'
+
+
+# Hướng trục Ox trên giấy (phép chiếu song song). Mặc định giữ hướng cũ (-0.5; 0.35); chỉ đổi khi
+# một điểm bị chiếu rơi đúng lên trục khác (ca thật 18/11/2026: M(2;1;10), N(12;6;30) dồn lên trục z).
+_OX_DIRECTIONS = ((-0.5, 0.35), (-0.62, 0.3), (-0.4, 0.45), (-0.7, 0.42), (-0.25, 0.5), (-0.2, 0.55))
+
+
+def _oxyz_x_direction(points):
+    def worst(direction):
+        kx, ky = direction
+        score = float('inf')
+        for x, y, z in points:
+            px, py = y + x * kx, -z + x * ky
+            norm = max(abs(x), abs(y), abs(z), 1.0)
+            if abs(x) > 1e-9 or abs(y) > 1e-9:          # điểm không nằm trên Oz
+                score = min(score, abs(px) / norm)       # khoảng cách tới trục z (đường dọc)
+        return score
+    best = _OX_DIRECTIONS[0]
+    if worst(best) >= 0.12:
+        return best
+    return max(_OX_DIRECTIONS, key=worst)
+
+
+def _oxyz_guides(proj, P, name):
+    """Nét gióng mảnh: P → chân trên (Oxy) → hai trục Ox, Oy (như hình SGK)."""
+    x, y, z = P
+    foot = proj((x, y, 0.0))
+    out = []
+    if abs(z) > 1e-9:
+        p = proj(P)
+        out.append(f'<line x1="{p[0]:.1f}" y1="{p[1]:.1f}" x2="{foot[0]:.1f}" y2="{foot[1]:.1f}" stroke="#94a3b8" stroke-width="0.9" stroke-dasharray="3,3"/>')
+    if abs(x) > 1e-9 and abs(y) > 1e-9:
+        for axis_point in ((x, 0.0, 0.0), (0.0, y, 0.0)):
+            t = proj(axis_point)
+            out.append(f'<line x1="{foot[0]:.1f}" y1="{foot[1]:.1f}" x2="{t[0]:.1f}" y2="{t[1]:.1f}" stroke="#94a3b8" stroke-width="0.9" stroke-dasharray="3,3"/>')
+    return '\n  '.join(out) + '\n  '
+
+
 def build_oxyz_flight_path_model(q_text):
     """Phục dựng trực quan bài toán quỹ đạo bay thiết bị và khoảng cách từ gốc O tới đường thẳng MN."""
     m_M = re.search(r'M\s*\(\s*(-?\d+(?:\.\d+)?)\s*;\s*(-?\d+(?:\.\d+)?)\s*;\s*(-?\d+(?:\.\d+)?)\s*\)', str(q_text))
@@ -1288,21 +1329,38 @@ def build_oxyz_flight_path_model(q_text):
     t = - (M[0]*MN[0] + M[1]*MN[1] + M[2]*MN[2]) / len_sq_MN
     H = (M[0] + t*MN[0], M[1] + t*MN[1], M[2] + t*MN[2])
     dist_OH = math.sqrt(H[0]**2 + H[1]**2 + H[2]**2)
+    # Chỉ vẽ H/OH khi đề hỏi khoảng cách từ gốc O hoặc điểm gần nhất (ca thật 18/11/2026: đề chỉ hỏi MN).
+    draw_h = bool(re.search(r'gần\s+nhất|ngắn\s+nhất|khoảng\s+cách\s+từ\s+(?:gốc\s+)?(?:tọa\s+độ\s+)?o\b|trạm',
+                            str(q_text).lower()))
 
     ox, oy = 80.0, 140.0
-    max_val = max(abs(M[0]), abs(M[1]), abs(M[2]), abs(N[0]), abs(N[1]), abs(N[2]), abs(H[0]), abs(H[1]), abs(H[2]), 4.0)
-    scale = 60.0 / max(max_val, 10.0)
+    max_val = max(abs(M[0]), abs(M[1]), abs(M[2]), abs(N[0]), abs(N[1]), abs(N[2]),
+                  *((abs(H[0]), abs(H[1]), abs(H[2])) if draw_h else ()), 4.0)
+    shown = [M, N] + ([H] if draw_h else [])
+    max_xy = max([abs(p[0]) for p in shown] + [abs(p[1]) for p in shown] + [1.0])
+    max_z = max([abs(p[2]) for p in shown] + [1.0])
+    # Nén trục z khi độ cao lớn hơn nhiều so với x, y (ca thật z=30, x≤12): hình không dựng đứng thành một vạch.
+    zf = min(1.0, 1.4 * max_xy / max_z)
+    scale = 60.0 / max(max_xy, max_z * zf, 4.0)
+    kx, ky = _oxyz_x_direction([(p[0], p[1], p[2] * zf) for p in shown])
 
     def proj(p):
         x, y, z = p
-        px = ox + (y * scale * 1.5) - (x * 0.5 * scale * 1.5)
-        py = oy - (z * scale * 1.5) + (x * 0.35 * scale * 1.5)
+        px = ox + (y * scale * 1.5) + (x * kx * scale * 1.5)
+        py = oy - (z * zf * scale * 1.5) + (x * ky * scale * 1.5)
         return px, py
 
     pO = (ox, oy)
     pM = proj(M)
     pN = proj(N)
     pH = proj(H)
+    # Nét gióng kiểu SGK: điểm → chân trên (Oxy) → hai trục Ox, Oy.
+    guides = ''.join(_oxyz_guides(proj, P, name) for name, P in (('M', M), ('N', N)))
+    h_part = (f'\n  <line x1="{pO[0]:.1f}" y1="{pO[1]:.1f}" x2="{pH[0]:.1f}" y2="{pH[1]:.1f}" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3,3"/>'
+              f'\n  <circle cx="{pH[0]:.1f}" cy="{pH[1]:.1f}" r="2.5" fill="#f59e0b"/>'
+              f'\n  <text x="{pH[0] + 6:.1f}" y="{pH[1] - 4:.1f}" font-size="10" font-weight="bold" fill="#d97706">H</text>') if draw_h else ''
+    xlen = min(100.0, 48.0 / max(ky, 0.35))   # trục Ox không vượt khung dưới (viewBox cao 200)
+    xa = (ox + xlen * kx, oy + xlen * ky)
 
     svg = f"""<svg width="240" height="190" viewBox="0 0 250 200" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -1312,29 +1370,23 @@ def build_oxyz_flight_path_model(q_text):
   <!-- Trục tọa độ Oxyz -->
   <line x1="{ox}" y1="{oy}" x2="{ox + 120}" y2="{oy}" stroke="#64748b" stroke-width="1.2" marker-end="url(#arr)"/>
   <line x1="{ox}" y1="{oy}" x2="{ox}" y2="{oy - 110}" stroke="#64748b" stroke-width="1.2" marker-end="url(#arr)"/>
-  <line x1="{ox}" y1="{oy}" x2="{ox - 50}" y2="{oy + 38}" stroke="#64748b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="{ox}" y1="{oy}" x2="{xa[0]:.1f}" y2="{xa[1]:.1f}" stroke="#64748b" stroke-width="1.2" marker-end="url(#arr)"/>
   <text x="{ox + 124}" y="{oy + 4}" fill="#334155" font-size="11" font-style="italic">y</text>
   <text x="{ox - 4}" y="{oy - 114}" fill="#334155" font-size="11" font-style="italic">z</text>
-  <text x="{ox - 60}" y="{oy + 45}" fill="#334155" font-size="11" font-style="italic">x</text>
-  
+  <text x="{xa[0] - 12:.1f}" y="{xa[1] + 2:.1f}" fill="#334155" font-size="11" font-style="italic">x</text>
+  {guides}
   <!-- Quỹ đạo bay MN -->
-  <line x1="{pM[0]:.1f}" y1="{pM[1]:.1f}" x2="{pN[0]:.1f}" y2="{pN[1]:.1f}" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr_flight)"/>
-  
-  <!-- Khoảng cách ngắn nhất OH vuông góc MN -->
-  <line x1="{pO[0]:.1f}" y1="{pO[1]:.1f}" x2="{pH[0]:.1f}" y2="{pH[1]:.1f}" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3,3"/>
-  
+  <line x1="{pM[0]:.1f}" y1="{pM[1]:.1f}" x2="{pN[0]:.1f}" y2="{pN[1]:.1f}" stroke="#0284c7" stroke-width="2.5" marker-end="url(#arr_flight)"/>{h_part}
+
   <!-- Các điểm và nhãn -->
   <circle cx="{pO[0]:.1f}" cy="{pO[1]:.1f}" r="3" fill="#0f172a"/>
-  <text x="{pO[0] - 14:.1f}" y="{pO[1] + 12:.1f}" font-size="11" font-weight="bold" fill="#0f172a">O(0;0;0)</text>
-  
+  <text x="{pO[0] + 4:.1f}" y="{pO[1] + 13:.1f}" font-size="11" font-weight="bold" fill="#0f172a">O</text>
+
   <circle cx="{pM[0]:.1f}" cy="{pM[1]:.1f}" r="3" fill="#0284c7"/>
-  <text x="{pM[0] - 25:.1f}" y="{pM[1] - 6:.1f}" font-size="10.5" font-weight="bold" fill="#0284c7">M({int(M[0])};{int(M[1])};{int(M[2])})</text>
-  
+  <text x="{pM[0] + 6:.1f}" y="{pM[1] + 4:.1f}" font-size="10.5" font-weight="bold" fill="#0284c7">M({_num(M[0])};{_num(M[1])};{_num(M[2])})</text>
+
   <circle cx="{pN[0]:.1f}" cy="{pN[1]:.1f}" r="3" fill="#0284c7"/>
-  <text x="{pN[0] + 5:.1f}" y="{pN[1] + 2:.1f}" font-size="10.5" font-weight="bold" fill="#0284c7">N({int(N[0])};{int(N[1])};{int(N[2])})</text>
-  
-  <circle cx="{pH[0]:.1f}" cy="{pH[1]:.1f}" r="2.5" fill="#f59e0b"/>
-  <text x="{pH[0] + 4:.1f}" y="{pH[1] + 12:.1f}" font-size="10" font-weight="bold" fill="#d97706">H (d_min)</text>
+  <text x="{pN[0] + 6:.1f}" y="{pN[1] + 4:.1f}" font-size="10.5" font-weight="bold" fill="#0284c7">N({_num(N[0])};{_num(N[1])};{_num(N[2])})</text>
 </svg>"""
 
     tikz = rf"""\begin{{tikzpicture}}[scale=0.75, >=stealth]
