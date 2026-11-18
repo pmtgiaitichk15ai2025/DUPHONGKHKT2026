@@ -4,6 +4,7 @@ import json
 import re
 
 from services.lesson_export import _TOKENS
+from services.markdown_tidy import geometry_notation
 
 T1_CONTEXT_REVISION = 2026110801
 
@@ -125,6 +126,7 @@ def chemical_display_markdown(text, *, separate_steps=True):
         raw = match[0]
         if raw.startswith(('`', '~~~')):
             return raw
+        raw = geometry_notation(raw)
         try:
             return _chemical_macros(raw, _chemical_core_tex)
         except ValueError:
@@ -148,6 +150,8 @@ def preserve_math_and_code(text, normalize_prose):
             original = '$$' + original[2:-2] + '$$'
         elif original.startswith(r'\('):
             original = '$' + original[2:-2] + '$'
+        if not original.startswith(('`', '~~~')):
+            original = geometry_notation(original)
         slots.append(original)
         return f'{prefix}N{len(slots)-1}END'
 

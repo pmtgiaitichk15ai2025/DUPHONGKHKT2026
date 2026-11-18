@@ -3774,6 +3774,7 @@ from data.socratic_anchors import (
 )
 from services.socratic_context import build_tram3_socratic_guide, looks_like_explain_solution
 from services.hint_rating import render_hint_rating
+from services.markdown_tidy import geometry_notation_inplace
 
 # AI exam JSON helpers — import an toàn để Cloud không sập nếu module lệch bản.
 try:
@@ -16019,7 +16020,7 @@ if selected_station == station_labels[2]:
 
     elif st.session_state.exam_state == "testing":
 
-        exam = st.session_state.exam_data
+        exam = geometry_notation_inplace(st.session_state.exam_data)
         recovery_meta = exam.get("context_recovery") if isinstance(exam, dict) else None
         withheld = recovery_meta.get("withheld") if isinstance(recovery_meta, dict) else 0
         if isinstance(withheld, int) and withheld > 0:
@@ -16402,7 +16403,7 @@ if selected_station == station_labels[2]:
 
     elif st.session_state.exam_state == "graded":
 
-        exam = st.session_state.exam_data
+        exam = geometry_notation_inplace(st.session_state.exam_data)
 
         ex_code = str(exam.get('code', st.session_state.get('exam_code', '1011')))
 
