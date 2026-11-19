@@ -232,13 +232,20 @@ def violence_safety_block() -> str:
 
 
 def crisis_resources_md() -> str:
+    """Khung cố định cho ca có ý nghĩ tự hại — KHÔNG để AI viết (owner duyệt bản ấm áp 19/11/2026)."""
     return (
-        "### Ưu tiên an toàn ngay bây giờ\n"
-        "- Hãy tìm **người lớn tin cậy** gần nhất (bố mẹ/người giám hộ, GVCN, ban giám hiệu, "
-        "cán bộ tư vấn học đường).\n"
-        "- Việt Nam: tổng đài bảo vệ trẻ em **111** (miễn phí).\n"
-        "- Nếu đang nguy cấp tính mạng: gọi **115** hoặc đến cơ sở y tế gần nhất.\n"
-        "- Em không phải đối mặt một mình. Việc tìm giúp đỡ là hành động can đảm và đúng đắn.\n"
+        "Em ơi, thầy đọc được những dòng em vừa viết, và thầy thương em lắm. "
+        "Cảm ơn em đã dám nói ra, chuyện đó cần nhiều can đảm lắm đó em.\n\n"
+        "Em không có lỗi khi thấy mệt mỏi đến mức này. Nỗi đau em đang mang là thật, "
+        "nhưng nó có thể nhẹ đi khi có người cùng em gánh. Em không phải chịu một mình đâu nghen.\n\n"
+        "### Ngay lúc này, thầy mong em làm giúp thầy mấy việc nhỏ\n"
+        "- Nếu em đang ở một mình, hãy tới chỗ có người thân hoặc người lớn em tin cậy nhất "
+        "(ba mẹ, người giám hộ, thầy cô chủ nhiệm, cán bộ tư vấn của trường).\n"
+        "- Gọi **111** — tổng đài bảo vệ trẻ em, miễn phí, có người lắng nghe em suốt ngày đêm.\n"
+        "- Nếu em đang gặp nguy hiểm tới tính mạng, gọi ngay **115** hoặc tới cơ sở y tế gần nhất.\n"
+        "- Cất xa những thứ có thể làm em bị thương, và nói với người lớn để họ ở cạnh em.\n\n"
+        "Nếu khó mở lời, em chỉ cần nói: *\"Con đang thấy không ổn, con cần người ở bên.\"* — vậy là đủ rồi.\n\n"
+        "Thầy vẫn ở đây với em. Em có muốn kể thầy nghe thêm một chút không?\n"
     )
 
 

@@ -42,7 +42,7 @@ class ViolenceDisclosureGetsListeningReply(unittest.TestCase):
         src = pathlib.Path(__file__).resolve().parents[1].joinpath("app.py").read_text(encoding="utf-8")
         self.assertIn("        if _crisis:\n            _safe = crisis_resources_md()", src.replace("\r\n", "\n"))
         self.assertNotIn("if _crisis or _violence:", src)
-        self.assertIn(r'_reply = violence_safety_block() + "\n\n" + _reply', src)
+        self.assertIn(r'_reply = violence_safety_block() + _t4_school_contacts(_user_msg) + "\n\n" + _reply', src)
 
 
 class TraumaInformedInstruction(unittest.TestCase):

@@ -64,6 +64,8 @@ def batches(blocks, limit=BATCH_CHARS):
 
 
 def translation_request(batch, subject, grade, topic=""):
+    if not bilingual_allowed(subject):
+        raise ValueError(SENSITIVE_NOTE)
     glossary = sorted({pair for _, t in batch for pair in terms_in(t, subject, grade, limit=50)})
     # Neo đúng hệ căn cứ dùng chung của lượt sinh bài (CT2018 + sửa đổi còn hiệu lực, trục KNTT, văn bản
     # pháp quy theo ngày áp dụng, hồ sơ môn/lớp) — không tạo bộ căn cứ thứ hai cho lượt dịch.
@@ -208,3 +210,14 @@ def build_term_feedback_entry(*, subject, grade, topic, text, name="", time=""):
             "category": TERM_FEEDBACK_CATEGORY, "rating": 1,
             "detail": json.dumps({"topic": str(topic or ""), "report": str(text or "")[:1000]}, ensure_ascii=False),
             "type": "USER_FEEDBACK"}
+
+
+# Owner 19/11/2026: môn nhạy cảm chính trị – pháp lý chỉ mở song ngữ khi giáo viên bộ môn duyệt thuật ngữ.
+SENSITIVE_SUBJECTS = frozenset({"Lịch sử", "Giáo dục kinh tế và pháp luật", "Ngữ văn", "Giáo dục công dân", "Lịch sử & Địa lý"})
+SENSITIVE_NOTE = ("Môn có nội dung chính trị – pháp lý: bản song ngữ chỉ mở khi giáo viên bộ môn duyệt thuật ngữ. "
+                  "Phiếu Sen Việt vẫn in đầy đủ bằng tiếng Việt.")
+
+
+def bilingual_allowed(subject):
+    from services.curriculum_policy import canonical_subject
+    return canonical_subject(subject) not in SENSITIVE_SUBJECTS

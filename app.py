@@ -2775,6 +2775,10 @@ def call_gemini_with_fallback(prompt_or_contents, system_instruction=None, json_
         effective_si = with_teaching_step_layout(effective_si)
         from services.curriculum_policy import with_academic_grounding
         effective_si = with_academic_grounding(effective_si)
+    if not json_mode:
+        # Owner 19/11/2026: lời thầy theo văn phong Nam Bộ (kiến thức giữ chuẩn SGK); mọi model dự phòng nhận như nhau.
+        from services.voice_style import with_southern_teacher_voice
+        effective_si = with_southern_teacher_voice(effective_si)
 
     with st.status("Gia sư AI đang tiếp nhận yêu cầu...", expanded=True) as status_box:
 
@@ -2982,6 +2986,9 @@ def stream_gemini_with_fallback(prompt_or_contents, system_instruction=None):
         effective_si = with_teaching_step_layout(effective_si)
         from services.curriculum_policy import with_academic_grounding
         effective_si = with_academic_grounding(effective_si)
+    # Owner 19/11/2026: lời thầy theo văn phong Nam Bộ (kiến thức giữ chuẩn SGK); mọi model dự phòng nhận như nhau.
+    from services.voice_style import with_southern_teacher_voice
+    effective_si = with_southern_teacher_voice(effective_si)
 
 
 
@@ -12668,8 +12675,14 @@ if selected_station == station_labels[0]:
                     _tr_key = _hl.sha1((subject + str(grade_num) + str(current_topic_name) + cleaned_p1).encode("utf-8")).hexdigest()[:16]
                     _tr_store = st.session_state.setdefault("lotus_translations", {})
                     _lotus_tr = _tr_store.get(_tr_key)
-                    from services.lesson_translation import batches, lesson_blocks, merge_response, translation_request
-                    _blocks_tr = lesson_blocks(subject, grade_num, current_topic_name, cleaned_p1)
+                    from services.lesson_translation import (batches, bilingual_allowed, lesson_blocks, merge_response,
+                                                             translation_request, SENSITIVE_NOTE)
+                    if not bilingual_allowed(subject):
+                        # Owner 19/11/2026: Sử, GDKT&PL, Ngữ văn, GDCD nhạy cảm chính trị–pháp lý → không sinh song ngữ.
+                        st.info(SENSITIVE_NOTE)
+                        _lotus_tr, _blocks_tr = None, []
+                    else:
+                        _blocks_tr = lesson_blocks(subject, grade_num, current_topic_name, cleaned_p1)
                     _pending_tr = [bk for bk in _blocks_tr if bk[0] not in (_lotus_tr or {})]
                     # Web 19/11/2026: lô dịch lỗi (AI quá tải) từng làm phiếu lủng và mất nút; nay luôn cho dịch tiếp phần thiếu.
                     if _pending_tr:
@@ -17971,11 +17984,21 @@ background:linear-gradient(135deg, rgba(6,78,59,0.35), rgba(15,23,42,0.65));marg
     if _user_msg:
         st.session_state.counseling_messages.append({"role": "user", "content": _user_msg})
         _crisis = is_crisis_text(_user_msg)
+
+        def _t4_school_contacts(msg):
+            # Owner 19/11/2026: danh bạ hỗ trợ của trường (Secrets SCHOOL_SUPPORT_CONTACTS); ẩn người bị nhắc tên.
+            from services.school_contacts import school_contacts_md
+            try:
+                _raw = st.secrets.get("SCHOOL_SUPPORT_CONTACTS", [])
+            except Exception:
+                _raw = []
+            _md = school_contacts_md(_raw, msg)
+            return ("\n" + _md) if _md else ""
         _violence = is_violence_disclosure(_user_msg)
         # Owner 18/11/2026: ca xâm hại/bạo lực vẫn cần AI lắng nghe, thấu cảm (như ca "hiếp dâm" owner từng
         # thử); khung an toàn 111/115 luôn đứng đầu câu trả lời. Chỉ ca nguy hiểm tính mạng dừng ở khung cố định.
         if _crisis:
-            _safe = crisis_resources_md()
+            _safe = crisis_resources_md() + _t4_school_contacts(_user_msg)
             st.session_state.counseling_messages.append({"role": "assistant", "content": _safe})
             _packet = build_research_packet(
                 student_name=student_name,
@@ -18029,7 +18052,7 @@ background:linear-gradient(135deg, rgba(6,78,59,0.35), rgba(15,23,42,0.65));marg
                     f"(Chi tiết kỹ thuật cho GV: {_ce})"
                 )
             if _violence:
-                _reply = violence_safety_block() + "\n\n" + _reply
+                _reply = violence_safety_block() + _t4_school_contacts(_user_msg) + "\n\n" + _reply
             st.session_state.counseling_messages.append({"role": "assistant", "content": _reply})
             _packet = build_research_packet(
                 student_name=student_name,
