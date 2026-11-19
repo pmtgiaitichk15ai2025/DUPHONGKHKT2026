@@ -275,7 +275,7 @@ def build_lesson_html(subject, grade, topic, lesson, style="handwritten", transl
         from services.lotus_style import lotus_css as _lotus_css, with_vocabulary
         body_class = "handwritten lotus"
         if translations:
-            from services.lesson_translation import block_id, inject_translations
+            from services.lesson_translation import block_id, flagged_count, inject_translations
             body, missing = inject_translations(body, translations)
             title_en = (translations.get(block_id(str(topic or ""))) or {}).get("en")
             if title_en:
@@ -285,8 +285,10 @@ def build_lesson_html(subject, grade, topic, lesson, style="handwritten", transl
             body += ('<div class="translation-note">Tồn tại đã biết của bảng thuật ngữ:<ul>' + issues + '</ul></div>') if issues else ''
             body += ('<p class="translation-note">Bản tiếng Anh do AI dịch theo bảng thuật ngữ đã đối chiếu; '
                      'giáo viên cần duyệt trước khi sử dụng chính thức.' +
-                     (f' Còn {missing} đoạn chưa có bản tiếng Anh.' if missing else '') + '</p>')
-        body = with_vocabulary(body, subject, grade)
+                     (f' Còn {missing} đoạn chưa có bản tiếng Anh.' if missing else '') +
+                     (f' Có {flagged_count(translations)} đoạn đánh dấu ⚠ lệch bảng thuật ngữ, giáo viên cần xem.' if flagged_count(translations) else '') + '</p>')
+        from services.lesson_translation import proposed_terms
+        body = with_vocabulary(body, subject, grade, extra_terms=proposed_terms(translations))
         lotus_css = _lotus_css()
     return r'''<!doctype html><html lang="vi"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>''' + title + r'''</title>

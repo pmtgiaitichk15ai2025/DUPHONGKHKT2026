@@ -50,8 +50,28 @@ async def _synth(text, voice, rate):
     return bytes(audio)
 
 
+_CACHE = {}          # dùng chung mọi phiên trên cùng máy chủ (owner 19/11/2026: bài đã tạo thì phát ngay)
+CACHE_MAX = 40
+
+
 def synthesize_male_mp3(text, voice=MALE_VOICE, rate="-5%", synth=None, sleep=time.sleep):
-    """MP3 cả bài; b"" nếu thư viện thiếu hoặc dịch vụ từ chối sau ATTEMPTS lần mỗi đoạn."""
+    """MP3 cả bài; b"" nếu thư viện thiếu hoặc dịch vụ từ chối sau ATTEMPTS lần mỗi đoạn.
+
+    Kết quả thành công được nhớ theo (giọng, tốc độ, nội dung); lỗi không bị nhớ.
+    """
+    import hashlib
+    key = hashlib.sha256(f"{voice}|{rate}|{text}".encode("utf-8")).hexdigest()
+    if synth is None and key in _CACHE:
+        return _CACHE[key]
+    out = _synthesize(text, voice, rate, synth, sleep)
+    if out and synth is None:
+        if len(_CACHE) >= CACHE_MAX:
+            _CACHE.pop(next(iter(_CACHE)))
+        _CACHE[key] = out
+    return out
+
+
+def _synthesize(text, voice, rate, synth, sleep):
     chunks = split_chunks(text)
     if not chunks:
         return b""

@@ -91,6 +91,37 @@ class Bilingual(unittest.TestCase):
         en_part = doc.split('<span class="en" lang="en"', 2)[2]
         self.assertIn('class="lesson-math"', en_part.split("</span></p>", 1)[0] + "</span>")
 
+    def test_glossary_mismatch_is_visible_to_teacher(self):
+        """Web 19/11/2026: cờ lệch thuật ngữ chỉ nằm trong thuộc tính ẩn, giáo viên không thấy."""
+        from services.lesson_export import build_lesson_html
+        from services.lesson_translation import merge_response
+        fake = {bid: ("Find the upright line of ⟦0⟧, compute the derivative, build the table of variations."
+                      if "tiệm cận đứng" in t.lower() else "EN " + t) for bid, t in self.blocks}
+        tr = merge_response(self.blocks, fake, "Toán học", 12)
+        doc = build_lesson_html("Toán học", 12, "Khảo sát hàm số", LESSON, "lotus", translations=tr)
+        warn = doc.split('<b class="glossary-warn">⚠ ', 1)[1].split("</b>", 1)[0]
+        self.assertIn("Tiệm cận đứng→vertical asymptote", warn)
+        self.assertIn("đánh dấu ⚠ lệch bảng thuật ngữ", doc)
+        self.assertEqual(doc.count(".handwritten .plain-header{display:none}"), 1)   # tên bài in một lần
+
+    def test_ai_terms_checked_and_vocab_for_any_subject(self):
+        """Owner 19/11/2026: mọi môn/lớp phải có từ vựng; AI đề xuất được kiểm, không tin mù."""
+        from services.lesson_translation import proposed_terms, review_terms
+        text = "Tìm tiệm cận đứng; nghề trồng lúa nước ở lưu vực sông Hồng."
+        got = review_terms([{"vi": "tiệm cận đứng", "en": "upright line"},          # bảng thắng AI
+                            {"vi": "trồng lúa nước", "en": "wet-rice cultivation"},
+                            {"vi": "không có trong đoạn", "en": "ghost"}], text, "Toán học", 12)
+        self.assertEqual(got[0], {"vi": "Tiệm cận đứng", "en": "vertical asymptote", "source": "glossary"})
+        self.assertEqual(got[1]["source"], "ai")
+        self.assertEqual(len(got), 2)
+        from services.lesson_export import build_lesson_html
+        lesson = "### PHẦN 1: BÀI HỌC\n\n#### Khởi động\nCư dân Văn Lang trồng lúa nước, dùng trống đồng Đông Sơn.\n"
+        tr = {"__terms__x": [{"vi": "trống đồng Đông Sơn", "en": "Dong Son bronze drum", "source": "ai"}]}
+        self.assertEqual(proposed_terms(tr)[0]["en"], "Dong Son bronze drum")
+        doc = build_lesson_html("Lịch sử", 10, "Văn Lang", lesson, "lotus", translations=tr)
+        self.assertIn("<b>Dong Son bronze drum</b> – trống đồng Đông Sơn<sup>*</sup>", doc)
+        self.assertIn("AI đề xuất theo bài, giáo viên cần duyệt", doc)
+
     def test_system_instruction_carries_absolute_rules_and_glossary(self):
         from services.lesson_translation import translation_request
         system, user = translation_request(self.blocks, "Toán học", 12)
@@ -100,6 +131,7 @@ class Bilingual(unittest.TestCase):
     def test_app_uses_shared_fallback_gate(self):
         src = pathlib.Path("app.py").read_text(encoding="utf-8")
         self.assertIn("call_gemini_with_fallback(_user_tr, system_instruction=_sys_tr, json_mode=True)", src)
+        self.assertIn("Dịch tiếp", src)   # lô lỗi không làm mất nút (web 19/11/2026)
         self.assertIn("cleaned_p1, export_style, _lotus_tr)", src)
 
 

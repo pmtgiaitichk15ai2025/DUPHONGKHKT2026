@@ -85,6 +85,7 @@ def _lotus_rules():
         # Tiếng Anh: nghiêng, nhỏ hơn tiếng Việt, xám xanh.
         ".lotus .en{display:block;font:italic 400 .62em/1.35 'Be Vietnam Pro','Segoe UI',Arial,sans-serif;color:#54758C;margin:.1em 0 .35em}"
         ".lotus h1 .en,.lotus h2 .en,.lotus h3 .en,.lotus h4 .en{font-size:.6em;font-weight:600;text-decoration:none}"
+        ".lotus .glossary-warn{font-style:normal;font-weight:700;color:#b45309;background:#fef3c7;padding:0 4px;border-radius:3px}"
         ".lotus .en .katex{color:#54758C}.lotus .en-missing{display:block;font:italic 12px Arial,sans-serif;color:#9a6b2f}"
         # Đồ thị theo mẫu: đường cong xanh liền, tiệm cận đỏ nét đứt, trục đen, điểm đặc biệt đỏ.
         ".lotus .verified-function-visuals polyline{stroke:#1d4ed8}"
@@ -95,6 +96,7 @@ def _lotus_rules():
         ".lotus .vocab-leaf h5{margin:0 0 8px;text-align:center;color:#2f6b3c;font:700 13px/1.3 Arial,sans-serif;letter-spacing:.06em}"
         ".lotus .vocab-leaf ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px 20px}"
         ".lotus .vocab-leaf li{font:14px/1.4 Arial,sans-serif;color:#1f3d2a}.lotus .vocab-leaf li b{color:#075B9A;font-weight:700}"
+        ".lotus .vocab-note{margin:6px 0 0;font:italic 11px Arial,sans-serif;color:#2f6b3c;text-align:center}"
         ".vocab-leaf,.pond,.corner-lotus,.page-lotus,.translation-note{display:none}.lotus .vocab-leaf,.lotus .pond,.lotus .corner-lotus{display:block}"
         ".lotus .translation-note{display:block;font:12px/1.4 Arial,sans-serif;color:#54758C;margin-top:10px}"
         "@media(max-width:600px){.lotus .corner-lotus{width:60px;height:50px}.lotus .vocab-leaf ul{grid-template-columns:1fr}}"
@@ -118,30 +120,60 @@ _EN_TITLE = {"Toán học": "MATHEMATICAL VOCABULARY", "Vật lý": "PHYSICS VOC
 
 
 def vocab_box(terms, subject):
+    """terms: [(vi, en)] hoặc [(vi, en, nguồn)]; nguồn "ai" = AI đề xuất, đã kiểm có trong đoạn, chưa duyệt."""
     title_vi = "TỪ VỰNG " + html.escape(subject.upper())
     title_en = _EN_TITLE.get(subject, "SUBJECT VOCABULARY")
-    items = "".join(f"<li><b>{html.escape(en)}</b> – {html.escape(vi)}</li>" for vi, en in terms)
+    items, any_ai = [], False
+    for t in terms:
+        vi, en = t[0], t[1]
+        ai = len(t) > 2 and t[2] == "ai"
+        any_ai = any_ai or ai
+        items.append(f"<li><b>{html.escape(en)}</b> – {html.escape(vi)}{'<sup>*</sup>' if ai else ''}</li>")
+    note = '<p class="vocab-note">* AI đề xuất theo bài, giáo viên cần duyệt.</p>' if any_ai else ""
     return (f'<aside class="vocab-leaf" aria-label="Từ vựng Anh–Việt"><h5>{title_vi} · {title_en}</h5>'
-            f"<ul>{items}</ul></aside>")
+            f"<ul>{''.join(items)}</ul>{note}</aside>")
 
 
 PAGE_LOTUS = ('<div class="pond" aria-hidden="true"></div><div class="corner-lotus" aria-hidden="true"></div>'
               '<div class="page-lotus tr" aria-hidden="true"></div><div class="page-lotus pond-print" aria-hidden="true"></div>')
+CHUNK_CHARS = 900   # khoảng nửa trang in: khung từ vựng dày như mẫu "mỗi trang 5 từ"
 
 
-def with_vocabulary(body, subject, grade, per_box=5):
-    """Chèn khung từ vựng cuối mỗi phần lớn (trước mỗi <h2> kế tiếp và cuối bài).
-
-    Trình duyệt không biết chỗ ngắt trang giấy nên khung đặt theo phần nội dung, không theo tờ.
-    Không lặp lại thuật ngữ đã in ở khung trước. Không có thuật ngữ đã duyệt → không chèn.
-    """
-    parts = re.split(r"(?=<h2\b)", body)
-    if len(parts) == 1:
-        parts = re.split(r"(?=<h3\b)", body)
-    seen, out = set(), []
+def _chunks(body):
+    """Cắt theo đề mục (h2/h3/h4) rồi gộp các mục ngắn tới ~CHUNK_CHARS chữ, để khung đặt đều theo trang."""
+    parts = [p for p in re.split(r"(?=<h[234])", body) if p]
+    out, cur = [], ""
     for part in parts:
-        picked = [t for t in terms_in(_plain(part), subject, grade, limit=50) if t[0] not in seen][:per_box]
-        seen.update(vi for vi, _ in picked)
+        cur += part
+        if len(_plain(cur)) >= CHUNK_CHARS:
+            out.append(cur)
+            cur = ""
+    if cur:
+        if out and len(_plain(cur)) < CHUNK_CHARS / 3:
+            out[-1] += cur
+        else:
+            out.append(cur)
+    return out
+
+
+def with_vocabulary(body, subject, grade, per_box=5, extra_terms=()):
+    """Chèn khung từ vựng 5 từ theo từng đoạn ~nửa trang (mọi môn/lớp).
+
+    Ưu tiên thuật ngữ bảng đã duyệt; bổ sung thuật ngữ AI đề xuất (đã kiểm có trong đoạn) đánh dấu *.
+    Trình duyệt không biết chỗ ngắt trang giấy nên khung đặt theo đoạn nội dung. Không lặp từ đã in.
+    """
+    from services.subject_glossary import _norm
+    seen, out = set(), []
+    for part in _chunks(body):
+        text = _plain(part)
+        hay = _norm(text)
+        picked = [(vi, en, "glossary") for vi, en in terms_in(text, subject, grade, limit=50) if _norm(vi) not in seen]
+        for t in extra_terms:
+            key = _norm(t["vi"])
+            if key in hay and key not in seen and all(_norm(p[0]) != key for p in picked):
+                picked.append((t["vi"], t["en"], t.get("source", "ai")))
+        picked = picked[:per_box]
+        seen.update(_norm(p[0]) for p in picked)
         out.append(part + (vocab_box(picked, subject) if picked else ""))
     return PAGE_LOTUS + "".join(out)
 

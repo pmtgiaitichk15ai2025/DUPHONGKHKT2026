@@ -62,5 +62,30 @@ class RunsInsideStreamlitEventLoop(unittest.TestCase):
         self.assertEqual(asyncio.run(inside()), b"MP3")
 
 
+
+class SharedCache(unittest.TestCase):
+    """Owner 19/11/2026: bài đã tạo giọng nam thì lần sau phát ngay, kể cả khi Microsoft chập chờn."""
+
+    def test_success_cached_failure_not_cached(self):
+        from unittest import mock
+        import services.male_voice as mv
+        mv._CACHE.clear()
+        calls = []
+
+        async def ok(text, voice, rate):
+            calls.append(text)
+            return b"MP3"
+        with mock.patch.object(mv, "_synth", ok):
+            self.assertEqual(mv.synthesize_male_mp3("Chào các em.", sleep=lambda s: None), b"MP3")
+            self.assertEqual(mv.synthesize_male_mp3("Chào các em.", sleep=lambda s: None), b"MP3")
+        self.assertEqual(len(calls), 1)
+
+        async def bad(text, voice, rate):
+            raise RuntimeError("403")
+        with mock.patch.object(mv, "_synth", bad):
+            self.assertEqual(mv.synthesize_male_mp3("Bài khác.", sleep=lambda s: None), b"")
+        self.assertEqual(len(mv._CACHE), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

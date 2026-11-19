@@ -78,7 +78,9 @@ def translation_request(batch, subject, grade, topic=""):
         "4. Không dịch theo nghĩa đời thường khi từ có nghĩa chuyên ngành.\n"
         "5. Giữ đúng cách gọi khái niệm theo CT GDPT 2018 và sách KNTT của môn/lớp này; không đổi nội dung "
         "chính trị, pháp lý, sự kiện lịch sử; tên riêng Việt Nam giữ nguyên hoặc dùng cách gọi chính thức.\n"
-        "6. Chỉ trả JSON {\"id\": \"bản dịch\"}, đủ mọi id được giao.\n"
+        "6. Chỉ trả JSON {\"id\": \"bản dịch\"}, đủ mọi id được giao; thêm khóa \"__terms__\" là danh sách tối đa "
+        "8 thuật ngữ chuyên ngành then chốt THỰC SỰ xuất hiện trong các đoạn này, dạng {\"vi\": \"...\", \"en\": \"...\"} "
+        "(vi viết đúng như trong đoạn; ưu tiên thuật ngữ trong BẢNG THUẬT NGỮ).\n"
         "BẢNG THUẬT NGỮ (đã đối chiếu): " + json.dumps(dict(glossary), ensure_ascii=False)
     )
     user = json.dumps({bid: text for bid, text in batch}, ensure_ascii=False)
@@ -99,6 +101,29 @@ def check_translation(vi, en, subject, grade):
     return en.strip(), flags
 
 
+def review_terms(items, text, subject, grade, limit=8):
+    """Thuật ngữ AI đề xuất cho khung từ vựng — kiểm bằng chương trình, không tin AI:
+    phải xuất hiện thật trong đoạn; có trong bảng đã duyệt thì lấy đúng bản tiếng Anh của bảng."""
+    from services.subject_glossary import _norm, approved_terms
+    approved = {_norm(vi): (vi, en) for vi, en in approved_terms(subject, grade)}
+    hay, out, seen = _norm(text), [], set()
+    for it in items or []:
+        if not isinstance(it, dict):
+            continue
+        vi, en = str(it.get("vi") or "").strip(), str(it.get("en") or "").strip()
+        key = _norm(vi)
+        if not vi or not en or key in seen or len(vi) > 60 or len(en) > 80 or key not in hay:
+            continue
+        seen.add(key)
+        if key in approved:
+            out.append({"vi": approved[key][0], "en": approved[key][1], "source": "glossary"})
+        else:
+            out.append({"vi": vi, "en": en, "source": "ai"})
+        if len(out) >= limit:
+            break
+    return out
+
+
 def merge_response(batch, raw, subject, grade):
     """Đọc JSON trả về của một lô → {id: {"en":..., "flags":[...]}}; khối hỏng bị bỏ, không làm hỏng lô."""
     try:
@@ -106,8 +131,13 @@ def merge_response(batch, raw, subject, grade):
     except ValueError:
         data = {}
     out = {}
+    if not isinstance(data, dict):
+        data = {}
+    terms = review_terms(data.get("__terms__"), " ".join(t for _, t in batch), subject, grade)
+    if terms and batch:
+        out["__terms__" + batch[0][0]] = terms   # mỗi lô một khóa, không ghi đè khi gộp nhiều lô
     for bid, vi in batch:
-        en, flags = check_translation(vi, (data or {}).get(bid), subject, grade)
+        en, flags = check_translation(vi, data.get(bid), subject, grade)
         if en is not None:
             out[bid] = {"en": en, "flags": flags}
     return out
@@ -129,10 +159,31 @@ def inject_translations(body_html, translations):
             return m.group(0)
         en = html.escape(item["en"])
         en = _TOKEN_RE.sub(lambda t: maths[int(t.group(1))] if int(t.group(1)) < len(maths) else "", en)
-        flag = ' data-glossary-flag="1"' if item.get("flags") else ""
+        flags = [f.split(":", 1)[1] for f in item.get("flags", []) if f.startswith("glossary:")]
+        flag = (' data-glossary-flag="1" title="' + html.escape("Lệch bảng thuật ngữ, giáo viên cần xem: " + "; ".join(flags), quote=True) + '"'
+                if flags else "")
+        if flags:
+            en = '<b class="glossary-warn">⚠ ' + html.escape("; ".join(flags)) + "</b> " + en
         return f'<{tag}{attrs}>{inner}<span class="en" lang="en"{flag}>{en}</span></{tag}>'
     body = _BLOCK_RE.sub(add, body_html)
     return body, missing
+
+
+def flagged_count(translations):
+    return sum(1 for k, v in (translations or {}).items()
+               if not k.startswith("__terms__") and any(f.startswith("glossary:") for f in v.get("flags", [])))
+
+
+def proposed_terms(translations):
+    """Gộp thuật ngữ AI đề xuất (đã kiểm) của mọi lô: [{"vi","en","source"}], không trùng."""
+    out, seen = [], set()
+    for k, v in (translations or {}).items():
+        if k.startswith("__terms__"):
+            for t in v:
+                if t["vi"].casefold() not in seen:
+                    seen.add(t["vi"].casefold())
+                    out.append(t)
+    return out
 
 
 def lesson_blocks(subject, grade, topic, lesson):  # noqa: E302

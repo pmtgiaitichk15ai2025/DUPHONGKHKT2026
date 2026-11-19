@@ -12622,6 +12622,14 @@ if selected_station == station_labels[0]:
             current_topic_name = st.session_state.get('current_topic') or topic_input or subject
             t1_indexing_data = generate_kntt_lesson_indexing_and_media(subject, grade_num, current_topic_name)
             st.markdown(t1_indexing_data["badge_html"], unsafe_allow_html=True)
+            # Owner 19/11/2026: luồng học liệu tiếng Anh uy tín (Khan Academy, BBC Bitesize, CK-12…) theo chủ đề bài.
+            from services.english_resources import english_resources_html
+            from services.lesson_translation import block_id as _bid_t1
+            _title_en_t1 = next((tr.get(_bid_t1(str(current_topic_name)), {}).get('en', '') for tr in
+                                 (st.session_state.get('lotus_translations') or {}).values()
+                                 if isinstance(tr, dict) and tr.get(_bid_t1(str(current_topic_name)))), '')
+            st.markdown(english_resources_html(subject, grade_num, current_topic_name,
+                                               st.session_state.get('current_lesson', ''), _title_en_t1), unsafe_allow_html=True)
 
             # ==============================================================================
             # 📊 THẺ CẨM NANG INFOGRAPHIC VECTOR SVG A4 (BỎ TÚI / IN ẤN PHOTO TIẾT KIỆM MỰC & MÀU NÉT CĂNG)
@@ -12638,24 +12646,32 @@ if selected_station == station_labels[0]:
                     _tr_key = _hl.sha1((subject + str(grade_num) + str(current_topic_name) + cleaned_p1).encode("utf-8")).hexdigest()[:16]
                     _tr_store = st.session_state.setdefault("lotus_translations", {})
                     _lotus_tr = _tr_store.get(_tr_key)
-                    if _lotus_tr is None:
-                        st.caption("Phiếu đang hiện tiếng Việt. Bản song ngữ cần 1 lượt AI dịch (dùng key đang chọn); "
-                                   "thuật ngữ lấy theo bảng đã đối chiếu, công thức giữ nguyên.")
-                        if st.button("🌐 Tạo bản song ngữ Việt – Anh", key=f"lotus_translate_{_tr_key}"):
-                            from services.lesson_translation import batches, lesson_blocks, merge_response, translation_request
-                            _got, _failed = {}, 0
+                    from services.lesson_translation import batches, lesson_blocks, merge_response, translation_request
+                    _blocks_tr = lesson_blocks(subject, grade_num, current_topic_name, cleaned_p1)
+                    _pending_tr = [bk for bk in _blocks_tr if bk[0] not in (_lotus_tr or {})]
+                    # Web 19/11/2026: lô dịch lỗi (AI quá tải) từng làm phiếu lủng và mất nút; nay luôn cho dịch tiếp phần thiếu.
+                    if _pending_tr:
+                        if _lotus_tr is None:
+                            st.caption("Phiếu đang hiện tiếng Việt. Bản song ngữ cần 1 lượt AI dịch (dùng key đang chọn); "
+                                       "thuật ngữ lấy theo bảng đã đối chiếu, công thức giữ nguyên.")
+                            _tr_label = "🌐 Tạo bản song ngữ Việt – Anh"
+                        else:
+                            st.warning(f"Còn {len(_pending_tr)} đoạn chưa có bản tiếng Anh (lần trước AI quá tải giữa chừng).")
+                            _tr_label = f"🔁 Dịch tiếp {len(_pending_tr)} đoạn còn thiếu"
+                        if st.button(_tr_label, key=f"lotus_translate_{_tr_key}_{len(_pending_tr)}"):
+                            _got = dict(_lotus_tr or {})
                             with st.spinner("Đang dịch song ngữ theo từng phần…"):
-                                for _batch in batches(lesson_blocks(subject, grade_num, current_topic_name, cleaned_p1)):
+                                for _batch in batches(_pending_tr):
                                     _sys_tr, _user_tr = translation_request(_batch, subject, grade_num, current_topic_name)
                                     try:
                                         _raw = call_gemini_with_fallback(_user_tr, system_instruction=_sys_tr, json_mode=True)
                                         _got.update(merge_response(_batch, _raw, subject, grade_num))
                                     except Exception:
-                                        _failed += 1
-                            if _got:
+                                        pass
+                            if len(_got) > len(_lotus_tr or {}):
                                 _tr_store[_tr_key] = _got
                                 st.rerun()
-                            st.warning("Chưa dịch được (AI đang quá tải hoặc hết lượt). Phiếu vẫn dùng được bằng tiếng Việt; thử lại sau ít phút.")
+                            st.warning("Chưa dịch được (AI đang quá tải hoặc hết lượt). Phiếu vẫn dùng được; thử lại sau ít phút.")
                 export_html = build_lesson_html(subject, grade_num, current_topic_name, cleaned_p1, export_style, _lotus_tr)
                 export_html = _sync_t1_function_export(export_html, subject, current_topic_name, cleaned_p1)
                 components.html(export_html, height=790, scrolling=True)
