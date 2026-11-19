@@ -63,7 +63,8 @@ class Station1ExportReloadTests(unittest.TestCase):
     def test_actual_app_export_assignments_repair_a_cached_old_builder(self):
         tree, scope = self.namespace()
         scope.update(build_lesson_html=lambda *args: self.old_page, subject='Toán học', grade_num=12,
-                     current_topic_name=self.topic, cleaned_p1='KEEP SOURCE', export_style='monochrome')
+                     current_topic_name=self.topic, cleaned_p1='KEEP SOURCE', export_style='monochrome',
+                     _lotus_tr=None)  # bản song ngữ Sen Việt (19/11/2026); None = chưa dịch
         assignments = [node for node in ast.walk(tree) if isinstance(node, ast.Assign) and
                        any(isinstance(target, ast.Name) and target.id == 'export_html' for target in node.targets)]
         for node in sorted(assignments, key=lambda item: item.lineno):

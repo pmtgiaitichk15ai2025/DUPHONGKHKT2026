@@ -1,0 +1,889 @@
+{
+ "subject": "Toán học",
+ "grade": 11,
+ "checked": "2026-11-19",
+ "spelling": "British English (owner 19/11/2026)",
+ "rule": "Dùng khi status là dat_2_nguon (Claude + Wikipedia vi↔en khớp) hoặc chu_du_an_duyet. Không phải thẩm định của Bộ.",
+ "terms": [
+  {
+   "vi": "Hàm số lượng giác",
+   "en": "trigonometric function",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hàm lượng giác ↔ Trigonometric functions"
+   ],
+   "wiki": {
+    "vi_page": "Hàm lượng giác",
+    "vi_page_en": "Trigonometric functions",
+    "en_page": "Trigonometric functions",
+    "en_page_vi": "Hàm lượng giác"
+   }
+  },
+  {
+   "vi": "Phương trình lượng giác",
+   "en": "trigonometric equation",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "List of trigonometric identities",
+    "en_page_vi": "Đẳng thức lượng giác"
+   }
+  },
+  {
+   "vi": "Góc lượng giác",
+   "en": "angle of rotation",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Angular displacement",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Đường tròn lượng giác",
+   "en": "unit circle",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Unit circle"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Unit circle",
+    "en_page_vi": "Đường tròn đơn vị"
+   }
+  },
+  {
+   "vi": "Radian",
+   "en": "radian",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Radian ↔ Radian"
+   ],
+   "wiki": {
+    "vi_page": "Radian",
+    "vi_page_en": "Radian",
+    "en_page": "Radian",
+    "en_page_vi": "Radian"
+   }
+  },
+  {
+   "vi": "Hàm số tuần hoàn",
+   "en": "periodic function",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hàm tuần hoàn ↔ Periodic function"
+   ],
+   "wiki": {
+    "vi_page": "Hàm tuần hoàn",
+    "vi_page_en": "Periodic function",
+    "en_page": "Periodic function",
+    "en_page_vi": "Hàm tuần hoàn"
+   }
+  },
+  {
+   "vi": "Chu kì",
+   "en": "period",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": "Chu kỳ",
+    "vi_page_en": null,
+    "en_page": "Period",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Công thức cộng",
+   "en": "angle addition formula",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "List of trigonometric identities",
+    "en_page_vi": "Đẳng thức lượng giác"
+   }
+  },
+  {
+   "vi": "Công thức nhân đôi",
+   "en": "double-angle formula",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "List of trigonometric identities",
+    "en_page_vi": "Đẳng thức lượng giác"
+   }
+  },
+  {
+   "vi": "Dãy số",
+   "en": "sequence",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Dãy số thực ↔ Sequence"
+   ],
+   "wiki": {
+    "vi_page": "Dãy số thực",
+    "vi_page_en": null,
+    "en_page": "Sequence",
+    "en_page_vi": "Dãy (toán học)"
+   }
+  },
+  {
+   "vi": "Cấp số cộng",
+   "en": "arithmetic progression",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Cấp số cộng ↔ Arithmetic progression"
+   ],
+   "wiki": {
+    "vi_page": "Cấp số cộng",
+    "vi_page_en": "Arithmetic progression",
+    "en_page": "Arithmetic progression",
+    "en_page_vi": "Cấp số cộng"
+   }
+  },
+  {
+   "vi": "Cấp số nhân",
+   "en": "geometric progression",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Cấp số nhân ↔ Geometric progression"
+   ],
+   "wiki": {
+    "vi_page": "Cấp số nhân",
+    "vi_page_en": "Geometric progression",
+    "en_page": "Geometric progression",
+    "en_page_vi": "Cấp số nhân"
+   }
+  },
+  {
+   "vi": "Công sai",
+   "en": "common difference",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Arithmetic progression",
+    "en_page_vi": "Cấp số cộng"
+   }
+  },
+  {
+   "vi": "Công bội",
+   "en": "common ratio",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Số hạng tổng quát",
+   "en": "general term",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Trademark distinctiveness",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Dãy số tăng",
+   "en": "increasing sequence",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Sequence",
+    "en_page_vi": "Dãy (toán học)"
+   }
+  },
+  {
+   "vi": "Dãy số bị chặn",
+   "en": "bounded sequence",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Bounded function",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Số trung vị",
+   "en": "median",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Số trung vị ↔ Median"
+   ],
+   "wiki": {
+    "vi_page": "Số trung vị",
+    "vi_page_en": "Median",
+    "en_page": "Median",
+    "en_page_vi": "Số trung vị"
+   }
+  },
+  {
+   "vi": "Mốt",
+   "en": "mode",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": "Mốt",
+    "vi_page_en": null,
+    "en_page": "Mode",
+    "en_page_vi": "Mode (định hướng)"
+   }
+  },
+  {
+   "vi": "Số trung bình cộng",
+   "en": "arithmetic mean",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Arithmetic mean"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Arithmetic mean",
+    "en_page_vi": "Trung bình cộng"
+   }
+  },
+  {
+   "vi": "Đường thẳng song song",
+   "en": "parallel lines",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Song song ↔ Parallel (geometry)"
+   ],
+   "wiki": {
+    "vi_page": "Song song",
+    "vi_page_en": "Parallel (geometry)",
+    "en_page": "Parallel (geometry)",
+    "en_page_vi": "Song song"
+   }
+  },
+  {
+   "vi": "Hai đường thẳng chéo nhau",
+   "en": "skew lines",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Skew lines",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Mặt phẳng song song",
+   "en": "parallel planes",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Parallel (geometry)",
+    "en_page_vi": "Song song"
+   }
+  },
+  {
+   "vi": "Hình lăng trụ",
+   "en": "prism",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hình lăng trụ ↔ Prism"
+   ],
+   "wiki": {
+    "vi_page": "Hình lăng trụ",
+    "vi_page_en": "Prism (geometry)",
+    "en_page": "Prism",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Hình chóp",
+   "en": "pyramid",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hình chóp ↔ Pyramid"
+   ],
+   "wiki": {
+    "vi_page": "Hình chóp",
+    "vi_page_en": "Pyramid (geometry)",
+    "en_page": "Pyramid",
+    "en_page_vi": "Kim tự tháp"
+   }
+  },
+  {
+   "vi": "Hình hộp",
+   "en": "parallelepiped",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Parallelepiped"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Parallelepiped",
+    "en_page_vi": "Hình khối lục diện"
+   }
+  },
+  {
+   "vi": "Phép chiếu song song",
+   "en": "parallel projection",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Parallel projection",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Giao tuyến",
+   "en": "line of intersection",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": "Giao điểm",
+    "vi_page_en": "Intersection (geometry)",
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Giới hạn của dãy số",
+   "en": "limit of a sequence",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Dãy số thực ↔ Limit of a sequence"
+   ],
+   "wiki": {
+    "vi_page": "Dãy số thực",
+    "vi_page_en": null,
+    "en_page": "Limit of a sequence",
+    "en_page_vi": "Giới hạn của một dãy"
+   }
+  },
+  {
+   "vi": "Giới hạn của hàm số",
+   "en": "limit of a function",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Giới hạn của hàm số ↔ Limit of a function"
+   ],
+   "wiki": {
+    "vi_page": "Giới hạn của hàm số",
+    "vi_page_en": "Limit of a function",
+    "en_page": "Limit of a function",
+    "en_page_vi": "Giới hạn của hàm số"
+   }
+  },
+  {
+   "vi": "Giới hạn một bên",
+   "en": "one-sided limit",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Giới hạn một bên ↔ One-sided limit"
+   ],
+   "wiki": {
+    "vi_page": "Giới hạn một bên",
+    "vi_page_en": "One-sided limit",
+    "en_page": "One-sided limit",
+    "en_page_vi": "Giới hạn một bên"
+   }
+  },
+  {
+   "vi": "Hàm số liên tục",
+   "en": "continuous function",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hàm liên tục ↔ Continuous function"
+   ],
+   "wiki": {
+    "vi_page": "Hàm liên tục",
+    "vi_page_en": "Continuous function",
+    "en_page": "Continuous function",
+    "en_page_vi": "Hàm liên tục"
+   }
+  },
+  {
+   "vi": "Cấp số nhân lùi vô hạn",
+   "en": "infinite geometric series",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Geometric series"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Geometric series",
+    "en_page_vi": "Chuỗi hình học"
+   }
+  },
+  {
+   "vi": "Hàm số mũ",
+   "en": "exponential function",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Exponential function"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Exponential function",
+    "en_page_vi": "Hàm mũ"
+   }
+  },
+  {
+   "vi": "Hàm số lôgarit",
+   "en": "logarithmic function",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Logarithm"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Logarithm",
+    "en_page_vi": "Logarit"
+   }
+  },
+  {
+   "vi": "Lôgarit",
+   "en": "logarithm",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Logarit ↔ Logarithm"
+   ],
+   "wiki": {
+    "vi_page": "Logarit",
+    "vi_page_en": "Logarithm",
+    "en_page": "Logarithm",
+    "en_page_vi": "Logarit"
+   }
+  },
+  {
+   "vi": "Lôgarit tự nhiên",
+   "en": "natural logarithm",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Logarit tự nhiên ↔ Natural logarithm"
+   ],
+   "wiki": {
+    "vi_page": "Logarit tự nhiên",
+    "vi_page_en": "Natural logarithm",
+    "en_page": "Natural logarithm",
+    "en_page_vi": "Logarit tự nhiên"
+   }
+  },
+  {
+   "vi": "Phương trình mũ",
+   "en": "exponential equation",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Exponential function",
+    "en_page_vi": "Hàm mũ"
+   }
+  },
+  {
+   "vi": "Lũy thừa",
+   "en": "power",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": "Lũy thừa",
+    "vi_page_en": "Exponentiation",
+    "en_page": "Power",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Số e",
+   "en": "e (mathematical constant)",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: E (số) ↔ E (mathematical constant)"
+   ],
+   "wiki": {
+    "vi_page": "E (số)",
+    "vi_page_en": "E (mathematical constant)",
+    "en_page": "E (mathematical constant)",
+    "en_page_vi": "E (số)"
+   }
+  },
+  {
+   "vi": "Đạo hàm cấp hai",
+   "en": "second derivative",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Second derivative"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Second derivative",
+    "en_page_vi": "Đạo hàm bậc hai"
+   }
+  },
+  {
+   "vi": "Tiếp tuyến",
+   "en": "tangent line",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tiếp tuyến ↔ Tangent"
+   ],
+   "wiki": {
+    "vi_page": "Tiếp tuyến",
+    "vi_page_en": "Tangent",
+    "en_page": "Tangent",
+    "en_page_vi": "Tiếp tuyến"
+   }
+  },
+  {
+   "vi": "Hệ số góc",
+   "en": "slope",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Slope"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Slope",
+    "en_page_vi": "Độ dốc"
+   }
+  },
+  {
+   "vi": "Quy tắc tính đạo hàm",
+   "en": "differentiation rules",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Differentiation rules",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Đạo hàm của hàm hợp",
+   "en": "chain rule",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Chain rule",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Đường thẳng vuông góc với mặt phẳng",
+   "en": "line perpendicular to a plane",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Hai mặt phẳng vuông góc",
+   "en": "perpendicular planes",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Góc nhị diện",
+   "en": "dihedral angle",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Dihedral angle",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Khoảng cách từ điểm đến mặt phẳng",
+   "en": "distance from a point to a plane",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Distance from a point to a plane",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Thể tích",
+   "en": "volume",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Thể tích ↔ Volume"
+   ],
+   "wiki": {
+    "vi_page": "Thể tích",
+    "vi_page_en": "Volume",
+    "en_page": "Volume",
+    "en_page_vi": "Thể tích"
+   }
+  },
+  {
+   "vi": "Hình chóp đều",
+   "en": "regular pyramid",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Pyramid (geometry)",
+    "en_page_vi": "Hình chóp"
+   }
+  },
+  {
+   "vi": "Định lí ba đường vuông góc",
+   "en": "theorem of three perpendiculars",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Biến cố giao",
+   "en": "intersection of events",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Biến cố hợp",
+   "en": "union of events",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Biến cố xung khắc",
+   "en": "mutually exclusive events",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Mutual exclusivity",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Quy tắc nhân xác suất",
+   "en": "multiplication rule of probability",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Quy tắc cộng xác suất",
+   "en": "addition rule of probability",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  }
+ ],
+ "anchors": {
+  "program": "Chương trình GDPT 2018 và các sửa đổi còn áp dụng: 32/2018/TT-BGDĐT; 20/2021/TT-BGDĐT; 13/2022/TT-BGDĐT; 17/2025/TT-BGDĐT; 22/2021/TT-BGDĐT; 3588/QĐ-BGDĐT; 185/QĐ-BGDĐT",
+  "textbook": [
+   "SGK Toán 11 Tập 1 (KNTT)",
+   "SGK Toán 11 Tập 2 (KNTT)",
+   "Chuyên đề học tập Toán 11 (KNTT)",
+   "SGV Toán 11 (KNTT)"
+  ],
+  "curriculum_topics": [
+   "Chuyên đề 1: Hàm số lượng giác và phương trình lượng giác",
+   "Chuyên đề 2: Dãy số, Cấp số cộng và Cấp số nhân",
+   "Chuyên đề 3: Các số đặc trưng đo xu thế trung tâm của mẫu số liệu ghép nhóm",
+   "Chuyên đề 4: Quan hệ song song trong không gian",
+   "Chuyên đề 5: Giới hạn và Hàm số liên tục",
+   "Chuyên đề 6: Hàm số mũ và hàm số lôgarit",
+   "Chuyên đề 7: Đạo hàm và ứng dụng tiếp tuyến",
+   "Chuyên đề 8: Quan hệ vuông góc trong không gian",
+   "Chuyên đề 9: Xác suất: Biến cố giao và quy tắc nhân xác suất"
+  ],
+  "note": "Thuật ngữ tiếng Việt gom theo các chuyên đề CT2018/KNTT của môn/lớp trong hệ thống; bản tiếng Anh đối chiếu Wikipedia vi↔en và/hoặc chủ dự án duyệt. Chưa đối chiếu từng trang SGK."
+ },
+ "known_issues": [
+  "Chưa đối chiếu từng trang SGK KNTT (kho sách ở ổ F chưa được phép đọc).",
+  "Một số cụm từ kiểu SGK Việt không có thuật ngữ quốc tế tương đương (vd. bảng biến thiên → table of variations)."
+ ]
+}

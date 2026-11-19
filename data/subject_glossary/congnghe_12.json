@@ -1,0 +1,685 @@
+{
+ "subject": "Công nghệ",
+ "grade": 12,
+ "checked": "2026-11-19",
+ "spelling": "British English (owner 19/11/2026)",
+ "rule": "Dùng khi status là dat_2_nguon (Claude + Wikipedia vi↔en khớp) hoặc chu_du_an_duyet. Không phải thẩm định của Bộ.",
+ "terms": [
+  {
+   "vi": "Hệ thống điện quốc gia",
+   "en": "national grid",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "National Grid",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Nhà máy điện",
+   "en": "power station",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Nhà máy điện ↔ Power station"
+   ],
+   "wiki": {
+    "vi_page": "Nhà máy điện",
+    "vi_page_en": "Power station",
+    "en_page": "Power station",
+    "en_page_vi": "Nhà máy điện"
+   }
+  },
+  {
+   "vi": "Lưới điện",
+   "en": "electrical grid",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Electrical grid"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Electrical grid",
+    "en_page_vi": "Điện lưới"
+   }
+  },
+  {
+   "vi": "Truyền tải điện năng",
+   "en": "electric power transmission",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Electric power transmission",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Phân phối điện năng",
+   "en": "electric power distribution",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Electric power distribution"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Electric power distribution",
+    "en_page_vi": "Phân phối điện"
+   }
+  },
+  {
+   "vi": "Mạng điện hạ áp",
+   "en": "low-voltage network",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Low-voltage network",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Điện áp",
+   "en": "voltage",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hiệu điện thế ↔ Voltage"
+   ],
+   "wiki": {
+    "vi_page": "Hiệu điện thế",
+    "vi_page_en": "Voltage",
+    "en_page": "Voltage",
+    "en_page_vi": "Hiệu điện thế"
+   }
+  },
+  {
+   "vi": "Cường độ dòng điện",
+   "en": "electric current",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Dòng điện ↔ Electric current"
+   ],
+   "wiki": {
+    "vi_page": "Dòng điện",
+    "vi_page_en": "Electric current",
+    "en_page": "Electric current",
+    "en_page_vi": "Dòng điện"
+   }
+  },
+  {
+   "vi": "Công suất điện",
+   "en": "electric power",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Electric power",
+    "en_page_vi": "Điện lực"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Điện năng",
+   "en": "electrical energy",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Điện lực ↔ Electrical energy"
+   ],
+   "wiki": {
+    "vi_page": "Điện lực",
+    "vi_page_en": "Electric power",
+    "en_page": "Electrical energy",
+    "en_page_vi": "Năng lượng điện"
+   }
+  },
+  {
+   "vi": "Máy biến áp",
+   "en": "transformer",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Biến áp ↔ Transformer"
+   ],
+   "wiki": {
+    "vi_page": "Biến áp",
+    "vi_page_en": "Transformer",
+    "en_page": "Transformer",
+    "en_page_vi": "Biến áp"
+   }
+  },
+  {
+   "vi": "Aptomat",
+   "en": "circuit breaker",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Thiết bị đóng cắt điện ↔ Circuit breaker"
+   ],
+   "wiki": {
+    "vi_page": "Thiết bị đóng cắt điện",
+    "vi_page_en": "Circuit breaker",
+    "en_page": "Circuit breaker",
+    "en_page_vi": "Thiết bị đóng cắt điện"
+   }
+  },
+  {
+   "vi": "Cầu chì",
+   "en": "fuse",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Cầu chì ↔ Fuse"
+   ],
+   "wiki": {
+    "vi_page": "Cầu chì",
+    "vi_page_en": "Fuse (electrical)",
+    "en_page": "Fuse",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Công tơ điện",
+   "en": "electricity meter",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Đồng hồ điện ↔ Electricity meter"
+   ],
+   "wiki": {
+    "vi_page": "Đồng hồ điện",
+    "vi_page_en": "Electricity meter",
+    "en_page": "Electricity meter",
+    "en_page_vi": "Đồng hồ điện"
+   }
+  },
+  {
+   "vi": "Dây dẫn điện",
+   "en": "electrical wire",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": "Dây dẫn điện",
+    "vi_page_en": "Electricity conductor",
+    "en_page": "Electrical wiring",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Nối đất",
+   "en": "ground (electricity)",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tiếp địa ↔ Ground (electricity)"
+   ],
+   "wiki": {
+    "vi_page": "Tiếp địa",
+    "vi_page_en": "Ground (electricity)",
+    "en_page": "Ground (electricity)",
+    "en_page_vi": "Tiếp địa"
+   }
+  },
+  {
+   "vi": "Điện trở",
+   "en": "resistor (resistance)",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": "Điện trở và điện dẫn",
+    "vi_page_en": "Electrical resistance and conductance",
+    "en_page": "Resistor",
+    "en_page_vi": "Điện trở (thiết bị)"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Tụ điện",
+   "en": "capacitor",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tụ điện ↔ Capacitor"
+   ],
+   "wiki": {
+    "vi_page": "Tụ điện",
+    "vi_page_en": "Capacitor",
+    "en_page": "Capacitor",
+    "en_page_vi": "Tụ điện"
+   }
+  },
+  {
+   "vi": "Cuộn cảm",
+   "en": "inductor",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Cuộn cảm ↔ Inductor"
+   ],
+   "wiki": {
+    "vi_page": "Cuộn cảm",
+    "vi_page_en": "Inductor",
+    "en_page": "Inductor",
+    "en_page_vi": "Cuộn cảm"
+   }
+  },
+  {
+   "vi": "Chất bán dẫn",
+   "en": "semiconductor",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Chất bán dẫn ↔ Semiconductor"
+   ],
+   "wiki": {
+    "vi_page": "Chất bán dẫn",
+    "vi_page_en": "Semiconductor",
+    "en_page": "Semiconductor",
+    "en_page_vi": "Chất bán dẫn"
+   }
+  },
+  {
+   "vi": "Điốt",
+   "en": "diode",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Diode ↔ Diode"
+   ],
+   "wiki": {
+    "vi_page": "Diode",
+    "vi_page_en": "Diode",
+    "en_page": "Diode",
+    "en_page_vi": "Diode"
+   }
+  },
+  {
+   "vi": "Tranzito",
+   "en": "transistor",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Transistor ↔ Transistor"
+   ],
+   "wiki": {
+    "vi_page": "Transistor",
+    "vi_page_en": "Transistor",
+    "en_page": "Transistor",
+    "en_page_vi": "Transistor"
+   }
+  },
+  {
+   "vi": "Mạch tích hợp",
+   "en": "integrated circuit",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Vi mạch ↔ Integrated circuit"
+   ],
+   "wiki": {
+    "vi_page": "Vi mạch",
+    "vi_page_en": "Integrated circuit",
+    "en_page": "Integrated circuit",
+    "en_page_vi": "Vi mạch"
+   }
+  },
+  {
+   "vi": "Mạch khuếch đại",
+   "en": "amplifier",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Khuếch đại (định hướng) ↔ Amplifier"
+   ],
+   "wiki": {
+    "vi_page": "Khuếch đại (định hướng)",
+    "vi_page_en": "Amplifier (disambiguation)",
+    "en_page": "Amplifier",
+    "en_page_vi": "Khuếch đại điện tử"
+   }
+  },
+  {
+   "vi": "Khuếch đại thuật toán",
+   "en": "operational amplifier",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Khuếch đại thuật toán ↔ Operational amplifier"
+   ],
+   "wiki": {
+    "vi_page": "Khuếch đại thuật toán",
+    "vi_page_en": "Operational amplifier",
+    "en_page": "Operational amplifier",
+    "en_page_vi": "Khuếch đại thuật toán"
+   }
+  },
+  {
+   "vi": "Mạch tạo xung",
+   "en": "pulse generator",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Pulse generator"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Pulse generator",
+    "en_page_vi": "Máy phát xung"
+   }
+  },
+  {
+   "vi": "Vi điều khiển",
+   "en": "microcontroller",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Vi điều khiển ↔ Microcontroller"
+   ],
+   "wiki": {
+    "vi_page": "Vi điều khiển",
+    "vi_page_en": "Microcontroller",
+    "en_page": "Microcontroller",
+    "en_page_vi": "Vi điều khiển"
+   }
+  },
+  {
+   "vi": "Cảm biến",
+   "en": "sensor",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Cảm biến ↔ Sensor"
+   ],
+   "wiki": {
+    "vi_page": "Cảm biến",
+    "vi_page_en": "Sensor",
+    "en_page": "Sensor",
+    "en_page_vi": "Cảm biến"
+   }
+  },
+  {
+   "vi": "Mạch chỉnh lưu",
+   "en": "rectifier",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Mạch chỉnh lưu ↔ Rectifier"
+   ],
+   "wiki": {
+    "vi_page": "Mạch chỉnh lưu",
+    "vi_page_en": "Rectifier",
+    "en_page": "Rectifier",
+    "en_page_vi": "Mạch chỉnh lưu"
+   }
+  },
+  {
+   "vi": "Tín hiệu số",
+   "en": "digital signal",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tín hiệu số ↔ Digital signal"
+   ],
+   "wiki": {
+    "vi_page": "Tín hiệu số",
+    "vi_page_en": "Digital signal",
+    "en_page": "Digital signal",
+    "en_page_vi": "Tín hiệu số"
+   }
+  },
+  {
+   "vi": "Tín hiệu tương tự",
+   "en": "analog signal",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tín hiệu analog ↔ Analog signal"
+   ],
+   "wiki": {
+    "vi_page": "Tín hiệu analog",
+    "vi_page_en": "Analog signal",
+    "en_page": "Analog signal",
+    "en_page_vi": "Tín hiệu analog"
+   }
+  },
+  {
+   "vi": "Cổng logic",
+   "en": "logic gate",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Cổng logic ↔ Logic gate"
+   ],
+   "wiki": {
+    "vi_page": "Cổng logic",
+    "vi_page_en": "Logic gate",
+    "en_page": "Logic gate",
+    "en_page_vi": "Cổng logic"
+   }
+  },
+  {
+   "vi": "Lâm nghiệp",
+   "en": "forestry",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Lâm nghiệp ↔ Forestry"
+   ],
+   "wiki": {
+    "vi_page": "Lâm nghiệp",
+    "vi_page_en": "Forestry",
+    "en_page": "Forestry",
+    "en_page_vi": "Lâm nghiệp"
+   }
+  },
+  {
+   "vi": "Trồng rừng",
+   "en": "afforestation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Trồng rừng ↔ Afforestation"
+   ],
+   "wiki": {
+    "vi_page": "Trồng rừng",
+    "vi_page_en": "Afforestation",
+    "en_page": "Afforestation",
+    "en_page_vi": "Trồng rừng"
+   }
+  },
+  {
+   "vi": "Phá rừng",
+   "en": "deforestation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Phá rừng ↔ Deforestation"
+   ],
+   "wiki": {
+    "vi_page": "Phá rừng",
+    "vi_page_en": "Deforestation",
+    "en_page": "Deforestation",
+    "en_page_vi": "Phá rừng"
+   }
+  },
+  {
+   "vi": "Thủy sản",
+   "en": "fishery",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Thủy sản ↔ Fishery"
+   ],
+   "wiki": {
+    "vi_page": "Thủy sản",
+    "vi_page_en": "Fishery",
+    "en_page": "Fishery",
+    "en_page_vi": "Thủy sản"
+   }
+  },
+  {
+   "vi": "Nuôi trồng thủy sản",
+   "en": "aquaculture",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Nuôi trồng thủy sản ↔ Aquaculture"
+   ],
+   "wiki": {
+    "vi_page": "Nuôi trồng thủy sản",
+    "vi_page_en": "Aquaculture",
+    "en_page": "Aquaculture",
+    "en_page_vi": "Nuôi trồng thủy sản"
+   }
+  },
+  {
+   "vi": "Nông nghiệp công nghệ cao",
+   "en": "high-tech agriculture",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": "Nông nghiệp công nghệ cao",
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "An toàn điện",
+   "en": "electrical safety",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Electrical safety testing",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Điện giật",
+   "en": "electric shock",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Điện giật ↔ Electrical injury"
+   ],
+   "wiki": {
+    "vi_page": "Điện giật",
+    "vi_page_en": "Electrical injury",
+    "en_page": "Electrical injury",
+    "en_page_vi": "Điện giật"
+   }
+  },
+  {
+   "vi": "Tiết kiệm năng lượng",
+   "en": "energy conservation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Energy conservation"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Energy conservation",
+    "en_page_vi": "Bảo tồn năng lượng"
+   }
+  },
+  {
+   "vi": "Năng lượng tái tạo",
+   "en": "renewable energy",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Năng lượng tái tạo ↔ Renewable energy"
+   ],
+   "wiki": {
+    "vi_page": "Năng lượng tái tạo",
+    "vi_page_en": "Renewable energy",
+    "en_page": "Renewable energy",
+    "en_page_vi": "Năng lượng tái tạo"
+   }
+  },
+  {
+   "vi": "Hiệu suất năng lượng",
+   "en": "energy efficiency",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Efficient energy use",
+    "en_page_vi": "Sử dụng năng lượng hiệu quả"
+   },
+   "provisional": true
+  }
+ ],
+ "anchors": {
+  "program": "Chương trình GDPT 2018 và các sửa đổi còn áp dụng: 32/2018/TT-BGDĐT; 20/2021/TT-BGDĐT; 13/2022/TT-BGDĐT; 17/2025/TT-BGDĐT; 22/2021/TT-BGDĐT; 3588/QĐ-BGDĐT; 185/QĐ-BGDĐT",
+  "textbook": [
+   "SGK Công nghệ 12 - Công nghệ điện - điện tử (KNTT)",
+   "SGK Công nghệ 12 - Lâm nghiệp - thủy sản (KNTT)",
+   "Chuyên đề học tập Công nghệ 12 - Công nghệ điện - điện tử (KNTT)",
+   "Chuyên đề học tập Công nghệ 12 - Lâm nghiệp - thủy sản (KNTT)"
+  ],
+  "curriculum_topics": [
+   "Chuyên đề 1: Hệ thống điện quốc gia và Mạng điện hạ áp",
+   "Chuyên đề 2: Kĩ thuật điện tử & Linh kiện bán dẫn (Diode, Transistor)",
+   "Chuyên đề 3: Mạch khuếch đại, Mạch tạo xung & Vi điều khiển",
+   "Chuyên đề 4: Lâm nghiệp, Thủy sản bền vững & Công nghệ cao",
+   "Chuyên đề 5: An toàn điện và Tiết kiệm năng lượng"
+  ],
+  "note": "Thuật ngữ tiếng Việt gom theo các chuyên đề CT2018/KNTT của môn/lớp trong hệ thống; bản tiếng Anh đối chiếu Wikipedia vi↔en và/hoặc chủ dự án duyệt. Chưa đối chiếu từng trang SGK."
+ },
+ "known_issues": [
+  "Chưa đối chiếu từng trang SGK KNTT.",
+  "Điện trở có thể là linh kiện (resistor) hoặc đại lượng (resistance) tùy câu.",
+  "9 thuật ngữ chưa khớp 2 nguồn, đang dùng tạm theo duyệt của chủ dự án (provisional)."
+ ]
+}

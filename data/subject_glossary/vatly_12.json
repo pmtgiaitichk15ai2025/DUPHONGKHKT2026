@@ -1,0 +1,908 @@
+{
+ "subject": "Vật lý",
+ "grade": 12,
+ "checked": "2026-11-19",
+ "spelling": "British English (owner 19/11/2026)",
+ "rule": "Dùng khi status là dat_2_nguon (Claude + Wikipedia vi↔en khớp) hoặc chu_du_an_duyet. Không phải thẩm định của Bộ.",
+ "terms": [
+  {
+   "vi": "Nội năng",
+   "en": "internal energy",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Nội năng ↔ Internal energy"
+   ],
+   "wiki": {
+    "vi_page": "Nội năng",
+    "vi_page_en": "Internal energy",
+    "en_page": "Internal energy",
+    "en_page_vi": "Nội năng"
+   }
+  },
+  {
+   "vi": "Nhiệt lượng",
+   "en": "heat",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Nhiệt ↔ Heat"
+   ],
+   "wiki": {
+    "vi_page": "Nhiệt",
+    "vi_page_en": "Heat",
+    "en_page": "Heat",
+    "en_page_vi": "Nhiệt"
+   }
+  },
+  {
+   "vi": "Nhiệt độ",
+   "en": "temperature",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Nhiệt độ ↔ Temperature"
+   ],
+   "wiki": {
+    "vi_page": "Nhiệt độ",
+    "vi_page_en": "Temperature",
+    "en_page": "Temperature",
+    "en_page_vi": "Nhiệt độ"
+   }
+  },
+  {
+   "vi": "Nhiệt dung riêng",
+   "en": "specific heat capacity",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Nhiệt dung riêng ↔ Specific heat capacity"
+   ],
+   "wiki": {
+    "vi_page": "Nhiệt dung riêng",
+    "vi_page_en": "Specific heat capacity",
+    "en_page": "Specific heat capacity",
+    "en_page_vi": "Nhiệt dung riêng"
+   }
+  },
+  {
+   "vi": "Nhiệt nóng chảy riêng",
+   "en": "specific latent heat of fusion",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Latent heat",
+    "en_page_vi": "Ẩn nhiệt"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Nhiệt hóa hơi riêng",
+   "en": "specific latent heat of vaporisation",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Sự nóng chảy",
+   "en": "melting",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Melting"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Melting",
+    "en_page_vi": "Nóng chảy"
+   }
+  },
+  {
+   "vi": "Sự hóa hơi",
+   "en": "vaporisation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Vaporization"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Vaporization",
+    "en_page_vi": "Hóa hơi"
+   }
+  },
+  {
+   "vi": "Sự bay hơi",
+   "en": "evaporation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Bay hơi ↔ Evaporation"
+   ],
+   "wiki": {
+    "vi_page": "Bay hơi",
+    "vi_page_en": "Evaporation",
+    "en_page": "Evaporation",
+    "en_page_vi": "Bay hơi"
+   }
+  },
+  {
+   "vi": "Sự sôi",
+   "en": "boiling",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Sự sôi ↔ Boiling"
+   ],
+   "wiki": {
+    "vi_page": "Sự sôi",
+    "vi_page_en": "Boiling",
+    "en_page": "Boiling",
+    "en_page_vi": "Sự sôi"
+   }
+  },
+  {
+   "vi": "Nhiệt độ tuyệt đối",
+   "en": "absolute temperature",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Thermodynamic temperature",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Độ không tuyệt đối",
+   "en": "absolute zero",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Nhiệt độ không tuyệt đối ↔ Absolute zero"
+   ],
+   "wiki": {
+    "vi_page": "Nhiệt độ không tuyệt đối",
+    "vi_page_en": "Absolute zero",
+    "en_page": "Absolute zero",
+    "en_page_vi": "Nhiệt độ không tuyệt đối"
+   }
+  },
+  {
+   "vi": "Thang nhiệt độ Kelvin",
+   "en": "Kelvin scale",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Kelvin",
+    "en_page_vi": "Kelvin"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Định luật I nhiệt động lực học",
+   "en": "first law of thermodynamics",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ First law of thermodynamics"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "First law of thermodynamics",
+    "en_page_vi": "Nguyên lý thứ nhất của nhiệt động lực học"
+   }
+  },
+  {
+   "vi": "Cân bằng nhiệt",
+   "en": "thermal equilibrium",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Thermal equilibrium",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Khí lí tưởng",
+   "en": "ideal gas",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Ideal gas"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Ideal gas",
+    "en_page_vi": "Khí lý tưởng"
+   }
+  },
+  {
+   "vi": "Thuyết động học phân tử",
+   "en": "kinetic theory of gases",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Kinetic theory of gases"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Kinetic theory of gases",
+    "en_page_vi": "Thuyết động học chất khí"
+   }
+  },
+  {
+   "vi": "Chuyển động Brown",
+   "en": "Brownian motion",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Chuyển động Brown ↔ Brownian motion"
+   ],
+   "wiki": {
+    "vi_page": "Chuyển động Brown",
+    "vi_page_en": "Brownian motion",
+    "en_page": "Brownian motion",
+    "en_page_vi": "Chuyển động Brown"
+   }
+  },
+  {
+   "vi": "Áp suất",
+   "en": "pressure",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Áp suất ↔ Pressure"
+   ],
+   "wiki": {
+    "vi_page": "Áp suất",
+    "vi_page_en": "Pressure",
+    "en_page": "Pressure",
+    "en_page_vi": "Áp suất"
+   }
+  },
+  {
+   "vi": "Định luật Boyle",
+   "en": "Boyle's law",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Boyle's law"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Boyle's law",
+    "en_page_vi": "Định luật Boyle-Mariotte"
+   }
+  },
+  {
+   "vi": "Định luật Charles",
+   "en": "Charles's law",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Định luật Charles ↔ Charles's law"
+   ],
+   "wiki": {
+    "vi_page": "Định luật Charles",
+    "vi_page_en": "Charles's law",
+    "en_page": "Charles's law",
+    "en_page_vi": "Định luật Charles"
+   }
+  },
+  {
+   "vi": "Phương trình trạng thái khí lí tưởng",
+   "en": "ideal gas law",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Phương trình trạng thái khí lý tưởng ↔ Ideal gas law"
+   ],
+   "wiki": {
+    "vi_page": "Phương trình trạng thái khí lý tưởng",
+    "vi_page_en": "Ideal gas law",
+    "en_page": "Ideal gas law",
+    "en_page_vi": "Phương trình trạng thái khí lý tưởng"
+   }
+  },
+  {
+   "vi": "Hằng số Boltzmann",
+   "en": "Boltzmann constant",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hằng số Boltzmann ↔ Boltzmann constant"
+   ],
+   "wiki": {
+    "vi_page": "Hằng số Boltzmann",
+    "vi_page_en": "Boltzmann constant",
+    "en_page": "Boltzmann constant",
+    "en_page_vi": "Hằng số Boltzmann"
+   }
+  },
+  {
+   "vi": "Hằng số Avogadro",
+   "en": "Avogadro constant",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hằng số Avogadro ↔ Avogadro constant"
+   ],
+   "wiki": {
+    "vi_page": "Hằng số Avogadro",
+    "vi_page_en": "Avogadro constant",
+    "en_page": "Avogadro constant",
+    "en_page_vi": "Hằng số Avogadro"
+   }
+  },
+  {
+   "vi": "Mol",
+   "en": "mole",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Mol ↔ Mole"
+   ],
+   "wiki": {
+    "vi_page": "Mol",
+    "vi_page_en": "Mole (unit)",
+    "en_page": "Mole",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Động năng",
+   "en": "kinetic energy",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Động năng ↔ Kinetic energy"
+   ],
+   "wiki": {
+    "vi_page": "Động năng",
+    "vi_page_en": "Kinetic energy",
+    "en_page": "Kinetic energy",
+    "en_page_vi": "Động năng"
+   }
+  },
+  {
+   "vi": "Từ trường",
+   "en": "magnetic field",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Từ trường ↔ Magnetic field"
+   ],
+   "wiki": {
+    "vi_page": "Từ trường",
+    "vi_page_en": "Magnetic field",
+    "en_page": "Magnetic field",
+    "en_page_vi": "Từ trường"
+   }
+  },
+  {
+   "vi": "Đường sức từ",
+   "en": "magnetic field line",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Đường sức từ ↔ Field line"
+   ],
+   "wiki": {
+    "vi_page": "Đường sức từ",
+    "vi_page_en": "Field line",
+    "en_page": "Field line",
+    "en_page_vi": "Đường sức từ"
+   }
+  },
+  {
+   "vi": "Cảm ứng từ",
+   "en": "magnetic flux density",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Từ trường ↔ Magnetic field"
+   ],
+   "wiki": {
+    "vi_page": "Từ trường",
+    "vi_page_en": "Magnetic field",
+    "en_page": "Magnetic field",
+    "en_page_vi": "Từ trường"
+   }
+  },
+  {
+   "vi": "Lực từ",
+   "en": "magnetic force",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": "Tương tác điện từ",
+    "vi_page_en": "Electromagnetic interaction",
+    "en_page": "Force between magnets",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Từ thông",
+   "en": "magnetic flux",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Từ thông ↔ Magnetic flux"
+   ],
+   "wiki": {
+    "vi_page": "Từ thông",
+    "vi_page_en": "Magnetic flux",
+    "en_page": "Magnetic flux",
+    "en_page_vi": "Từ thông"
+   }
+  },
+  {
+   "vi": "Cảm ứng điện từ",
+   "en": "electromagnetic induction",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hiện tượng cảm ứng điện từ ↔ Electromagnetic induction"
+   ],
+   "wiki": {
+    "vi_page": "Hiện tượng cảm ứng điện từ",
+    "vi_page_en": "Electromagnetic induction",
+    "en_page": "Electromagnetic induction",
+    "en_page_vi": "Hiện tượng cảm ứng điện từ"
+   }
+  },
+  {
+   "vi": "Suất điện động cảm ứng",
+   "en": "induced electromotive force",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Định luật Faraday",
+   "en": "Faraday's law of induction",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Định luật Faraday ↔ Faraday's law of induction"
+   ],
+   "wiki": {
+    "vi_page": "Định luật Faraday",
+    "vi_page_en": "Faraday's law",
+    "en_page": "Faraday's law of induction",
+    "en_page_vi": "Định luật cảm ứng Faraday"
+   }
+  },
+  {
+   "vi": "Định luật Lenz",
+   "en": "Lenz's law",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Định luật Lenz ↔ Lenz's law"
+   ],
+   "wiki": {
+    "vi_page": "Định luật Lenz",
+    "vi_page_en": "Lenz's law",
+    "en_page": "Lenz's law",
+    "en_page_vi": "Định luật Lenz"
+   }
+  },
+  {
+   "vi": "Dòng điện xoay chiều",
+   "en": "alternating current",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Điện xoay chiều ↔ Alternating current"
+   ],
+   "wiki": {
+    "vi_page": "Điện xoay chiều",
+    "vi_page_en": "Alternating current",
+    "en_page": "Alternating current",
+    "en_page_vi": "Điện xoay chiều"
+   }
+  },
+  {
+   "vi": "Máy phát điện",
+   "en": "electric generator",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Máy phát điện ↔ Electric generator"
+   ],
+   "wiki": {
+    "vi_page": "Máy phát điện",
+    "vi_page_en": "Electric generator",
+    "en_page": "Electric generator",
+    "en_page_vi": "Máy phát điện"
+   }
+  },
+  {
+   "vi": "Máy biến áp",
+   "en": "transformer",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Biến áp ↔ Transformer"
+   ],
+   "wiki": {
+    "vi_page": "Biến áp",
+    "vi_page_en": "Transformer",
+    "en_page": "Transformer",
+    "en_page_vi": "Biến áp"
+   }
+  },
+  {
+   "vi": "Điện từ trường",
+   "en": "electromagnetic field",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Trường điện từ ↔ Electromagnetic field"
+   ],
+   "wiki": {
+    "vi_page": "Trường điện từ",
+    "vi_page_en": "Electromagnetic field",
+    "en_page": "Electromagnetic field",
+    "en_page_vi": "Trường điện từ"
+   }
+  },
+  {
+   "vi": "Sóng điện từ",
+   "en": "electromagnetic wave",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Bức xạ điện từ ↔ Electromagnetic radiation"
+   ],
+   "wiki": {
+    "vi_page": "Bức xạ điện từ",
+    "vi_page_en": "Electromagnetic radiation",
+    "en_page": "Electromagnetic radiation",
+    "en_page_vi": "Bức xạ điện từ"
+   }
+  },
+  {
+   "vi": "Lực Lorentz",
+   "en": "Lorentz force",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Lực Lorentz ↔ Lorentz force"
+   ],
+   "wiki": {
+    "vi_page": "Lực Lorentz",
+    "vi_page_en": "Lorentz force",
+    "en_page": "Lorentz force",
+    "en_page_vi": "Lực Lorentz"
+   }
+  },
+  {
+   "vi": "Hạt nhân nguyên tử",
+   "en": "atomic nucleus",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hạt nhân nguyên tử ↔ Atomic nucleus"
+   ],
+   "wiki": {
+    "vi_page": "Hạt nhân nguyên tử",
+    "vi_page_en": "Atomic nucleus",
+    "en_page": "Atomic nucleus",
+    "en_page_vi": "Hạt nhân nguyên tử"
+   }
+  },
+  {
+   "vi": "Proton",
+   "en": "proton",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Proton ↔ Proton"
+   ],
+   "wiki": {
+    "vi_page": "Proton",
+    "vi_page_en": "Proton",
+    "en_page": "Proton",
+    "en_page_vi": "Proton"
+   }
+  },
+  {
+   "vi": "Neutron",
+   "en": "neutron",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Neutron ↔ Neutron"
+   ],
+   "wiki": {
+    "vi_page": "Neutron",
+    "vi_page_en": "Neutron",
+    "en_page": "Neutron",
+    "en_page_vi": "Neutron"
+   }
+  },
+  {
+   "vi": "Nucleon",
+   "en": "nucleon",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Nucleon ↔ Nucleon"
+   ],
+   "wiki": {
+    "vi_page": "Nucleon",
+    "vi_page_en": "Nucleon",
+    "en_page": "Nucleon",
+    "en_page_vi": "Nucleon"
+   }
+  },
+  {
+   "vi": "Đồng vị",
+   "en": "isotope",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Đồng vị ↔ Isotope"
+   ],
+   "wiki": {
+    "vi_page": "Đồng vị",
+    "vi_page_en": "Isotope",
+    "en_page": "Isotope",
+    "en_page_vi": "Đồng vị"
+   }
+  },
+  {
+   "vi": "Năng lượng liên kết",
+   "en": "nuclear binding energy",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Năng lượng liên kết ↔ Nuclear binding energy"
+   ],
+   "wiki": {
+    "vi_page": "Năng lượng liên kết",
+    "vi_page_en": "Bond energy",
+    "en_page": "Nuclear binding energy",
+    "en_page_vi": "Năng lượng liên kết hạt nhân"
+   }
+  },
+  {
+   "vi": "Độ hụt khối",
+   "en": "mass defect",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Nuclear binding energy",
+    "en_page_vi": "Năng lượng liên kết hạt nhân"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Phản ứng hạt nhân",
+   "en": "nuclear reaction",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Phản ứng hạt nhân ↔ Nuclear reaction"
+   ],
+   "wiki": {
+    "vi_page": "Phản ứng hạt nhân",
+    "vi_page_en": "Nuclear reaction",
+    "en_page": "Nuclear reaction",
+    "en_page_vi": "Phản ứng hạt nhân"
+   }
+  },
+  {
+   "vi": "Phân hạch",
+   "en": "nuclear fission",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Nuclear fission"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Nuclear fission",
+    "en_page_vi": "Phản ứng phân hạch"
+   }
+  },
+  {
+   "vi": "Nhiệt hạch",
+   "en": "nuclear fusion",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Nuclear fusion"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Nuclear fusion",
+    "en_page_vi": "Phản ứng tổng hợp hạt nhân"
+   }
+  },
+  {
+   "vi": "Phóng xạ",
+   "en": "radioactive decay",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Phóng xạ ↔ Radioactive decay"
+   ],
+   "wiki": {
+    "vi_page": "Phóng xạ",
+    "vi_page_en": "Radioactivity",
+    "en_page": "Radioactive decay",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Chu kì bán rã",
+   "en": "half-life",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Chu kỳ bán rã ↔ Half-life"
+   ],
+   "wiki": {
+    "vi_page": "Chu kỳ bán rã",
+    "vi_page_en": "Half-life",
+    "en_page": "Half-life",
+    "en_page_vi": "Chu kỳ bán rã"
+   }
+  },
+  {
+   "vi": "Hằng số phóng xạ",
+   "en": "decay constant",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Exponential decay",
+    "en_page_vi": "Phân rã theo cấp số mũ"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Độ phóng xạ",
+   "en": "activity",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Activity",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Tia alpha",
+   "en": "alpha particle",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hạt alpha ↔ Alpha particle"
+   ],
+   "wiki": {
+    "vi_page": "Hạt alpha",
+    "vi_page_en": "Alpha particle",
+    "en_page": "Alpha particle",
+    "en_page_vi": "Hạt alpha"
+   }
+  },
+  {
+   "vi": "Tia beta",
+   "en": "beta particle",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hạt beta ↔ Beta particle"
+   ],
+   "wiki": {
+    "vi_page": "Hạt beta",
+    "vi_page_en": "Beta particle",
+    "en_page": "Beta particle",
+    "en_page_vi": "Hạt beta"
+   }
+  },
+  {
+   "vi": "Tia gamma",
+   "en": "gamma ray",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tia gamma ↔ Gamma ray"
+   ],
+   "wiki": {
+    "vi_page": "Tia gamma",
+    "vi_page_en": "Gamma ray",
+    "en_page": "Gamma ray",
+    "en_page_vi": "Tia gamma"
+   }
+  }
+ ],
+ "anchors": {
+  "program": "Chương trình GDPT 2018 và các sửa đổi còn áp dụng: 32/2018/TT-BGDĐT; 20/2021/TT-BGDĐT; 13/2022/TT-BGDĐT; 17/2025/TT-BGDĐT; 22/2021/TT-BGDĐT; 3588/QĐ-BGDĐT; 185/QĐ-BGDĐT",
+  "textbook": [
+   "SGK Vật lí 12 (KNTT)",
+   "Chuyên đề học tập Vật lí 12 (KNTT)"
+  ],
+  "curriculum_topics": [
+   "Chuyên đề 1: Vật lý nhiệt & Năng lượng",
+   "Chuyên đề 2: Thuyết động học khí lý tưởng",
+   "Chuyên đề 3: Từ trường & Cảm ứng điện từ",
+   "Chuyên đề 4: Vật lý hạt nhân & Phóng xạ"
+  ],
+  "note": "Thuật ngữ tiếng Việt gom theo các chuyên đề CT2018/KNTT của môn/lớp trong hệ thống; bản tiếng Anh đối chiếu Wikipedia vi↔en và/hoặc chủ dự án duyệt. Chưa đối chiếu từng trang SGK."
+ },
+ "known_issues": [
+  "Chưa đối chiếu từng trang SGK KNTT.",
+  "Cảm ứng từ: dùng 'magnetic flux density'; một số tài liệu gọi 'magnetic field strength'.",
+  "10 thuật ngữ chưa khớp 2 nguồn, đang dùng tạm theo duyệt của chủ dự án (provisional)."
+ ]
+}

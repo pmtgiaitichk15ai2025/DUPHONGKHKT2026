@@ -1,0 +1,1051 @@
+{
+ "subject": "Toán học",
+ "grade": 12,
+ "checked": "2026-11-19",
+ "rule": "Dùng khi status là dat_2_nguon (Claude + Wikipedia vi↔en khớp) hoặc chu_du_an_duyet. Không phải thẩm định của Bộ.",
+ "terms": [
+  {
+   "vi": "Đạo hàm",
+   "en": "derivative",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Đạo hàm ↔ Derivative"
+   ],
+   "wiki": {
+    "vi_page": "Đạo hàm",
+    "vi_page_en": "Derivative",
+    "en_page": "Derivative",
+    "en_page_vi": "Đạo hàm"
+   }
+  },
+  {
+   "vi": "Hàm số đồng biến",
+   "en": "increasing function",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hàm số đơn điệu ↔ Monotonic function"
+   ],
+   "wiki": {
+    "vi_page": "Hàm số đơn điệu",
+    "vi_page_en": "Monotonic function",
+    "en_page": "Monotonic function",
+    "en_page_vi": "Hàm số đơn điệu"
+   }
+  },
+  {
+   "vi": "Hàm số nghịch biến",
+   "en": "decreasing function",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hàm số đơn điệu ↔ Monotonic function"
+   ],
+   "wiki": {
+    "vi_page": "Hàm số đơn điệu",
+    "vi_page_en": "Monotonic function",
+    "en_page": "Monotonic function",
+    "en_page_vi": "Hàm số đơn điệu"
+   }
+  },
+  {
+   "vi": "Hàm đơn điệu",
+   "en": "monotonic function",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hàm số đơn điệu ↔ Monotonic function"
+   ],
+   "wiki": {
+    "vi_page": "Hàm số đơn điệu",
+    "vi_page_en": "Monotonic function",
+    "en_page": "Monotonic function",
+    "en_page_vi": "Hàm số đơn điệu"
+   }
+  },
+  {
+   "vi": "Cực trị",
+   "en": "extremum",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Maximum and minimum"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Maximum and minimum",
+    "en_page_vi": "Cực trị của hàm số"
+   }
+  },
+  {
+   "vi": "Cực đại",
+   "en": "local maximum",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Maximum and minimum"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Maximum and minimum",
+    "en_page_vi": "Cực trị của hàm số"
+   }
+  },
+  {
+   "vi": "Cực tiểu",
+   "en": "local minimum",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Maximum and minimum"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Maximum and minimum",
+    "en_page_vi": "Cực trị của hàm số"
+   }
+  },
+  {
+   "vi": "Giá trị lớn nhất",
+   "en": "maximum value",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Maximum and minimum"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Maximum and minimum",
+    "en_page_vi": "Cực trị của hàm số"
+   }
+  },
+  {
+   "vi": "Giá trị nhỏ nhất",
+   "en": "minimum value",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Tiệm cận",
+   "en": "asymptote",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Asymptote"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Asymptote",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Tiệm cận đứng",
+   "en": "vertical asymptote",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Asymptote",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Tiệm cận ngang",
+   "en": "horizontal asymptote",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Asymptote",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Tiệm cận xiên",
+   "en": "oblique asymptote",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Asymptote",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Bảng biến thiên",
+   "en": "table of variations",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Đồ thị hàm số",
+   "en": "graph of a function",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Đồ thị của hàm số ↔ Graph of a function"
+   ],
+   "wiki": {
+    "vi_page": "Đồ thị của hàm số",
+    "vi_page_en": "Graph of a function",
+    "en_page": "Graph of a function",
+    "en_page_vi": "Đồ thị của hàm số"
+   }
+  },
+  {
+   "vi": "Tâm đối xứng",
+   "en": "centre of symmetry",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": "Đối xứng tâm",
+    "vi_page_en": "Point reflection",
+    "en_page": "Fixed points of isometry groups in Euclidean space",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Hàm số bậc ba",
+   "en": "cubic function",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hàm số bậc ba ↔ Cubic function"
+   ],
+   "wiki": {
+    "vi_page": "Hàm số bậc ba",
+    "vi_page_en": "Cubic function",
+    "en_page": "Cubic function",
+    "en_page_vi": "Hàm số bậc ba"
+   }
+  },
+  {
+   "vi": "Hàm phân thức",
+   "en": "rational function",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hàm phân thức ↔ Rational function"
+   ],
+   "wiki": {
+    "vi_page": "Hàm phân thức",
+    "vi_page_en": "Rational function",
+    "en_page": "Rational function",
+    "en_page_vi": "Hàm phân thức"
+   }
+  },
+  {
+   "vi": "Điểm uốn",
+   "en": "inflection point",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Điểm uốn ↔ Inflection point"
+   ],
+   "wiki": {
+    "vi_page": "Điểm uốn",
+    "vi_page_en": "Inflection point",
+    "en_page": "Inflection point",
+    "en_page_vi": "Điểm uốn"
+   }
+  },
+  {
+   "vi": "Tập xác định",
+   "en": "domain",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tập xác định ↔ Domain"
+   ],
+   "wiki": {
+    "vi_page": "Tập xác định",
+    "vi_page_en": "Domain of a function",
+    "en_page": "Domain",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Giới hạn",
+   "en": "limit",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Giới hạn ↔ Limit"
+   ],
+   "wiki": {
+    "vi_page": "Giới hạn",
+    "vi_page_en": null,
+    "en_page": "Limit",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Tối ưu hóa",
+   "en": "optimisation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tối ưu hóa (toán học) ↔ Mathematical optimization"
+   ],
+   "wiki": {
+    "vi_page": "Tối ưu hóa (toán học)",
+    "vi_page_en": "Mathematical optimization",
+    "en_page": "Mathematical optimization",
+    "en_page_vi": "Tối ưu hóa (toán học)"
+   }
+  },
+  {
+   "vi": "Vectơ",
+   "en": "vector",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Vectơ ↔ Vector"
+   ],
+   "wiki": {
+    "vi_page": "Vectơ",
+    "vi_page_en": "Euclidean vector",
+    "en_page": "Vector",
+    "en_page_vi": "Vectơ (định hướng)"
+   }
+  },
+  {
+   "vi": "Tọa độ",
+   "en": "coordinates",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hệ tọa độ ↔ Coordinate system"
+   ],
+   "wiki": {
+    "vi_page": "Hệ tọa độ",
+    "vi_page_en": "Coordinate system",
+    "en_page": "Coordinate system",
+    "en_page_vi": "Hệ tọa độ"
+   }
+  },
+  {
+   "vi": "Hệ tọa độ Descartes",
+   "en": "Cartesian coordinate system",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hệ tọa độ Descartes ↔ Cartesian coordinate system"
+   ],
+   "wiki": {
+    "vi_page": "Hệ tọa độ Descartes",
+    "vi_page_en": "Cartesian coordinate system",
+    "en_page": "Cartesian coordinate system",
+    "en_page_vi": "Hệ tọa độ Descartes"
+   }
+  },
+  {
+   "vi": "Tích vô hướng",
+   "en": "dot product",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tích vô hướng ↔ Dot product"
+   ],
+   "wiki": {
+    "vi_page": "Tích vô hướng",
+    "vi_page_en": "Dot product",
+    "en_page": "Dot product",
+    "en_page_vi": "Tích vô hướng"
+   }
+  },
+  {
+   "vi": "Tích có hướng",
+   "en": "cross product",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tích vectơ ↔ Cross product"
+   ],
+   "wiki": {
+    "vi_page": "Tích vectơ",
+    "vi_page_en": "Cross product",
+    "en_page": "Cross product",
+    "en_page_vi": "Tích vectơ"
+   }
+  },
+  {
+   "vi": "Độ dài vectơ",
+   "en": "magnitude of a vector",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Trung điểm",
+   "en": "midpoint",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Trung điểm ↔ Midpoint"
+   ],
+   "wiki": {
+    "vi_page": "Trung điểm",
+    "vi_page_en": "Midpoint",
+    "en_page": "Midpoint",
+    "en_page_vi": "Trung điểm"
+   }
+  },
+  {
+   "vi": "Trọng tâm",
+   "en": "centroid",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Trọng tâm (Vật lí học) ↔ Centroid"
+   ],
+   "wiki": {
+    "vi_page": "Trọng tâm (Vật lí học)",
+    "vi_page_en": null,
+    "en_page": "Centroid",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Góc giữa hai vectơ",
+   "en": "angle between two vectors",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Hai vectơ cùng phương",
+   "en": "parallel vectors",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Collinearity",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Mặt phẳng",
+   "en": "plane",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Mặt phẳng (toán học) ↔ Plane"
+   ],
+   "wiki": {
+    "vi_page": "Mặt phẳng (toán học)",
+    "vi_page_en": "Euclidean plane",
+    "en_page": "Plane",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Vectơ pháp tuyến",
+   "en": "normal vector",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Normal (geometry)"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Normal (geometry)",
+    "en_page_vi": "Pháp tuyến (hình học)"
+   }
+  },
+  {
+   "vi": "Vectơ chỉ phương",
+   "en": "direction vector",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Direction (geometry)",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Phương trình mặt phẳng",
+   "en": "equation of a plane",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Phương trình đường thẳng",
+   "en": "equation of a line",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": "Phương trình đường thẳng",
+    "vi_page_en": null,
+    "en_page": "Line (geometry)",
+    "en_page_vi": "Đường thẳng"
+   }
+  },
+  {
+   "vi": "Phương trình tham số",
+   "en": "parametric equation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Phương trình tham số ↔ Parametric equation"
+   ],
+   "wiki": {
+    "vi_page": "Phương trình tham số",
+    "vi_page_en": "Parametric equation",
+    "en_page": "Parametric equation",
+    "en_page_vi": "Phương trình tham số"
+   }
+  },
+  {
+   "vi": "Mặt cầu",
+   "en": "sphere",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Mặt cầu ↔ Sphere"
+   ],
+   "wiki": {
+    "vi_page": "Mặt cầu",
+    "vi_page_en": "Sphere",
+    "en_page": "Sphere",
+    "en_page_vi": "Mặt cầu"
+   }
+  },
+  {
+   "vi": "Bán kính",
+   "en": "radius",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Bán kính ↔ Radius"
+   ],
+   "wiki": {
+    "vi_page": "Bán kính",
+    "vi_page_en": "Radius",
+    "en_page": "Radius",
+    "en_page_vi": "Bán kính"
+   }
+  },
+  {
+   "vi": "Khoảng cách",
+   "en": "distance",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Khoảng cách ↔ Distance"
+   ],
+   "wiki": {
+    "vi_page": "Khoảng cách",
+    "vi_page_en": "Distance",
+    "en_page": "Distance",
+    "en_page_vi": "Khoảng cách"
+   }
+  },
+  {
+   "vi": "Hình chiếu vuông góc",
+   "en": "orthogonal projection",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Projection (linear algebra)",
+    "en_page_vi": "Phép chiếu (đại số tuyến tính)"
+   }
+  },
+  {
+   "vi": "Mẫu số liệu ghép nhóm",
+   "en": "grouped data",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Grouped data",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Khoảng biến thiên",
+   "en": "range",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Khoảng biến thiên ↔ Range"
+   ],
+   "wiki": {
+    "vi_page": "Khoảng biến thiên",
+    "vi_page_en": "Range (statistics)",
+    "en_page": "Range",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Khoảng tứ phân vị",
+   "en": "interquartile range",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Độ trải giữa ↔ Interquartile range"
+   ],
+   "wiki": {
+    "vi_page": "Độ trải giữa",
+    "vi_page_en": "Interquartile range",
+    "en_page": "Interquartile range",
+    "en_page_vi": "Độ trải giữa"
+   }
+  },
+  {
+   "vi": "Tứ phân vị",
+   "en": "quartile",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tứ phân vị ↔ Quartile"
+   ],
+   "wiki": {
+    "vi_page": "Tứ phân vị",
+    "vi_page_en": "Quartile",
+    "en_page": "Quartile",
+    "en_page_vi": "Tứ phân vị"
+   }
+  },
+  {
+   "vi": "Phương sai",
+   "en": "variance",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Phương sai ↔ Variance"
+   ],
+   "wiki": {
+    "vi_page": "Phương sai",
+    "vi_page_en": "Variance",
+    "en_page": "Variance",
+    "en_page_vi": "Phương sai"
+   }
+  },
+  {
+   "vi": "Độ lệch chuẩn",
+   "en": "standard deviation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Độ lệch chuẩn ↔ Standard deviation"
+   ],
+   "wiki": {
+    "vi_page": "Độ lệch chuẩn",
+    "vi_page_en": "Standard deviation",
+    "en_page": "Standard deviation",
+    "en_page_vi": "Độ lệch chuẩn"
+   }
+  },
+  {
+   "vi": "Giá trị ngoại lai",
+   "en": "outlier",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Outlier"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Outlier",
+    "en_page_vi": "Điểm bất thường (thống kê)"
+   }
+  },
+  {
+   "vi": "Số trung bình",
+   "en": "mean",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Average",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Tần số",
+   "en": "frequency",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tần số ↔ Frequency"
+   ],
+   "wiki": {
+    "vi_page": "Tần số",
+    "vi_page_en": "Frequency",
+    "en_page": "Frequency",
+    "en_page_vi": "Tần số"
+   }
+  },
+  {
+   "vi": "Nguyên hàm",
+   "en": "antiderivative",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Nguyên hàm ↔ Antiderivative"
+   ],
+   "wiki": {
+    "vi_page": "Nguyên hàm",
+    "vi_page_en": "Antiderivative",
+    "en_page": "Antiderivative",
+    "en_page_vi": "Nguyên hàm"
+   }
+  },
+  {
+   "vi": "Tích phân",
+   "en": "integral",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tích phân ↔ Integral"
+   ],
+   "wiki": {
+    "vi_page": "Tích phân",
+    "vi_page_en": "Integral",
+    "en_page": "Integral",
+    "en_page_vi": "Tích phân"
+   }
+  },
+  {
+   "vi": "Tích phân xác định",
+   "en": "definite integral",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tích phân ↔ Integral"
+   ],
+   "wiki": {
+    "vi_page": "Tích phân",
+    "vi_page_en": "Integral",
+    "en_page": "Integral",
+    "en_page_vi": "Tích phân"
+   }
+  },
+  {
+   "vi": "Cận tích phân",
+   "en": "limits of integration",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Limits of integration",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Diện tích hình phẳng",
+   "en": "area of a plane region",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Thể tích khối tròn xoay",
+   "en": "volume of a solid of revolution",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Phương pháp đổi biến",
+   "en": "integration by substitution",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Integration by substitution"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Integration by substitution",
+    "en_page_vi": "Phép đổi biến tích phân"
+   }
+  },
+  {
+   "vi": "Tích phân từng phần",
+   "en": "integration by parts",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tích phân từng phần ↔ Integration by parts"
+   ],
+   "wiki": {
+    "vi_page": "Tích phân từng phần",
+    "vi_page_en": "Integration by parts",
+    "en_page": "Integration by parts",
+    "en_page_vi": "Tích phân từng phần"
+   }
+  },
+  {
+   "vi": "Định lí cơ bản của giải tích",
+   "en": "fundamental theorem of calculus",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Fundamental theorem of calculus"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Fundamental theorem of calculus",
+    "en_page_vi": "Định lý cơ bản của giải tích"
+   }
+  },
+  {
+   "vi": "Xác suất",
+   "en": "probability",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Xác suất ↔ Probability"
+   ],
+   "wiki": {
+    "vi_page": "Xác suất",
+    "vi_page_en": "Probability",
+    "en_page": "Probability",
+    "en_page_vi": "Xác suất"
+   }
+  },
+  {
+   "vi": "Xác suất có điều kiện",
+   "en": "conditional probability",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Xác suất có điều kiện ↔ Conditional probability"
+   ],
+   "wiki": {
+    "vi_page": "Xác suất có điều kiện",
+    "vi_page_en": "Conditional probability",
+    "en_page": "Conditional probability",
+    "en_page_vi": "Xác suất có điều kiện"
+   }
+  },
+  {
+   "vi": "Công thức xác suất toàn phần",
+   "en": "law of total probability",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Law of total probability",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Định lí Bayes",
+   "en": "Bayes' theorem",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Bayes' theorem"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Bayes' theorem",
+    "en_page_vi": "Định lý Bayes"
+   }
+  },
+  {
+   "vi": "Biến cố",
+   "en": "event",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": "Sự kiện",
+    "vi_page_en": null,
+    "en_page": "Event",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Biến cố độc lập",
+   "en": "independent events",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Independence (probability theory)"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Independence (probability theory)",
+    "en_page_vi": "Độc lập thống kê"
+   }
+  },
+  {
+   "vi": "Không gian mẫu",
+   "en": "sample space",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Không gian mẫu ↔ Sample space"
+   ],
+   "wiki": {
+    "vi_page": "Không gian mẫu",
+    "vi_page_en": "Sample space",
+    "en_page": "Sample space",
+    "en_page_vi": "Không gian mẫu"
+   }
+  },
+  {
+   "vi": "Sơ đồ hình cây",
+   "en": "tree diagram",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Tree diagram",
+    "en_page_vi": null
+   }
+  }
+ ],
+ "spelling": "British English (owner 19/11/2026)",
+ "anchors": {
+  "program": "Chương trình GDPT 2018 và các sửa đổi còn áp dụng: 32/2018/TT-BGDĐT; 20/2021/TT-BGDĐT; 13/2022/TT-BGDĐT; 17/2025/TT-BGDĐT; 22/2021/TT-BGDĐT; 3588/QĐ-BGDĐT; 185/QĐ-BGDĐT",
+  "textbook": [
+   "SGK Toán 12 Tập 1 (KNTT)",
+   "SGK Toán 12 Tập 2 (KNTT)",
+   "Chuyên đề học tập Toán 12 (KNTT)",
+   "SGV Toán 12 (KNTT)"
+  ],
+  "curriculum_topics": [
+   "Chuyên đề 1: Ứng dụng đạo hàm khảo sát & vẽ đồ thị hàm số (KSHS chuẩn KNTT)",
+   "Chuyên đề 2: Vectơ và tọa độ trong không gian Oxyz",
+   "Chuyên đề 3: Các số đặc trưng đo mức độ phân tán (Mẫu ghép nhóm)",
+   "Chuyên đề 4: Nguyên hàm, Tích phân và ứng dụng thực tiễn",
+   "Chuyên đề 5: Phương pháp tọa độ Oxyz (Mặt phẳng, Đường thẳng, Mặt cầu)",
+   "Chuyên đề 6: Xác suất có điều kiện, Công thức Bayes"
+  ],
+  "note": "Thuật ngữ tiếng Việt gom theo các chuyên đề CT2018/KNTT của môn/lớp trong hệ thống; bản tiếng Anh đối chiếu Wikipedia vi↔en và/hoặc chủ dự án duyệt. Chưa đối chiếu từng trang SGK."
+ },
+ "known_issues": [
+  "Chưa đối chiếu từng trang SGK KNTT (kho sách ở ổ F chưa được phép đọc).",
+  "Một số cụm từ kiểu SGK Việt không có thuật ngữ quốc tế tương đương (vd. bảng biến thiên → table of variations)."
+ ]
+}

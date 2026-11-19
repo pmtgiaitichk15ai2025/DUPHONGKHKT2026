@@ -230,7 +230,7 @@ def _oxyz_print_figures(lesson, subject, grade):
     return ''.join(out)
 
 
-def build_lesson_html(subject, grade, topic, lesson, style="handwritten"):
+def build_lesson_html(subject, grade, topic, lesson, style="handwritten", translations=None):
     subject, grade = academic_context(subject, grade)
     if not isinstance(lesson, str) or not lesson.strip():
         raise ValueError("Chưa có nội dung bài học để xuất.")
@@ -240,7 +240,7 @@ def build_lesson_html(subject, grade, topic, lesson, style="handwritten"):
     validate_lesson_policy(lesson, subject, grade)
     from services.lesson_sources import lesson_source_review_html, reviewed_lesson_sources
     source_review_html = lesson_source_review_html(subject, grade, topic)
-    if style not in {"handwritten", "color", "monochrome"}:
+    if style not in {"handwritten", "color", "monochrome", "lotus"}:
         raise ValueError("Kiểu bản in không hợp lệ.")
     css, font, js = renderer_assets()
     digest = hashlib.sha256(lesson.encode()).hexdigest()
@@ -269,9 +269,28 @@ def build_lesson_html(subject, grade, topic, lesson, style="handwritten"):
         from services.function_visuals import with_function_visuals
         body = with_function_visuals(body, topic, lesson)
         body += _oxyz_print_figures(lesson, subject, grade)
+    lotus_css, body_class, heading_title = "", style, title
+    if style == "lotus":
+        # Vở ghi tay song ngữ – hoa sen Việt: kế thừa giấy ô ly + gáy lò xo + chữ viết tay của kiểu "handwritten".
+        from services.lotus_style import lotus_css as _lotus_css, with_vocabulary
+        body_class = "handwritten lotus"
+        if translations:
+            from services.lesson_translation import block_id, inject_translations
+            body, missing = inject_translations(body, translations)
+            title_en = (translations.get(block_id(str(topic or ""))) or {}).get("en")
+            if title_en:
+                heading_title += '<span class="en" lang="en">' + html.escape(title_en) + '</span>'
+            from services.subject_glossary import known_issues
+            issues = ''.join('<li>' + html.escape(x) + '</li>' for x in known_issues(subject, grade))
+            body += ('<div class="translation-note">Tồn tại đã biết của bảng thuật ngữ:<ul>' + issues + '</ul></div>') if issues else ''
+            body += ('<p class="translation-note">Bản tiếng Anh do AI dịch theo bảng thuật ngữ đã đối chiếu; '
+                     'giáo viên cần duyệt trước khi sử dụng chính thức.' +
+                     (f' Còn {missing} đoạn chưa có bản tiếng Anh.' if missing else '') + '</p>')
+        body = with_vocabulary(body, subject, grade)
+        lotus_css = _lotus_css()
     return r'''<!doctype html><html lang="vi"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>''' + title + r'''</title>
-<style>''' + css + r'''
+<style>''' + css + lotus_css + r'''
 @font-face{font-family:GSAIHand;src:url(data:font/ttf;base64,''' + font + r''') format('truetype');font-style:normal;font-weight:400;font-display:swap}
 *{box-sizing:border-box}body{margin:0;background:#e8e3d8;color:#182c73;font-family:Arial,'Segoe UI',sans-serif}
 .toolbar{padding:12px;background:#fff;position:sticky;top:0;z-index:5;font:14px system-ui;color:#334155}.toolbar button{padding:8px 18px;margin-right:12px;cursor:pointer}
@@ -298,10 +317,10 @@ article .verified-function-visuals svg{background:transparent!important}article 
 .handwritten .lesson-source-review{font-family:GSAIHand,cursive;font-size:18px;line-height:1.4}
 @media(max-width:600px){.paper{margin:10px 8px;padding:20px}.handwritten .paper{padding:24px 18px 28px 48px}.handwritten article{font-size:22px}.handwritten .notebook-header{grid-template-columns:1fr;gap:14px}.notebook-identity span{margin-top:2px}.notebook-heading h1{font-size:28px}}
 @page{size:A4;margin:10mm}@media print{body{background:#fff}.toolbar{display:none}.paper{margin:0;max-width:none;min-height:0;padding:10mm 7mm 10mm 12mm;box-shadow:none}.handwritten .paper{padding:5mm 5mm 7mm 16mm;box-shadow:none;print-color-adjust:exact;-webkit-print-color-adjust:exact;box-decoration-break:clone;-webkit-box-decoration-break:clone}.handwritten .notebook-header{grid-template-columns:minmax(120px,1fr) minmax(0,2fr);break-inside:avoid}.handwritten article{font-size:23px}.handwritten .source-note{font-size:16px}article{orphans:3;widows:3}p,li:not(:has(ul,ol,.katex-display,table)){break-inside:avoid}li:has(ul,ol,.katex-display,table){break-inside:auto}.oxyz-figure{break-inside:avoid}pre{break-inside:auto}thead{display:table-header-group}tr{break-inside:avoid}.katex-display{overflow:visible}a{color:inherit;text-decoration:none}}
-</style></head><body class="''' + style + r'''">
+</style></head><body class="''' + body_class + r'''">
 <div class="toolbar"><button id="print" disabled>In / Lưu PDF</button><span id="render-status">Đang dựng công thức…</span></div>
-<main class="paper"><header class="notebook-header"><div class="notebook-identity"><strong>SỔ TAY HỌC TẬP</strong><span>KẾT NỐI TRI THỨC</span></div><div class="notebook-heading"><h1>''' + title + r'''</h1><div class="context">''' + html.escape(subject) + f" · Lớp {grade}" + r'''</div></div></header>
-<header class="plain-header"><h1>''' + title + r'''</h1><div class="context">''' + html.escape(subject) + f" · Lớp {grade}" + r'''</div></header>
+<main class="paper"><header class="notebook-header"><div class="notebook-identity"><strong>SỔ TAY HỌC TẬP</strong><span>KẾT NỐI TRI THỨC</span></div><div class="notebook-heading"><h1>''' + heading_title + r'''</h1><div class="context">''' + html.escape(subject) + f" · Lớp {grade}" + r'''</div></div></header>
+<header class="plain-header"><h1>''' + heading_title + r'''</h1><div class="context">''' + html.escape(subject) + f" · Lớp {grade}" + r'''</div></header>
 <article id="lesson">''' + body + r'''</article>
 <div class="lesson-end" aria-hidden="true">Hết bài</div>
 ''' + source_review_html + r'''

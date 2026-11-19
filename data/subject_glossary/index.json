@@ -1,0 +1,26 @@
+{
+ "_note": "Môn → lớp → tệp thuật ngữ Anh–Việt đã đối chiếu. Môn/lớp chưa có tệp thì phiếu không hiện khung từ vựng.",
+ "Toán học": {
+  "12": "toan_12.json",
+  "11": "toan_11.json",
+  "10": "toan_10.json"
+ },
+ "Vật lý": {
+  "12": "vatly_12.json"
+ },
+ "Hóa học": {
+  "12": "hoahoc_12.json"
+ },
+ "Sinh học": {
+  "12": "sinhhoc_12.json"
+ },
+ "Tin học": {
+  "12": "tinhoc_12.json"
+ },
+ "Công nghệ": {
+  "12": "congnghe_12.json"
+ },
+ "Địa lý": {
+  "12": "dialy_12.json"
+ }
+}

@@ -351,11 +351,11 @@ def graph_svg(model):
     asymptote = None
     if X in denominator.free_symbols:
         asymptote = sp.div(numerator, denominator, X)[0]
-        clipped += _line(px(xmin), py(float(asymptote.subs(X,xmin))), px(xmax), py(float(asymptote.subs(X,xmax))), True)
+        clipped += '<g data-asymptote="true">' + _line(px(xmin), py(float(asymptote.subs(X,xmin))), px(xmax), py(float(asymptote.subs(X,xmax))), True) + '</g>'
     for p in model['excluded']:
         value = sp.limit(expression, X, p)
         if value in (sp.oo, -sp.oo):
-            clipped += _line(px(float(p)), 40, px(float(p)), 430, True)
+            clipped += '<g data-asymptote="true">' + _line(px(float(p)), 40, px(float(p)), 430, True) + '</g>'
         else:
             clipped += f'<circle cx="{px(float(p)):.3f}" cy="{py(float(value)):.3f}" r="4" fill="white" stroke="#163e87" stroke-width="2"/>'
     body += '<g clip-path="url(#function-plot-clip)">' + clipped + '</g>'

@@ -1,0 +1,926 @@
+{
+ "subject": "Sinh học",
+ "grade": 12,
+ "checked": "2026-11-19",
+ "spelling": "British English (owner 19/11/2026)",
+ "rule": "Dùng khi status là dat_2_nguon (Claude + Wikipedia vi↔en khớp) hoặc chu_du_an_duyet. Không phải thẩm định của Bộ.",
+ "terms": [
+  {
+   "vi": "Gene",
+   "en": "gene",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Gen ↔ Gene"
+   ],
+   "wiki": {
+    "vi_page": "Gen",
+    "vi_page_en": "Gene",
+    "en_page": "Gene",
+    "en_page_vi": "Gen"
+   }
+  },
+  {
+   "vi": "DNA",
+   "en": "DNA",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: DNA ↔ DNA"
+   ],
+   "wiki": {
+    "vi_page": "DNA",
+    "vi_page_en": "DNA",
+    "en_page": "DNA",
+    "en_page_vi": "DNA"
+   }
+  },
+  {
+   "vi": "RNA",
+   "en": "RNA",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: RNA ↔ RNA"
+   ],
+   "wiki": {
+    "vi_page": "RNA",
+    "vi_page_en": "RNA",
+    "en_page": "RNA",
+    "en_page_vi": "RNA"
+   }
+  },
+  {
+   "vi": "Mã di truyền",
+   "en": "genetic code",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Mã di truyền ↔ Genetic code"
+   ],
+   "wiki": {
+    "vi_page": "Mã di truyền",
+    "vi_page_en": "Genetic code",
+    "en_page": "Genetic code",
+    "en_page_vi": "Mã di truyền"
+   }
+  },
+  {
+   "vi": "Tái bản DNA",
+   "en": "DNA replication",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ DNA replication"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "DNA replication",
+    "en_page_vi": "Quá trình nhân đôi DNA"
+   }
+  },
+  {
+   "vi": "Phiên mã",
+   "en": "transcription",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Phiên mã ↔ Transcription"
+   ],
+   "wiki": {
+    "vi_page": "Phiên mã",
+    "vi_page_en": "Transcription (biology)",
+    "en_page": "Transcription",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Dịch mã",
+   "en": "translation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Dịch mã ↔ Translation"
+   ],
+   "wiki": {
+    "vi_page": "Dịch mã",
+    "vi_page_en": "Translation (biology)",
+    "en_page": "Translation",
+    "en_page_vi": "Dịch thuật"
+   }
+  },
+  {
+   "vi": "Điều hòa biểu hiện gene",
+   "en": "regulation of gene expression",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Regulation of gene expression",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Operon",
+   "en": "operon",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Operon ↔ Operon"
+   ],
+   "wiki": {
+    "vi_page": "Operon",
+    "vi_page_en": "Operon",
+    "en_page": "Operon",
+    "en_page_vi": "Operon"
+   }
+  },
+  {
+   "vi": "Đột biến gene",
+   "en": "gene mutation",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Mutation",
+    "en_page_vi": "Đột biến sinh học"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Đột biến điểm",
+   "en": "point mutation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Đột biến điểm ↔ Point mutation"
+   ],
+   "wiki": {
+    "vi_page": "Đột biến điểm",
+    "vi_page_en": "Point mutation",
+    "en_page": "Point mutation",
+    "en_page_vi": "Đột biến điểm"
+   }
+  },
+  {
+   "vi": "Nhiễm sắc thể",
+   "en": "chromosome",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Nhiễm sắc thể ↔ Chromosome"
+   ],
+   "wiki": {
+    "vi_page": "Nhiễm sắc thể",
+    "vi_page_en": "Chromosome",
+    "en_page": "Chromosome",
+    "en_page_vi": "Nhiễm sắc thể"
+   }
+  },
+  {
+   "vi": "Đột biến nhiễm sắc thể",
+   "en": "chromosomal abnormality",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Chromosome abnormality"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Chromosome abnormality",
+    "en_page_vi": "Bất thường nhiễm sắc thể"
+   }
+  },
+  {
+   "vi": "Thể lệch bội",
+   "en": "aneuploidy",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Thể lệch bội ↔ Aneuploidy"
+   ],
+   "wiki": {
+    "vi_page": "Thể lệch bội",
+    "vi_page_en": "Aneuploidy",
+    "en_page": "Aneuploidy",
+    "en_page_vi": "Thể lệch bội"
+   }
+  },
+  {
+   "vi": "Thể đa bội",
+   "en": "polyploidy",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Thể đa bội ↔ Polyploidy"
+   ],
+   "wiki": {
+    "vi_page": "Thể đa bội",
+    "vi_page_en": "Polyploidy",
+    "en_page": "Polyploidy",
+    "en_page_vi": "Thể đa bội"
+   }
+  },
+  {
+   "vi": "Nguyên phân",
+   "en": "mitosis",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Nguyên phân ↔ Mitosis"
+   ],
+   "wiki": {
+    "vi_page": "Nguyên phân",
+    "vi_page_en": "Mitosis",
+    "en_page": "Mitosis",
+    "en_page_vi": "Nguyên phân"
+   }
+  },
+  {
+   "vi": "Giảm phân",
+   "en": "meiosis",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Giảm phân ↔ Meiosis"
+   ],
+   "wiki": {
+    "vi_page": "Giảm phân",
+    "vi_page_en": "Meiosis",
+    "en_page": "Meiosis",
+    "en_page_vi": "Giảm phân"
+   }
+  },
+  {
+   "vi": "Allele",
+   "en": "allele",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Alen ↔ Allele"
+   ],
+   "wiki": {
+    "vi_page": "Alen",
+    "vi_page_en": "Allele",
+    "en_page": "Allele",
+    "en_page_vi": "Alen"
+   }
+  },
+  {
+   "vi": "Kiểu gene",
+   "en": "genotype",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Kiểu gen ↔ Genotype"
+   ],
+   "wiki": {
+    "vi_page": "Kiểu gen",
+    "vi_page_en": "Genotype",
+    "en_page": "Genotype",
+    "en_page_vi": "Kiểu gen"
+   }
+  },
+  {
+   "vi": "Kiểu hình",
+   "en": "phenotype",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Kiểu hình ↔ Phenotype"
+   ],
+   "wiki": {
+    "vi_page": "Kiểu hình",
+    "vi_page_en": "Phenotype",
+    "en_page": "Phenotype",
+    "en_page_vi": "Kiểu hình"
+   }
+  },
+  {
+   "vi": "Đồng hợp tử",
+   "en": "homozygote",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Zygosity",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Dị hợp tử",
+   "en": "heterozygote",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Zygosity",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Allele trội",
+   "en": "dominant allele",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Dominance",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Allele lặn",
+   "en": "recessive allele",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Dominance (genetics)",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Quy luật phân li",
+   "en": "law of segregation",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Mendelian inheritance",
+    "en_page_vi": "Di truyền Mendel"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Quy luật phân li độc lập",
+   "en": "law of independent assortment",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Mendelian inheritance",
+    "en_page_vi": "Di truyền Mendel"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Liên kết gene",
+   "en": "genetic linkage",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Genetic linkage"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Genetic linkage",
+    "en_page_vi": "Gen liên kết"
+   }
+  },
+  {
+   "vi": "Hoán vị gene",
+   "en": "crossing over",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Genetic recombination",
+    "en_page_vi": "Tái tổ hợp di truyền"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Di truyền liên kết với giới tính",
+   "en": "sex linkage",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Sex linkage"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Sex linkage",
+    "en_page_vi": "Di truyền liên kết giới tính"
+   }
+  },
+  {
+   "vi": "Tương tác gene",
+   "en": "gene interaction",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Epistasis"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Epistasis",
+    "en_page_vi": "Tương tác gen"
+   }
+  },
+  {
+   "vi": "Quần thể",
+   "en": "population",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Quần thể ↔ Population"
+   ],
+   "wiki": {
+    "vi_page": "Quần thể",
+    "vi_page_en": "Population",
+    "en_page": "Population",
+    "en_page_vi": "Quần thể"
+   }
+  },
+  {
+   "vi": "Tần số allele",
+   "en": "allele frequency",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Allele frequency",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Định luật Hardy–Weinberg",
+   "en": "Hardy–Weinberg principle",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Hardy–Weinberg principle"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Hardy–Weinberg principle",
+    "en_page_vi": "Phương trình Hardy–Weinberg"
+   }
+  },
+  {
+   "vi": "Giao phối gần",
+   "en": "inbreeding",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Giao phối cận huyết ↔ Inbreeding"
+   ],
+   "wiki": {
+    "vi_page": "Giao phối cận huyết",
+    "vi_page_en": "Inbreeding",
+    "en_page": "Inbreeding",
+    "en_page_vi": "Giao phối cận huyết"
+   }
+  },
+  {
+   "vi": "Công nghệ gene",
+   "en": "genetic engineering",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Công nghệ gene ↔ Genetic engineering"
+   ],
+   "wiki": {
+    "vi_page": "Công nghệ gene",
+    "vi_page_en": "Genetic engineering",
+    "en_page": "Genetic engineering",
+    "en_page_vi": "Công nghệ gene"
+   }
+  },
+  {
+   "vi": "DNA tái tổ hợp",
+   "en": "recombinant DNA",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: DNA tái tổ hợp ↔ Recombinant DNA"
+   ],
+   "wiki": {
+    "vi_page": "DNA tái tổ hợp",
+    "vi_page_en": "Recombinant DNA",
+    "en_page": "Recombinant DNA",
+    "en_page_vi": "DNA tái tổ hợp"
+   }
+  },
+  {
+   "vi": "Sinh vật biến đổi gene",
+   "en": "genetically modified organism",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Sinh vật biến đổi gen ↔ Genetically modified organism"
+   ],
+   "wiki": {
+    "vi_page": "Sinh vật biến đổi gen",
+    "vi_page_en": "Genetically modified organism",
+    "en_page": "Genetically modified organism",
+    "en_page_vi": "Sinh vật biến đổi gen"
+   }
+  },
+  {
+   "vi": "Liệu pháp gene",
+   "en": "gene therapy",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Liệu pháp gen ↔ Gene therapy"
+   ],
+   "wiki": {
+    "vi_page": "Liệu pháp gen",
+    "vi_page_en": "Gene therapy",
+    "en_page": "Gene therapy",
+    "en_page_vi": "Liệu pháp gen"
+   }
+  },
+  {
+   "vi": "Bệnh di truyền",
+   "en": "genetic disorder",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Bệnh di truyền ↔ Genetic disorder"
+   ],
+   "wiki": {
+    "vi_page": "Bệnh di truyền",
+    "vi_page_en": "Genetic disorder",
+    "en_page": "Genetic disorder",
+    "en_page_vi": "Bệnh di truyền"
+   }
+  },
+  {
+   "vi": "Tiến hóa",
+   "en": "evolution",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tiến hóa ↔ Evolution"
+   ],
+   "wiki": {
+    "vi_page": "Tiến hóa",
+    "vi_page_en": "Evolution",
+    "en_page": "Evolution",
+    "en_page_vi": "Tiến hóa"
+   }
+  },
+  {
+   "vi": "Chọn lọc tự nhiên",
+   "en": "natural selection",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Chọn lọc tự nhiên ↔ Natural selection"
+   ],
+   "wiki": {
+    "vi_page": "Chọn lọc tự nhiên",
+    "vi_page_en": "Natural selection",
+    "en_page": "Natural selection",
+    "en_page_vi": "Chọn lọc tự nhiên"
+   }
+  },
+  {
+   "vi": "Đột biến",
+   "en": "mutation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Đột biến sinh học ↔ Mutation"
+   ],
+   "wiki": {
+    "vi_page": "Đột biến sinh học",
+    "vi_page_en": "Mutation",
+    "en_page": "Mutation",
+    "en_page_vi": "Đột biến sinh học"
+   }
+  },
+  {
+   "vi": "Phiêu bạt di truyền",
+   "en": "genetic drift",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Phiêu bạt di truyền ↔ Genetic drift"
+   ],
+   "wiki": {
+    "vi_page": "Phiêu bạt di truyền",
+    "vi_page_en": "Genetic drift",
+    "en_page": "Genetic drift",
+    "en_page_vi": "Phiêu bạt di truyền"
+   }
+  },
+  {
+   "vi": "Dòng gene",
+   "en": "gene flow",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Gene flow"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Gene flow",
+    "en_page_vi": "Dòng gen"
+   }
+  },
+  {
+   "vi": "Loài",
+   "en": "species",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Loài ↔ Species"
+   ],
+   "wiki": {
+    "vi_page": "Loài",
+    "vi_page_en": "Species",
+    "en_page": "Species",
+    "en_page_vi": "Loài"
+   }
+  },
+  {
+   "vi": "Hình thành loài",
+   "en": "speciation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hình thành loài ↔ Speciation"
+   ],
+   "wiki": {
+    "vi_page": "Hình thành loài",
+    "vi_page_en": "Speciation",
+    "en_page": "Speciation",
+    "en_page_vi": "Hình thành loài"
+   }
+  },
+  {
+   "vi": "Cách li sinh sản",
+   "en": "reproductive isolation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Cách li sinh sản ↔ Reproductive isolation"
+   ],
+   "wiki": {
+    "vi_page": "Cách li sinh sản",
+    "vi_page_en": "Reproductive isolation",
+    "en_page": "Reproductive isolation",
+    "en_page_vi": "Cách li sinh sản"
+   }
+  },
+  {
+   "vi": "Hóa thạch",
+   "en": "fossil",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hóa thạch ↔ Fossil"
+   ],
+   "wiki": {
+    "vi_page": "Hóa thạch",
+    "vi_page_en": "Fossil",
+    "en_page": "Fossil",
+    "en_page_vi": "Hóa thạch"
+   }
+  },
+  {
+   "vi": "Hệ sinh thái",
+   "en": "ecosystem",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hệ sinh thái ↔ Ecosystem"
+   ],
+   "wiki": {
+    "vi_page": "Hệ sinh thái",
+    "vi_page_en": "Ecosystem",
+    "en_page": "Ecosystem",
+    "en_page_vi": "Hệ sinh thái"
+   }
+  },
+  {
+   "vi": "Quần xã sinh vật",
+   "en": "biological community",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Quần xã sinh học ↔ Biocoenosis"
+   ],
+   "wiki": {
+    "vi_page": "Quần xã sinh học",
+    "vi_page_en": "Community (ecology)",
+    "en_page": "Biocoenosis",
+    "en_page_vi": "Quần xã (sinh học)"
+   }
+  },
+  {
+   "vi": "Chuỗi thức ăn",
+   "en": "food chain",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Chuỗi thức ăn ↔ Food chain"
+   ],
+   "wiki": {
+    "vi_page": "Chuỗi thức ăn",
+    "vi_page_en": "Food chain",
+    "en_page": "Food chain",
+    "en_page_vi": "Chuỗi thức ăn"
+   }
+  },
+  {
+   "vi": "Lưới thức ăn",
+   "en": "food web",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Lưới thức ăn ↔ Food web"
+   ],
+   "wiki": {
+    "vi_page": "Lưới thức ăn",
+    "vi_page_en": "Food web",
+    "en_page": "Food web",
+    "en_page_vi": "Lưới thức ăn"
+   }
+  },
+  {
+   "vi": "Bậc dinh dưỡng",
+   "en": "trophic level",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Bậc dinh dưỡng ↔ Trophic level"
+   ],
+   "wiki": {
+    "vi_page": "Bậc dinh dưỡng",
+    "vi_page_en": "Trophic level",
+    "en_page": "Trophic level",
+    "en_page_vi": "Bậc dinh dưỡng"
+   }
+  },
+  {
+   "vi": "Sinh vật sản xuất",
+   "en": "producer",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Sinh vật sản xuất sơ cấp ↔ Producer"
+   ],
+   "wiki": {
+    "vi_page": "Sinh vật sản xuất sơ cấp",
+    "vi_page_en": "Primary producer",
+    "en_page": "Producer",
+    "en_page_vi": "Nhà sản xuất"
+   }
+  },
+  {
+   "vi": "Sinh vật tiêu thụ",
+   "en": "consumer",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Sinh vật tiêu thụ ↔ Consumer"
+   ],
+   "wiki": {
+    "vi_page": "Sinh vật tiêu thụ",
+    "vi_page_en": "Consumer (food chain)",
+    "en_page": "Consumer",
+    "en_page_vi": "Người tiêu dùng"
+   }
+  },
+  {
+   "vi": "Sinh vật phân giải",
+   "en": "decomposer",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Sinh vật phân giải ↔ Decomposer"
+   ],
+   "wiki": {
+    "vi_page": "Sinh vật phân giải",
+    "vi_page_en": "Decomposer",
+    "en_page": "Decomposer",
+    "en_page_vi": "Sinh vật phân giải"
+   }
+  },
+  {
+   "vi": "Diễn thế sinh thái",
+   "en": "ecological succession",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Diễn thế sinh thái ↔ Ecological succession"
+   ],
+   "wiki": {
+    "vi_page": "Diễn thế sinh thái",
+    "vi_page_en": "Ecological succession",
+    "en_page": "Ecological succession",
+    "en_page_vi": "Diễn thế sinh thái"
+   }
+  },
+  {
+   "vi": "Đa dạng sinh học",
+   "en": "biodiversity",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Đa dạng sinh học ↔ Biodiversity"
+   ],
+   "wiki": {
+    "vi_page": "Đa dạng sinh học",
+    "vi_page_en": "Biodiversity",
+    "en_page": "Biodiversity",
+    "en_page_vi": "Đa dạng sinh học"
+   }
+  },
+  {
+   "vi": "Chu trình sinh địa hóa",
+   "en": "biogeochemical cycle",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Chu trình sinh địa hóa ↔ Biogeochemical cycle"
+   ],
+   "wiki": {
+    "vi_page": "Chu trình sinh địa hóa",
+    "vi_page_en": "Biogeochemical cycle",
+    "en_page": "Biogeochemical cycle",
+    "en_page_vi": "Chu trình sinh địa hóa"
+   }
+  }
+ ],
+ "anchors": {
+  "program": "Chương trình GDPT 2018 và các sửa đổi còn áp dụng: 32/2018/TT-BGDĐT; 20/2021/TT-BGDĐT; 13/2022/TT-BGDĐT; 17/2025/TT-BGDĐT; 22/2021/TT-BGDĐT; 3588/QĐ-BGDĐT; 185/QĐ-BGDĐT",
+  "textbook": [
+   "SGK Sinh học 12 (KNTT)",
+   "Chuyên đề học tập Sinh học 12 (KNTT)"
+  ],
+  "curriculum_topics": [
+   "Chuyên đề 1: Di truyền phân tử DNA RNA Đột biến gen",
+   "Chuyên đề 2: Di truyền nhiễm sắc thể & Đột biến nhiễm sắc thể",
+   "Chuyên đề 3: Quy luật Mendel & Hoán vị gen",
+   "Chuyên đề 4: Di truyền học quần thể Hardy-Weinberg",
+   "Chuyên đề 5: Di truyền y học & Công nghệ gen",
+   "Chuyên đề 6: Tiến hóa hiện đại",
+   "Chuyên đề 7: Sinh thái học & Hệ sinh thái"
+  ],
+  "note": "Thuật ngữ tiếng Việt gom theo các chuyên đề CT2018/KNTT của môn/lớp trong hệ thống; bản tiếng Anh đối chiếu Wikipedia vi↔en và/hoặc chủ dự án duyệt. Chưa đối chiếu từng trang SGK."
+ },
+ "known_issues": [
+  "Chưa đối chiếu từng trang SGK KNTT.",
+  "Hoán vị gene dịch 'crossing over' (cơ chế); tài liệu khác có thể dùng 'genetic recombination'.",
+  "10 thuật ngữ chưa khớp 2 nguồn, đang dùng tạm theo duyệt của chủ dự án (provisional)."
+ ]
+}

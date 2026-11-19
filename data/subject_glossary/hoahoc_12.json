@@ -1,0 +1,851 @@
+{
+ "subject": "Hóa học",
+ "grade": 12,
+ "checked": "2026-11-19",
+ "spelling": "British English (owner 19/11/2026)",
+ "rule": "Dùng khi status là dat_2_nguon (Claude + Wikipedia vi↔en khớp) hoặc chu_du_an_duyet. Không phải thẩm định của Bộ.",
+ "terms": [
+  {
+   "vi": "Ester",
+   "en": "ester",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Ester ↔ Ester"
+   ],
+   "wiki": {
+    "vi_page": "Ester",
+    "vi_page_en": "Ester",
+    "en_page": "Ester",
+    "en_page_vi": "Ester"
+   }
+  },
+  {
+   "vi": "Lipid",
+   "en": "lipid",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Lipid ↔ Lipid"
+   ],
+   "wiki": {
+    "vi_page": "Lipid",
+    "vi_page_en": "Lipid",
+    "en_page": "Lipid",
+    "en_page_vi": "Lipid"
+   }
+  },
+  {
+   "vi": "Chất béo",
+   "en": "fat",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Chất béo ↔ Fat"
+   ],
+   "wiki": {
+    "vi_page": "Chất béo",
+    "vi_page_en": "Fat",
+    "en_page": "Fat",
+    "en_page_vi": "Chất béo"
+   }
+  },
+  {
+   "vi": "Acid béo",
+   "en": "fatty acid",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Acid béo ↔ Fatty acid"
+   ],
+   "wiki": {
+    "vi_page": "Acid béo",
+    "vi_page_en": "Fatty acid",
+    "en_page": "Fatty acid",
+    "en_page_vi": "Acid béo"
+   }
+  },
+  {
+   "vi": "Xà phòng",
+   "en": "soap",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Xà phòng ↔ Soap"
+   ],
+   "wiki": {
+    "vi_page": "Xà phòng",
+    "vi_page_en": "Soap",
+    "en_page": "Soap",
+    "en_page_vi": "Xà phòng"
+   }
+  },
+  {
+   "vi": "Chất giặt rửa tổng hợp",
+   "en": "synthetic detergent",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Detergent"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Detergent",
+    "en_page_vi": "Chất tẩy rửa"
+   }
+  },
+  {
+   "vi": "Phản ứng xà phòng hóa",
+   "en": "saponification",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Saponification"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Saponification",
+    "en_page_vi": "Xà phòng hóa"
+   }
+  },
+  {
+   "vi": "Phản ứng thủy phân",
+   "en": "hydrolysis",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Hydrolysis"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Hydrolysis",
+    "en_page_vi": "Thủy phân"
+   }
+  },
+  {
+   "vi": "Phản ứng ester hóa",
+   "en": "esterification",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Ester",
+    "en_page_vi": "Ester"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Carbohydrate",
+   "en": "carbohydrate",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Carbohydrat ↔ Carbohydrate"
+   ],
+   "wiki": {
+    "vi_page": "Carbohydrat",
+    "vi_page_en": "Carbohydrate",
+    "en_page": "Carbohydrate",
+    "en_page_vi": "Carbohydrat"
+   }
+  },
+  {
+   "vi": "Glucose",
+   "en": "glucose",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Glucose ↔ Glucose"
+   ],
+   "wiki": {
+    "vi_page": "Glucose",
+    "vi_page_en": "Glucose",
+    "en_page": "Glucose",
+    "en_page_vi": "Glucose"
+   }
+  },
+  {
+   "vi": "Fructose",
+   "en": "fructose",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Fructose ↔ Fructose"
+   ],
+   "wiki": {
+    "vi_page": "Fructose",
+    "vi_page_en": "Fructose",
+    "en_page": "Fructose",
+    "en_page_vi": "Fructose"
+   }
+  },
+  {
+   "vi": "Saccharose",
+   "en": "sucrose",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Saccarose ↔ Sucrose"
+   ],
+   "wiki": {
+    "vi_page": "Saccarose",
+    "vi_page_en": "Sucrose",
+    "en_page": "Sucrose",
+    "en_page_vi": "Saccarose"
+   }
+  },
+  {
+   "vi": "Maltose",
+   "en": "maltose",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Kẹo mạch nha ↔ Maltose"
+   ],
+   "wiki": {
+    "vi_page": "Kẹo mạch nha",
+    "vi_page_en": "Maltose",
+    "en_page": "Maltose",
+    "en_page_vi": "Kẹo mạch nha"
+   }
+  },
+  {
+   "vi": "Tinh bột",
+   "en": "starch",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tinh bột ↔ Starch"
+   ],
+   "wiki": {
+    "vi_page": "Tinh bột",
+    "vi_page_en": "Starch",
+    "en_page": "Starch",
+    "en_page_vi": "Tinh bột"
+   }
+  },
+  {
+   "vi": "Cellulose",
+   "en": "cellulose",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Cellulose ↔ Cellulose"
+   ],
+   "wiki": {
+    "vi_page": "Cellulose",
+    "vi_page_en": "Cellulose",
+    "en_page": "Cellulose",
+    "en_page_vi": "Cellulose"
+   }
+  },
+  {
+   "vi": "Monosaccharide",
+   "en": "monosaccharide",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Monosaccharide ↔ Monosaccharide"
+   ],
+   "wiki": {
+    "vi_page": "Monosaccharide",
+    "vi_page_en": "Monosaccharide",
+    "en_page": "Monosaccharide",
+    "en_page_vi": "Monosaccharide"
+   }
+  },
+  {
+   "vi": "Disaccharide",
+   "en": "disaccharide",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Disaccharide ↔ Disaccharide"
+   ],
+   "wiki": {
+    "vi_page": "Disaccharide",
+    "vi_page_en": "Disaccharide",
+    "en_page": "Disaccharide",
+    "en_page_vi": "Disaccharide"
+   }
+  },
+  {
+   "vi": "Polysaccharide",
+   "en": "polysaccharide",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Polysaccharide ↔ Polysaccharide"
+   ],
+   "wiki": {
+    "vi_page": "Polysaccharide",
+    "vi_page_en": "Polysaccharide",
+    "en_page": "Polysaccharide",
+    "en_page_vi": "Polysaccharide"
+   }
+  },
+  {
+   "vi": "Amine",
+   "en": "amine",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Amin ↔ Amine"
+   ],
+   "wiki": {
+    "vi_page": "Amin",
+    "vi_page_en": "Amine",
+    "en_page": "Amine",
+    "en_page_vi": "Amin"
+   }
+  },
+  {
+   "vi": "Amino acid",
+   "en": "amino acid",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Amino acid ↔ Amino acid"
+   ],
+   "wiki": {
+    "vi_page": "Amino acid",
+    "vi_page_en": "Amino acid",
+    "en_page": "Amino acid",
+    "en_page_vi": "Amino acid"
+   }
+  },
+  {
+   "vi": "Peptide",
+   "en": "peptide",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Peptide ↔ Peptide"
+   ],
+   "wiki": {
+    "vi_page": "Peptide",
+    "vi_page_en": "Peptide",
+    "en_page": "Peptide",
+    "en_page_vi": "Peptide"
+   }
+  },
+  {
+   "vi": "Liên kết peptide",
+   "en": "peptide bond",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Liên kết peptide ↔ Peptide bond"
+   ],
+   "wiki": {
+    "vi_page": "Liên kết peptide",
+    "vi_page_en": "Peptide bond",
+    "en_page": "Peptide bond",
+    "en_page_vi": "Liên kết peptide"
+   }
+  },
+  {
+   "vi": "Protein",
+   "en": "protein",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Protein ↔ Protein"
+   ],
+   "wiki": {
+    "vi_page": "Protein",
+    "vi_page_en": "Protein",
+    "en_page": "Protein",
+    "en_page_vi": "Protein"
+   }
+  },
+  {
+   "vi": "Enzyme",
+   "en": "enzyme",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Enzyme ↔ Enzyme"
+   ],
+   "wiki": {
+    "vi_page": "Enzyme",
+    "vi_page_en": "Enzyme",
+    "en_page": "Enzyme",
+    "en_page_vi": "Enzyme"
+   }
+  },
+  {
+   "vi": "Sự đông tụ protein",
+   "en": "protein coagulation",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Denaturation (biochemistry)",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Polymer",
+   "en": "polymer",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Polymer ↔ Polymer"
+   ],
+   "wiki": {
+    "vi_page": "Polymer",
+    "vi_page_en": "Polymer",
+    "en_page": "Polymer",
+    "en_page_vi": "Polymer"
+   }
+  },
+  {
+   "vi": "Monomer",
+   "en": "monomer",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Monomer ↔ Monomer"
+   ],
+   "wiki": {
+    "vi_page": "Monomer",
+    "vi_page_en": "Monomer",
+    "en_page": "Monomer",
+    "en_page_vi": "Monomer"
+   }
+  },
+  {
+   "vi": "Phản ứng trùng hợp",
+   "en": "addition polymerisation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Phản ứng trùng hợp ↔ Chain-growth polymerization"
+   ],
+   "wiki": {
+    "vi_page": "Phản ứng trùng hợp",
+    "vi_page_en": "Polymerization",
+    "en_page": "Chain-growth polymerization",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Phản ứng trùng ngưng",
+   "en": "condensation polymerisation",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": "Phản ứng trùng ngưng",
+    "vi_page_en": "Condensation reaction",
+    "en_page": "Condensation polymer",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Chất dẻo",
+   "en": "plastic",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Chất dẻo ↔ Plastic"
+   ],
+   "wiki": {
+    "vi_page": "Chất dẻo",
+    "vi_page_en": "Plastic",
+    "en_page": "Plastic",
+    "en_page_vi": "Chất dẻo"
+   }
+  },
+  {
+   "vi": "Tơ",
+   "en": "fibre",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Fiber",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Cao su",
+   "en": "rubber",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Cao su ↔ Natural rubber"
+   ],
+   "wiki": {
+    "vi_page": "Cao su",
+    "vi_page_en": "Rubber",
+    "en_page": "Natural rubber",
+    "en_page_vi": "Cao su tự nhiên"
+   }
+  },
+  {
+   "vi": "Vật liệu composite",
+   "en": "composite material",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Vật liệu composite ↔ Composite material"
+   ],
+   "wiki": {
+    "vi_page": "Vật liệu composite",
+    "vi_page_en": "Composite material",
+    "en_page": "Composite material",
+    "en_page_vi": "Vật liệu composite"
+   }
+  },
+  {
+   "vi": "Keo dán",
+   "en": "adhesive",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Keo ↔ Adhesive"
+   ],
+   "wiki": {
+    "vi_page": "Keo",
+    "vi_page_en": "Adhesive",
+    "en_page": "Adhesive",
+    "en_page_vi": "Keo"
+   }
+  },
+  {
+   "vi": "Pin điện hóa",
+   "en": "galvanic cell",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Galvanic cell"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Galvanic cell",
+    "en_page_vi": "Pin Galvanic"
+   }
+  },
+  {
+   "vi": "Điện phân",
+   "en": "electrolysis",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Điện phân ↔ Electrolysis"
+   ],
+   "wiki": {
+    "vi_page": "Điện phân",
+    "vi_page_en": "Electrolysis",
+    "en_page": "Electrolysis",
+    "en_page_vi": "Điện phân"
+   }
+  },
+  {
+   "vi": "Thế điện cực chuẩn",
+   "en": "standard electrode potential",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Standard electrode potential",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Cặp oxi hóa – khử",
+   "en": "redox couple",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Redox",
+    "en_page_vi": "Phản ứng oxy hóa khử"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Cathode",
+   "en": "cathode",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Cathode ↔ Cathode"
+   ],
+   "wiki": {
+    "vi_page": "Cathode",
+    "vi_page_en": "Cathode",
+    "en_page": "Cathode",
+    "en_page_vi": "Cathode"
+   }
+  },
+  {
+   "vi": "Anode",
+   "en": "anode",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Anode ↔ Anode"
+   ],
+   "wiki": {
+    "vi_page": "Anode",
+    "vi_page_en": "Anode",
+    "en_page": "Anode",
+    "en_page_vi": "Anode"
+   }
+  },
+  {
+   "vi": "Sự ăn mòn kim loại",
+   "en": "corrosion",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Corrosion"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Corrosion",
+    "en_page_vi": "Ăn mòn"
+   }
+  },
+  {
+   "vi": "Ăn mòn điện hóa",
+   "en": "electrochemical corrosion",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": "Ăn mòn điện hóa",
+    "vi_page_en": "Galvanic corrosion",
+    "en_page": null,
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Kim loại",
+   "en": "metal",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Kim loại ↔ Metal"
+   ],
+   "wiki": {
+    "vi_page": "Kim loại",
+    "vi_page_en": "Metal",
+    "en_page": "Metal",
+    "en_page_vi": "Kim loại"
+   }
+  },
+  {
+   "vi": "Liên kết kim loại",
+   "en": "metallic bonding",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Liên kết kim loại ↔ Metallic bonding"
+   ],
+   "wiki": {
+    "vi_page": "Liên kết kim loại",
+    "vi_page_en": "Metallic bonding",
+    "en_page": "Metallic bonding",
+    "en_page_vi": "Liên kết kim loại"
+   }
+  },
+  {
+   "vi": "Hợp kim",
+   "en": "alloy",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hợp kim ↔ Alloy"
+   ],
+   "wiki": {
+    "vi_page": "Hợp kim",
+    "vi_page_en": "Alloy",
+    "en_page": "Alloy",
+    "en_page_vi": "Hợp kim"
+   }
+  },
+  {
+   "vi": "Tách kim loại",
+   "en": "extractive metallurgy",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Extractive metallurgy"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Extractive metallurgy",
+    "en_page_vi": "Luyện kim khai khoáng"
+   }
+  },
+  {
+   "vi": "Kim loại kiềm",
+   "en": "alkali metal",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Kim loại kiềm ↔ Alkali metal"
+   ],
+   "wiki": {
+    "vi_page": "Kim loại kiềm",
+    "vi_page_en": "Alkali metal",
+    "en_page": "Alkali metal",
+    "en_page_vi": "Kim loại kiềm"
+   }
+  },
+  {
+   "vi": "Kim loại kiềm thổ",
+   "en": "alkaline earth metal",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Kim loại kiềm thổ ↔ Alkaline earth metal"
+   ],
+   "wiki": {
+    "vi_page": "Kim loại kiềm thổ",
+    "vi_page_en": "Alkaline earth metal",
+    "en_page": "Alkaline earth metal",
+    "en_page_vi": "Kim loại kiềm thổ"
+   }
+  },
+  {
+   "vi": "Nước cứng",
+   "en": "hard water",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Nước cứng ↔ Hard water"
+   ],
+   "wiki": {
+    "vi_page": "Nước cứng",
+    "vi_page_en": "Hard water",
+    "en_page": "Hard water",
+    "en_page_vi": "Nước cứng"
+   }
+  },
+  {
+   "vi": "Phức chất",
+   "en": "coordination complex",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Phức chất ↔ Coordination complex"
+   ],
+   "wiki": {
+    "vi_page": "Phức chất",
+    "vi_page_en": "Coordination complex",
+    "en_page": "Coordination complex",
+    "en_page_vi": "Phức chất"
+   }
+  },
+  {
+   "vi": "Phối tử",
+   "en": "ligand",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Ligand",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Nguyên tử trung tâm",
+   "en": "central atom",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Số phối trí",
+   "en": "coordination number",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Số phối trí ↔ Coordination number"
+   ],
+   "wiki": {
+    "vi_page": "Số phối trí",
+    "vi_page_en": "Coordination number",
+    "en_page": "Coordination number",
+    "en_page_vi": "Số phối trí"
+   }
+  }
+ ],
+ "anchors": {
+  "program": "Chương trình GDPT 2018 và các sửa đổi còn áp dụng: 32/2018/TT-BGDĐT; 20/2021/TT-BGDĐT; 13/2022/TT-BGDĐT; 17/2025/TT-BGDĐT; 22/2021/TT-BGDĐT; 3588/QĐ-BGDĐT; 185/QĐ-BGDĐT",
+  "textbook": [
+   "SGK Hóa học 12 (KNTT)",
+   "Chuyên đề học tập Hóa học 12 (KNTT)"
+  ],
+  "curriculum_topics": [
+   "Chuyên đề 1: Ester Lipid IUPAC",
+   "Chuyên đề 2: Carbohydrate Glucose Cellulose",
+   "Chuyên đề 3: Amine Amino acid Peptide Protein IUPAC",
+   "Chuyên đề 4: Polymer & Vật liệu polymer",
+   "Chuyên đề 5: Pin điện hóa & Điện phân",
+   "Chuyên đề 6: Đại cương kim loại",
+   "Chuyên đề 7: Kim loại nhóm IA IIA",
+   "Chuyên đề 8: Sơ lược về phức chất"
+  ],
+  "note": "Thuật ngữ tiếng Việt gom theo các chuyên đề CT2018/KNTT của môn/lớp trong hệ thống; bản tiếng Anh đối chiếu Wikipedia vi↔en và/hoặc chủ dự án duyệt. Chưa đối chiếu từng trang SGK."
+ },
+ "known_issues": [
+  "Chưa đối chiếu từng trang SGK KNTT.",
+  "Anode/cathode giữ nguyên từ gốc vì cực âm/dương đổi theo pin hay điện phân.",
+  "9 thuật ngữ chưa khớp 2 nguồn, đang dùng tạm theo duyệt của chủ dự án (provisional)."
+ ]
+}

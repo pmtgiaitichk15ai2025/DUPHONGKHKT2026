@@ -1,0 +1,695 @@
+{
+ "subject": "Tin học",
+ "grade": 12,
+ "checked": "2026-11-19",
+ "spelling": "British English (owner 19/11/2026)",
+ "rule": "Dùng khi status là dat_2_nguon (Claude + Wikipedia vi↔en khớp) hoặc chu_du_an_duyet. Không phải thẩm định của Bộ.",
+ "terms": [
+  {
+   "vi": "Trí tuệ nhân tạo",
+   "en": "artificial intelligence",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Trí tuệ nhân tạo ↔ Artificial intelligence"
+   ],
+   "wiki": {
+    "vi_page": "Trí tuệ nhân tạo",
+    "vi_page_en": "Artificial intelligence",
+    "en_page": "Artificial intelligence",
+    "en_page_vi": "Trí tuệ nhân tạo"
+   }
+  },
+  {
+   "vi": "Học máy",
+   "en": "machine learning",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Học máy ↔ Machine learning"
+   ],
+   "wiki": {
+    "vi_page": "Học máy",
+    "vi_page_en": "Machine learning",
+    "en_page": "Machine learning",
+    "en_page_vi": "Học máy"
+   }
+  },
+  {
+   "vi": "Học sâu",
+   "en": "deep learning",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Học sâu ↔ Deep learning"
+   ],
+   "wiki": {
+    "vi_page": "Học sâu",
+    "vi_page_en": "Deep learning",
+    "en_page": "Deep learning",
+    "en_page_vi": "Học sâu"
+   }
+  },
+  {
+   "vi": "Mạng nơ-ron nhân tạo",
+   "en": "artificial neural network",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Mạng thần kinh nhân tạo ↔ Neural network (machine learning)"
+   ],
+   "wiki": {
+    "vi_page": "Mạng thần kinh nhân tạo",
+    "vi_page_en": "Neural network (machine learning)",
+    "en_page": "Neural network (machine learning)",
+    "en_page_vi": "Mạng thần kinh nhân tạo"
+   }
+  },
+  {
+   "vi": "Dữ liệu huấn luyện",
+   "en": "training data",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Training, validation, and test data sets",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Học có giám sát",
+   "en": "supervised learning",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Học có giám sát ↔ Supervised learning"
+   ],
+   "wiki": {
+    "vi_page": "Học có giám sát",
+    "vi_page_en": "Supervised learning",
+    "en_page": "Supervised learning",
+    "en_page_vi": "Học có giám sát"
+   }
+  },
+  {
+   "vi": "Học không giám sát",
+   "en": "unsupervised learning",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Học không có giám sát ↔ Unsupervised learning"
+   ],
+   "wiki": {
+    "vi_page": "Học không có giám sát",
+    "vi_page_en": "Unsupervised learning",
+    "en_page": "Unsupervised learning",
+    "en_page_vi": "Học không có giám sát"
+   }
+  },
+  {
+   "vi": "Phân cụm",
+   "en": "cluster analysis",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Phân tích cụm ↔ Cluster analysis"
+   ],
+   "wiki": {
+    "vi_page": "Phân tích cụm",
+    "vi_page_en": "Cluster analysis",
+    "en_page": "Cluster analysis",
+    "en_page_vi": "Phân tích cụm"
+   }
+  },
+  {
+   "vi": "Bài toán phân loại",
+   "en": "classification problem",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Phân loại ↔ Statistical classification"
+   ],
+   "wiki": {
+    "vi_page": "Phân loại",
+    "vi_page_en": "Classification",
+    "en_page": "Statistical classification",
+    "en_page_vi": "Phân loại bằng thống kê"
+   }
+  },
+  {
+   "vi": "Khoa học dữ liệu",
+   "en": "data science",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Khoa học dữ liệu ↔ Data science"
+   ],
+   "wiki": {
+    "vi_page": "Khoa học dữ liệu",
+    "vi_page_en": "Data science",
+    "en_page": "Data science",
+    "en_page_vi": "Khoa học dữ liệu"
+   }
+  },
+  {
+   "vi": "Dữ liệu lớn",
+   "en": "big data",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Dữ liệu lớn ↔ Big data"
+   ],
+   "wiki": {
+    "vi_page": "Dữ liệu lớn",
+    "vi_page_en": "Big data",
+    "en_page": "Big data",
+    "en_page_vi": "Dữ liệu lớn"
+   }
+  },
+  {
+   "vi": "Trực quan hóa dữ liệu",
+   "en": "data visualisation",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Data and information visualization",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Xử lí ngôn ngữ tự nhiên",
+   "en": "natural language processing",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Xử lý ngôn ngữ tự nhiên ↔ Natural language processing"
+   ],
+   "wiki": {
+    "vi_page": "Xử lý ngôn ngữ tự nhiên",
+    "vi_page_en": "Natural language processing",
+    "en_page": "Natural language processing",
+    "en_page_vi": "Xử lý ngôn ngữ tự nhiên"
+   }
+  },
+  {
+   "vi": "Thị giác máy tính",
+   "en": "computer vision",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Thị giác máy tính ↔ Computer vision"
+   ],
+   "wiki": {
+    "vi_page": "Thị giác máy tính",
+    "vi_page_en": "Computer vision",
+    "en_page": "Computer vision",
+    "en_page_vi": "Thị giác máy tính"
+   }
+  },
+  {
+   "vi": "Mạng máy tính",
+   "en": "computer network",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Mạng máy tính ↔ Computer network"
+   ],
+   "wiki": {
+    "vi_page": "Mạng máy tính",
+    "vi_page_en": "Computer network",
+    "en_page": "Computer network",
+    "en_page_vi": "Mạng máy tính"
+   }
+  },
+  {
+   "vi": "Giao thức",
+   "en": "communication protocol",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Giao thức truyền thông ↔ Communication protocol"
+   ],
+   "wiki": {
+    "vi_page": "Giao thức truyền thông",
+    "vi_page_en": "Communication protocol",
+    "en_page": "Communication protocol",
+    "en_page_vi": "Giao thức truyền thông"
+   }
+  },
+  {
+   "vi": "Bộ định tuyến",
+   "en": "router",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Bộ định tuyến ↔ Router"
+   ],
+   "wiki": {
+    "vi_page": "Bộ định tuyến",
+    "vi_page_en": "Router (computing)",
+    "en_page": "Router",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Bộ chuyển mạch",
+   "en": "network switch",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Bộ chuyển mạch ↔ Network switch"
+   ],
+   "wiki": {
+    "vi_page": "Bộ chuyển mạch",
+    "vi_page_en": "Network switch",
+    "en_page": "Network switch",
+    "en_page_vi": "Bộ chuyển mạch"
+   }
+  },
+  {
+   "vi": "Modem",
+   "en": "modem",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Modem ↔ Modem"
+   ],
+   "wiki": {
+    "vi_page": "Modem",
+    "vi_page_en": "Modem",
+    "en_page": "Modem",
+    "en_page_vi": "Modem"
+   }
+  },
+  {
+   "vi": "Điểm truy cập không dây",
+   "en": "wireless access point",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Điểm truy cập không dây ↔ Wireless access point"
+   ],
+   "wiki": {
+    "vi_page": "Điểm truy cập không dây",
+    "vi_page_en": "Wireless access point",
+    "en_page": "Wireless access point",
+    "en_page_vi": "Điểm truy cập không dây"
+   }
+  },
+  {
+   "vi": "Địa chỉ IP",
+   "en": "IP address",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Địa chỉ IP ↔ IP address"
+   ],
+   "wiki": {
+    "vi_page": "Địa chỉ IP",
+    "vi_page_en": "IP address",
+    "en_page": "IP address",
+    "en_page_vi": "Địa chỉ IP"
+   }
+  },
+  {
+   "vi": "Giao thức TCP/IP",
+   "en": "Internet protocol suite",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: TCP/IP ↔ Internet protocol suite"
+   ],
+   "wiki": {
+    "vi_page": "TCP/IP",
+    "vi_page_en": "Internet protocol suite",
+    "en_page": "Internet protocol suite",
+    "en_page_vi": "TCP/IP"
+   }
+  },
+  {
+   "vi": "Mạng cục bộ",
+   "en": "local area network",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Mạng cục bộ ↔ Local area network"
+   ],
+   "wiki": {
+    "vi_page": "Mạng cục bộ",
+    "vi_page_en": "Local area network",
+    "en_page": "Local area network",
+    "en_page_vi": "Mạng cục bộ"
+   }
+  },
+  {
+   "vi": "Mạng diện rộng",
+   "en": "wide area network",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Mạng diện rộng ↔ Wide area network"
+   ],
+   "wiki": {
+    "vi_page": "Mạng diện rộng",
+    "vi_page_en": "Wide area network",
+    "en_page": "Wide area network",
+    "en_page_vi": "Mạng diện rộng"
+   }
+  },
+  {
+   "vi": "Tên miền",
+   "en": "domain name",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tên miền ↔ Domain name"
+   ],
+   "wiki": {
+    "vi_page": "Tên miền",
+    "vi_page_en": "Domain name",
+    "en_page": "Domain name",
+    "en_page_vi": "Tên miền"
+   }
+  },
+  {
+   "vi": "Máy chủ",
+   "en": "server",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Máy chủ ↔ Server"
+   ],
+   "wiki": {
+    "vi_page": "Máy chủ",
+    "vi_page_en": "Server (computing)",
+    "en_page": "Server",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Điện toán đám mây",
+   "en": "cloud computing",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Điện toán đám mây ↔ Cloud computing"
+   ],
+   "wiki": {
+    "vi_page": "Điện toán đám mây",
+    "vi_page_en": "Cloud computing",
+    "en_page": "Cloud computing",
+    "en_page_vi": "Điện toán đám mây"
+   }
+  },
+  {
+   "vi": "An toàn thông tin",
+   "en": "information security",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: An toàn thông tin ↔ Information security"
+   ],
+   "wiki": {
+    "vi_page": "An toàn thông tin",
+    "vi_page_en": "Information security",
+    "en_page": "Information security",
+    "en_page_vi": "An toàn thông tin"
+   }
+  },
+  {
+   "vi": "Mã độc",
+   "en": "malware",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Phần mềm ác ý ↔ Malware"
+   ],
+   "wiki": {
+    "vi_page": "Phần mềm ác ý",
+    "vi_page_en": "Malware",
+    "en_page": "Malware",
+    "en_page_vi": "Phần mềm ác ý"
+   }
+  },
+  {
+   "vi": "Tường lửa",
+   "en": "firewall",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tường lửa ↔ Firewall"
+   ],
+   "wiki": {
+    "vi_page": "Tường lửa",
+    "vi_page_en": "Firewall (computing)",
+    "en_page": "Firewall",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Bản quyền",
+   "en": "copyright",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Quyền tác giả ↔ Copyright"
+   ],
+   "wiki": {
+    "vi_page": "Quyền tác giả",
+    "vi_page_en": "Copyright",
+    "en_page": "Copyright",
+    "en_page_vi": "Quyền tác giả"
+   }
+  },
+  {
+   "vi": "Bắt nạt trực tuyến",
+   "en": "cyberbullying",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Cyberbullying"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Cyberbullying",
+    "en_page_vi": "Bắt nạt trên mạng"
+   }
+  },
+  {
+   "vi": "Ngôn ngữ đánh dấu siêu văn bản",
+   "en": "HTML",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: HTML ↔ HTML"
+   ],
+   "wiki": {
+    "vi_page": "HTML",
+    "vi_page_en": "HTML",
+    "en_page": "HTML",
+    "en_page_vi": "HTML"
+   }
+  },
+  {
+   "vi": "Trang web",
+   "en": "web page",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Trang web ↔ Web page"
+   ],
+   "wiki": {
+    "vi_page": "Trang web",
+    "vi_page_en": "Web page",
+    "en_page": "Web page",
+    "en_page_vi": "Trang web"
+   }
+  },
+  {
+   "vi": "Siêu liên kết",
+   "en": "hyperlink",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Siêu liên kết ↔ Hyperlink"
+   ],
+   "wiki": {
+    "vi_page": "Siêu liên kết",
+    "vi_page_en": "Hyperlink",
+    "en_page": "Hyperlink",
+    "en_page_vi": "Siêu liên kết"
+   }
+  },
+  {
+   "vi": "Thẻ HTML",
+   "en": "HTML tag",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ HTML element"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "HTML element",
+    "en_page_vi": "Phần tử HTML"
+   }
+  },
+  {
+   "vi": "Thuộc tính HTML",
+   "en": "HTML attribute",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Attribute",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Biểu mẫu HTML",
+   "en": "HTML form",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Form",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Bảng định kiểu",
+   "en": "Cascading Style Sheets",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ CSS"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "CSS",
+    "en_page_vi": "CSS"
+   }
+  },
+  {
+   "vi": "Bộ chọn CSS",
+   "en": "CSS selector",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "CSS",
+    "en_page_vi": "CSS"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Trình duyệt web",
+   "en": "web browser",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Trình duyệt web ↔ Web browser"
+   ],
+   "wiki": {
+    "vi_page": "Trình duyệt web",
+    "vi_page_en": "Web browser",
+    "en_page": "Web browser",
+    "en_page_vi": "Trình duyệt web"
+   }
+  },
+  {
+   "vi": "Thuật toán",
+   "en": "algorithm",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Thuật toán ↔ Algorithm"
+   ],
+   "wiki": {
+    "vi_page": "Thuật toán",
+    "vi_page_en": "Algorithm",
+    "en_page": "Algorithm",
+    "en_page_vi": "Thuật toán"
+   }
+  },
+  {
+   "vi": "Cơ sở dữ liệu",
+   "en": "database",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Cơ sở dữ liệu ↔ Database"
+   ],
+   "wiki": {
+    "vi_page": "Cơ sở dữ liệu",
+    "vi_page_en": "Database",
+    "en_page": "Database",
+    "en_page_vi": "Cơ sở dữ liệu"
+   }
+  },
+  {
+   "vi": "Lập trình",
+   "en": "computer programming",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Lập trình máy tính ↔ Computer programming"
+   ],
+   "wiki": {
+    "vi_page": "Lập trình máy tính",
+    "vi_page_en": "Computer programming",
+    "en_page": "Computer programming",
+    "en_page_vi": "Lập trình máy tính"
+   }
+  }
+ ],
+ "anchors": {
+  "program": "Chương trình GDPT 2018 và các sửa đổi còn áp dụng: 32/2018/TT-BGDĐT; 20/2021/TT-BGDĐT; 13/2022/TT-BGDĐT; 17/2025/TT-BGDĐT; 22/2021/TT-BGDĐT; 3588/QĐ-BGDĐT; 185/QĐ-BGDĐT",
+  "textbook": [
+   "SGK Tin học 12 - Khoa học máy tính (KNTT)",
+   "SGK Tin học 12 - Tin học ứng dụng (KNTT)",
+   "SGV Tin học 12 (KNTT)"
+  ],
+  "curriculum_topics": [
+   "Chuyên đề 1: Trí tuệ nhân tạo trong khoa học và đời sống",
+   "Chuyên đề 2: Mạng máy tính: thiết bị mạng và giao thức mạng",
+   "Chuyên đề 3: Giao tiếp và ứng xử trong không gian mạng",
+   "Chuyên đề 4: Tạo trang web với HTML và CSS",
+   "Chuyên đề 5: Học máy và khoa học dữ liệu (định hướng Khoa học máy tính)"
+  ],
+  "note": "Thuật ngữ tiếng Việt gom theo các chuyên đề CT2018/KNTT của môn/lớp trong hệ thống; bản tiếng Anh đối chiếu Wikipedia vi↔en và/hoặc chủ dự án duyệt. Chưa đối chiếu từng trang SGK."
+ },
+ "known_issues": [
+  "Chưa đối chiếu từng trang SGK KNTT.",
+  "Thuật ngữ HTML/CSS giữ tên kỹ thuật tiếng Anh gốc.",
+  "5 thuật ngữ chưa khớp 2 nguồn, đang dùng tạm theo duyệt của chủ dự án (provisional)."
+ ]
+}

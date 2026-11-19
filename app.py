@@ -12628,14 +12628,54 @@ if selected_station == station_labels[0]:
             # ==============================================================================
             with st.expander("📒 Phiếu bài học và infographic chữ viết tay", expanded=True):
                 st.caption("Mẫu sổ tay: giấy ô ly kem, gáy lò xo đen, chữ xanh và tiêu đề đỏ gạch chân. Giữ nội dung bài học đang hiển thị và công thức KaTeX; bài dài in nhiều trang. Tải HTML, mở bằng trình duyệt rồi chọn In / Lưu PDF; bật Đồ họa nền để giữ màu giấy khi in.")
-                export_mode = st.radio("Kiểu phiếu bài học:", ["Chữ viết tay trên giấy ô ly", "Infographic màu theo bài học", "Bản in trắng đen"], horizontal=True, key=f"lesson_export_{t1_indexing_data['index_code']}")
-                export_style = "handwritten" if export_mode.startswith("Chữ") else "color" if export_mode.startswith("Infographic") else "monochrome"
-                export_html = build_lesson_html(subject, grade_num, current_topic_name, cleaned_p1, export_style)
+                export_mode = st.radio("Kiểu phiếu bài học:", ["Chữ viết tay trên giấy ô ly", "Infographic màu theo bài học", "🌸 Infographic Sen Việt", "Bản in trắng đen"], horizontal=True, key=f"lesson_export_{t1_indexing_data['index_code']}")
+                export_style = "handwritten" if export_mode.startswith("Chữ") else "lotus" if "Sen Việt" in export_mode else "color" if export_mode.startswith("Infographic") else "monochrome"
+                _lotus_tr = None
+                if export_style == "lotus":
+                    # Song ngữ (owner 19/11/2026): thêm đúng 1 lượt AI khi người dùng bấm, qua cổng gọi AI chung
+                    # call_gemini_with_fallback → mọi model dự phòng nhận cùng system instruction + bảng thuật ngữ.
+                    import hashlib as _hl
+                    _tr_key = _hl.sha1((subject + str(grade_num) + str(current_topic_name) + cleaned_p1).encode("utf-8")).hexdigest()[:16]
+                    _tr_store = st.session_state.setdefault("lotus_translations", {})
+                    _lotus_tr = _tr_store.get(_tr_key)
+                    if _lotus_tr is None:
+                        st.caption("Phiếu đang hiện tiếng Việt. Bản song ngữ cần 1 lượt AI dịch (dùng key đang chọn); "
+                                   "thuật ngữ lấy theo bảng đã đối chiếu, công thức giữ nguyên.")
+                        if st.button("🌐 Tạo bản song ngữ Việt – Anh", key=f"lotus_translate_{_tr_key}"):
+                            from services.lesson_translation import batches, lesson_blocks, merge_response, translation_request
+                            _got, _failed = {}, 0
+                            with st.spinner("Đang dịch song ngữ theo từng phần…"):
+                                for _batch in batches(lesson_blocks(subject, grade_num, current_topic_name, cleaned_p1)):
+                                    _sys_tr, _user_tr = translation_request(_batch, subject, grade_num, current_topic_name)
+                                    try:
+                                        _raw = call_gemini_with_fallback(_user_tr, system_instruction=_sys_tr, json_mode=True)
+                                        _got.update(merge_response(_batch, _raw, subject, grade_num))
+                                    except Exception:
+                                        _failed += 1
+                            if _got:
+                                _tr_store[_tr_key] = _got
+                                st.rerun()
+                            st.warning("Chưa dịch được (AI đang quá tải hoặc hết lượt). Phiếu vẫn dùng được bằng tiếng Việt; thử lại sau ít phút.")
+                export_html = build_lesson_html(subject, grade_num, current_topic_name, cleaned_p1, export_style, _lotus_tr)
                 export_html = _sync_t1_function_export(export_html, subject, current_topic_name, cleaned_p1)
                 components.html(export_html, height=790, scrolling=True)
+                if export_style == "lotus":
+                    # Owner 19/11/2026: thuật ngữ chưa chắc ghi rõ tồn tại; người dùng báo lỗi → Trạm 5 → vá, hồi quy.
+                    with st.expander("✍️ Báo thuật ngữ dịch sai / chưa chuẩn"):
+                        _tf = st.text_input("Từ nào sai và nên dịch thế nào?", key=f"lotus_term_fb_{t1_indexing_data['index_code']}",
+                                            placeholder="Ví dụ: 'điện trở' ở câu 2 phải là resistance, không phải resistor")
+                        if st.button("📤 Gửi báo lỗi thuật ngữ", key=f"lotus_term_fb_send_{t1_indexing_data['index_code']}") and _tf.strip():
+                            from services.lesson_translation import build_term_feedback_entry
+                            sync_event(build_term_feedback_entry(subject=subject, grade=grade_num, topic=current_topic_name, text=_tf,
+                                                                 name=st.session_state.get('student_name', ''),
+                                                                 time=datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+                            st.success("Đã ghi nhận, cảm ơn thầy cô/em. Thuật ngữ sẽ được đối chiếu và sửa ở bản cập nhật.")
                 st.download_button("📥 Tải phiếu HTML để xem / In PDF", export_html.encode("utf-8"), file_name=f"Bai_hoc_{t1_indexing_data['index_code']}_{export_style}.html", mime="text/html", key="download_lesson_html", on_click="ignore")
                 st.download_button("📄 Tải nội dung gốc Markdown", cleaned_p1.encode("utf-8"), file_name=f"Bai_hoc_{t1_indexing_data['index_code']}.md", mime="text/markdown", key="download_lesson_source", on_click="ignore")
                 handwritten_prompt_bytes = handwritten_prompt(subject, grade_num, current_topic_name, cleaned_p1).encode("utf-8")
+                if export_style == "lotus":
+                    from services.lotus_style import illustration_prompt
+                    st.download_button("🎨 Tải prompt tranh minh họa (dán vào AI vẽ ảnh)", illustration_prompt(subject, grade_num, current_topic_name, cleaned_p1).encode("utf-8"), file_name=f"Tranh_{t1_indexing_data['index_code']}.json", mime="application/json", key="download_lotus_art_prompt", on_click="ignore", help="Chỉ xin tranh nền, không chữ/công thức; chữ và đồ thị chính xác do app dựng.")
                 st.download_button("🖋️ Tải prompt phong cách chữ viết tay", handwritten_prompt_bytes, file_name=f"Prompt_{t1_indexing_data['index_code']}.json", mime="application/json", key="download_handwritten_prompt", on_click="ignore")
                 # Nút tải của Streamlit lấy file từ bộ nhớ phiên; phiên kết nối lại thì báo "File not found".
                 # Link dự phòng nhúng thẳng dữ liệu nên luôn tải được.

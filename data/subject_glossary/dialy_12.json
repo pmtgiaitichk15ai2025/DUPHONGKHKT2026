@@ -1,0 +1,728 @@
+{
+ "subject": "Địa lý",
+ "grade": 12,
+ "checked": "2026-11-19",
+ "spelling": "British English (owner 19/11/2026)",
+ "rule": "Dùng khi status là dat_2_nguon (Claude + Wikipedia vi↔en khớp) hoặc chu_du_an_duyet. Không phải thẩm định của Bộ.",
+ "terms": [
+  {
+   "vi": "Khí hậu nhiệt đới ẩm gió mùa",
+   "en": "tropical monsoon climate",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Tropical monsoon climate"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Tropical monsoon climate",
+    "en_page_vi": "Khí hậu nhiệt đới gió mùa"
+   }
+  },
+  {
+   "vi": "Gió mùa",
+   "en": "monsoon",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Gió mùa ↔ Monsoon"
+   ],
+   "wiki": {
+    "vi_page": "Gió mùa",
+    "vi_page_en": "Monsoon",
+    "en_page": "Monsoon",
+    "en_page_vi": "Gió mùa"
+   }
+  },
+  {
+   "vi": "Địa hình",
+   "en": "terrain",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Địa hình ↔ Terrain"
+   ],
+   "wiki": {
+    "vi_page": "Địa hình",
+    "vi_page_en": "Terrain",
+    "en_page": "Terrain",
+    "en_page_vi": "Địa hình"
+   }
+  },
+  {
+   "vi": "Đồi núi",
+   "en": "hills and mountains",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Hill",
+    "en_page_vi": "Đồi"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Đồng bằng",
+   "en": "plain",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Đồng bằng ↔ Plain"
+   ],
+   "wiki": {
+    "vi_page": "Đồng bằng",
+    "vi_page_en": "Plain",
+    "en_page": "Plain",
+    "en_page_vi": "Đồng bằng"
+   }
+  },
+  {
+   "vi": "Đồng bằng châu thổ",
+   "en": "river delta",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Châu thổ ↔ River delta"
+   ],
+   "wiki": {
+    "vi_page": "Châu thổ",
+    "vi_page_en": "River delta",
+    "en_page": "River delta",
+    "en_page_vi": "Châu thổ"
+   }
+  },
+  {
+   "vi": "Sông ngòi",
+   "en": "river",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ River"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "River",
+    "en_page_vi": "Sông"
+   }
+  },
+  {
+   "vi": "Đất feralit",
+   "en": "ferralitic soil",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Oxisol",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Hệ sinh thái rừng ngập mặn",
+   "en": "mangrove forest",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: - ↔ Mangrove forest"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Mangrove forest",
+    "en_page_vi": "Rừng ngập mặn"
+   }
+  },
+  {
+   "vi": "Thiên tai",
+   "en": "natural disaster",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Thiên tai ↔ Natural disaster"
+   ],
+   "wiki": {
+    "vi_page": "Thiên tai",
+    "vi_page_en": "Natural disaster",
+    "en_page": "Natural disaster",
+    "en_page_vi": "Thiên tai"
+   }
+  },
+  {
+   "vi": "Bão",
+   "en": "tropical cyclone",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Bão ↔ Tropical cyclone"
+   ],
+   "wiki": {
+    "vi_page": "Bão",
+    "vi_page_en": "Storm",
+    "en_page": "Tropical cyclone",
+    "en_page_vi": "Xoáy thuận nhiệt đới"
+   }
+  },
+  {
+   "vi": "Lũ lụt",
+   "en": "flood",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Lụt ↔ Flood"
+   ],
+   "wiki": {
+    "vi_page": "Lụt",
+    "vi_page_en": "Flood",
+    "en_page": "Flood",
+    "en_page_vi": "Lụt"
+   }
+  },
+  {
+   "vi": "Hạn hán",
+   "en": "drought",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Hạn hán ↔ Drought"
+   ],
+   "wiki": {
+    "vi_page": "Hạn hán",
+    "vi_page_en": "Drought",
+    "en_page": "Drought",
+    "en_page_vi": "Hạn hán"
+   }
+  },
+  {
+   "vi": "Biến đổi khí hậu",
+   "en": "climate change",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Biến đổi khí hậu ↔ Climate change"
+   ],
+   "wiki": {
+    "vi_page": "Biến đổi khí hậu",
+    "vi_page_en": "Climate change",
+    "en_page": "Climate change",
+    "en_page_vi": "Biến đổi khí hậu"
+   }
+  },
+  {
+   "vi": "Xâm nhập mặn",
+   "en": "saltwater intrusion",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": "Xâm nhập mặn",
+    "vi_page_en": "Soil salinity",
+    "en_page": "Saltwater intrusion",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Tài nguyên thiên nhiên",
+   "en": "natural resource",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tài nguyên thiên nhiên ↔ Natural resource"
+   ],
+   "wiki": {
+    "vi_page": "Tài nguyên thiên nhiên",
+    "vi_page_en": "Natural resource",
+    "en_page": "Natural resource",
+    "en_page_vi": "Tài nguyên thiên nhiên"
+   }
+  },
+  {
+   "vi": "Bảo vệ môi trường",
+   "en": "environmental protection",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Bảo vệ môi trường ↔ Environmental protection"
+   ],
+   "wiki": {
+    "vi_page": "Bảo vệ môi trường",
+    "vi_page_en": "Environmental protection",
+    "en_page": "Environmental protection",
+    "en_page_vi": "Bảo vệ môi trường"
+   }
+  },
+  {
+   "vi": "Dân số",
+   "en": "population",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Dân số ↔ Population"
+   ],
+   "wiki": {
+    "vi_page": "Dân số",
+    "vi_page_en": "Human population",
+    "en_page": "Population",
+    "en_page_vi": "Quần thể"
+   }
+  },
+  {
+   "vi": "Gia tăng dân số",
+   "en": "population growth",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tăng dân số ↔ Population growth"
+   ],
+   "wiki": {
+    "vi_page": "Tăng dân số",
+    "vi_page_en": "Population growth",
+    "en_page": "Population growth",
+    "en_page_vi": "Tăng dân số"
+   }
+  },
+  {
+   "vi": "Cơ cấu dân số",
+   "en": "population structure",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Population pyramid",
+    "en_page_vi": "Tháp dân số"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Mật độ dân số",
+   "en": "population density",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Mật độ dân số ↔ Population density"
+   ],
+   "wiki": {
+    "vi_page": "Mật độ dân số",
+    "vi_page_en": "Population density",
+    "en_page": "Population density",
+    "en_page_vi": "Mật độ dân số"
+   }
+  },
+  {
+   "vi": "Phân bố dân cư",
+   "en": "population distribution",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Species distribution",
+    "en_page_vi": "Phạm vi (sinh học)"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Lao động",
+   "en": "labour force",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": "Lao động",
+    "vi_page_en": null,
+    "en_page": "Labour economics",
+    "en_page_vi": "Kinh tế học lao động"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Thất nghiệp",
+   "en": "unemployment",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Thất nghiệp ↔ Unemployment"
+   ],
+   "wiki": {
+    "vi_page": "Thất nghiệp",
+    "vi_page_en": "Unemployment",
+    "en_page": "Unemployment",
+    "en_page_vi": "Thất nghiệp"
+   }
+  },
+  {
+   "vi": "Đô thị hóa",
+   "en": "urbanisation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Đô thị hóa ↔ Urbanization"
+   ],
+   "wiki": {
+    "vi_page": "Đô thị hóa",
+    "vi_page_en": "Urbanization",
+    "en_page": "Urbanization",
+    "en_page_vi": "Đô thị hóa"
+   }
+  },
+  {
+   "vi": "Di cư",
+   "en": "human migration",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Di cư ↔ Human migration"
+   ],
+   "wiki": {
+    "vi_page": "Di cư",
+    "vi_page_en": "Migration",
+    "en_page": "Human migration",
+    "en_page_vi": "Di dân"
+   }
+  },
+  {
+   "vi": "Cơ cấu kinh tế",
+   "en": "economic structure",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Tổng sản phẩm trong nước",
+   "en": "gross domestic product",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Tổng sản phẩm nội địa ↔ Gross domestic product"
+   ],
+   "wiki": {
+    "vi_page": "Tổng sản phẩm nội địa",
+    "vi_page_en": "Gross domestic product",
+    "en_page": "Gross domestic product",
+    "en_page_vi": "Tổng sản phẩm nội địa"
+   }
+  },
+  {
+   "vi": "Công nghiệp hóa",
+   "en": "industrialisation",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Công nghiệp hóa ↔ Industrialisation"
+   ],
+   "wiki": {
+    "vi_page": "Công nghiệp hóa",
+    "vi_page_en": "Industrialisation",
+    "en_page": "Industrialisation",
+    "en_page_vi": "Công nghiệp hóa"
+   }
+  },
+  {
+   "vi": "Nông nghiệp",
+   "en": "agriculture",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Nông nghiệp ↔ Agriculture"
+   ],
+   "wiki": {
+    "vi_page": "Nông nghiệp",
+    "vi_page_en": "Agriculture",
+    "en_page": "Agriculture",
+    "en_page_vi": "Nông nghiệp"
+   }
+  },
+  {
+   "vi": "Công nghiệp",
+   "en": "industry",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Công nghiệp ↔ Industry"
+   ],
+   "wiki": {
+    "vi_page": "Công nghiệp",
+    "vi_page_en": "Industry (manufacturing)",
+    "en_page": "Industry",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Dịch vụ",
+   "en": "services",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Dịch vụ ↔ Tertiary sector"
+   ],
+   "wiki": {
+    "vi_page": "Dịch vụ",
+    "vi_page_en": "Service (economics)",
+    "en_page": "Tertiary sector",
+    "en_page_vi": "Khu vực ba của nền kinh tế"
+   }
+  },
+  {
+   "vi": "Khu công nghiệp",
+   "en": "industrial park",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Khu công nghiệp ↔ Industrial park"
+   ],
+   "wiki": {
+    "vi_page": "Khu công nghiệp",
+    "vi_page_en": "Industrial park",
+    "en_page": "Industrial park",
+    "en_page_vi": null
+   }
+  },
+  {
+   "vi": "Giao thông vận tải",
+   "en": "transport",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Vận tải ↔ Transport"
+   ],
+   "wiki": {
+    "vi_page": "Vận tải",
+    "vi_page_en": "Transport",
+    "en_page": "Transport",
+    "en_page_vi": "Vận tải"
+   }
+  },
+  {
+   "vi": "Du lịch",
+   "en": "tourism",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Du lịch ↔ Tourism"
+   ],
+   "wiki": {
+    "vi_page": "Du lịch",
+    "vi_page_en": "Tourism",
+    "en_page": "Tourism",
+    "en_page_vi": "Du lịch"
+   }
+  },
+  {
+   "vi": "Thương mại",
+   "en": "trade",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Thương mại ↔ Trade"
+   ],
+   "wiki": {
+    "vi_page": "Thương mại",
+    "vi_page_en": "Commerce",
+    "en_page": "Trade",
+    "en_page_vi": "Giao thương"
+   }
+  },
+  {
+   "vi": "Xuất khẩu",
+   "en": "export",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Xuất khẩu ↔ Export"
+   ],
+   "wiki": {
+    "vi_page": "Xuất khẩu",
+    "vi_page_en": "Export",
+    "en_page": "Export",
+    "en_page_vi": "Xuất khẩu"
+   }
+  },
+  {
+   "vi": "Nhập khẩu",
+   "en": "import",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Nhập khẩu ↔ Import"
+   ],
+   "wiki": {
+    "vi_page": "Nhập khẩu",
+    "vi_page_en": "Import",
+    "en_page": "Import",
+    "en_page_vi": "Nhập khẩu"
+   }
+  },
+  {
+   "vi": "Vùng kinh tế",
+   "en": "economic region",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Economic region",
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Vùng kinh tế trọng điểm",
+   "en": "key economic region",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": null,
+    "en_page_vi": null
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Vùng biển",
+   "en": "maritime zone",
+   "status": "chu_du_an_duyet",
+   "sources": [
+    "Claude (soạn)",
+    "Chủ dự án duyệt theo đề xuất 19/11/2026 — tạm dùng, vá theo phản hồi người dùng"
+   ],
+   "wiki": {
+    "vi_page": null,
+    "vi_page_en": null,
+    "en_page": "Territorial waters",
+    "en_page_vi": "Lãnh hải"
+   },
+   "provisional": true
+  },
+  {
+   "vi": "Lãnh hải",
+   "en": "territorial waters",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Lãnh hải ↔ Territorial waters"
+   ],
+   "wiki": {
+    "vi_page": "Lãnh hải",
+    "vi_page_en": "Territorial waters",
+    "en_page": "Territorial waters",
+    "en_page_vi": "Lãnh hải"
+   }
+  },
+  {
+   "vi": "Vùng đặc quyền kinh tế",
+   "en": "exclusive economic zone",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Vùng đặc quyền kinh tế ↔ Exclusive economic zone"
+   ],
+   "wiki": {
+    "vi_page": "Vùng đặc quyền kinh tế",
+    "vi_page_en": "Exclusive economic zone",
+    "en_page": "Exclusive economic zone",
+    "en_page_vi": "Vùng đặc quyền kinh tế"
+   }
+  },
+  {
+   "vi": "Thềm lục địa",
+   "en": "continental shelf",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Thềm lục địa ↔ Continental shelf"
+   ],
+   "wiki": {
+    "vi_page": "Thềm lục địa",
+    "vi_page_en": "Continental shelf",
+    "en_page": "Continental shelf",
+    "en_page_vi": "Thềm lục địa"
+   }
+  },
+  {
+   "vi": "Quần đảo",
+   "en": "archipelago",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Quần đảo ↔ Archipelago"
+   ],
+   "wiki": {
+    "vi_page": "Quần đảo",
+    "vi_page_en": "Archipelago",
+    "en_page": "Archipelago",
+    "en_page_vi": "Quần đảo"
+   }
+  },
+  {
+   "vi": "Kinh tế biển",
+   "en": "blue economy",
+   "status": "dat_2_nguon",
+   "sources": [
+    "Claude (soạn)",
+    "Wikipedia: Kinh tế biển ↔ Blue economy"
+   ],
+   "wiki": {
+    "vi_page": "Kinh tế biển",
+    "vi_page_en": "Blue economy",
+    "en_page": "Blue economy",
+    "en_page_vi": "Kinh tế biển"
+   }
+  }
+ ],
+ "anchors": {
+  "program": "Chương trình GDPT 2018 và các sửa đổi còn áp dụng: 32/2018/TT-BGDĐT; 20/2021/TT-BGDĐT; 13/2022/TT-BGDĐT; 17/2025/TT-BGDĐT; 22/2021/TT-BGDĐT; 3588/QĐ-BGDĐT; 185/QĐ-BGDĐT",
+  "textbook": [
+   "SGK Địa lí 12 (KNTT)",
+   "Chuyên đề học tập Địa lí 12 (KNTT)"
+  ],
+  "curriculum_topics": [
+   "Chuyên đề 1: Địa lý tự nhiên Việt Nam",
+   "Chuyên đề 2: Địa lý dân cư & Đô thị hóa",
+   "Chuyên đề 3: Địa lý các ngành kinh tế",
+   "Chuyên đề 4: Địa lý các vùng kinh tế & Biển đảo"
+  ],
+  "note": "Thuật ngữ tiếng Việt gom theo các chuyên đề CT2018/KNTT của môn/lớp trong hệ thống; bản tiếng Anh đối chiếu Wikipedia vi↔en và/hoặc chủ dự án duyệt. Chưa đối chiếu từng trang SGK."
+ },
+ "known_issues": [
+  "Chưa đối chiếu từng trang SGK KNTT.",
+  "Thuật ngữ đặc thù Việt Nam (đất feralit, vùng kinh tế trọng điểm) chưa có chuẩn dịch thống nhất.",
+  "10 thuật ngữ chưa khớp 2 nguồn, đang dùng tạm theo duyệt của chủ dự án (provisional)."
+ ]
+}
