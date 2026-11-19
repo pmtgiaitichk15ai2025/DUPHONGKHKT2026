@@ -3,7 +3,7 @@
 > Chủ dự án: thầy Phan Minh Trí (không lập trình — hướng dẫn từng bước bấm, trả lời tiếng Việt, ngắn gọn, trung thực).
 > Repo: `pmtgiaitichk15ai2025/DUPHONGKHKT2026` (nhánh `main`). App: `https://duphongkhkt2026.streamlit.app`.
 > Thư mục làm việc trên máy chủ dự án: `E:\4 TRẠM THI KHKT_FINAL KHKT 2026` (mã trong repo; bằng chứng ở `qa_evidence\`).
-> Cập nhật lần cuối: 19/11/2026 — commit `788e8a5` (Claude).
+> Cập nhật lần cuối: 19/11/2026 tối — đo độ trễ (Claude; tài khoản Claude còn ~9% lượt tuần, chủ dự án chuyển sang Codex).
 
 ## 0. LỜI DẶN BẮT BUỘC CHO MỌI AI TIẾP NHẬN
 
@@ -35,7 +35,14 @@
 
 ## 4. Việc tiếp theo (theo thứ tự ưu tiên)
 
-1. **Giảm độ trễ** (chủ dự án yêu cầu 19/11, chưa bắt đầu): (a) gắn đo thời gian từng phần trên web — không đổi chức năng; (b) tách vùng chạy riêng `st.fragment` cho khu nặng (phiếu in, thanh đọc, Lab, phòng thi), từng khu một + hồi quy; (c) kho bài/đề làm sẵn + tạo giọng chạy ngầm sau khi soạn bài; (d) giọng Thầy Trí lên ZeroGPU (gói PRO 40 phút/ngày) và đánh thức app/Space trước giờ học. Không hứa "độ trễ 0" — phần AI sinh nội dung luôn cần vài giây.
+1. **Giảm độ trễ** — ĐÃ ĐO trên web 19/11 (Claude, trình duyệt, khóa trường):
+   - Mở app lần đầu ~4,5 giây; chuyển trạm 0,3–0,8 giây; bấm radio/kiểm tra câu khi đã có bài ~0,3–0,5 giây
+     (đo bằng trạng thái "Running" của Streamlit — phương pháp thô, sàn ~0,3 giây).
+   - **Chậm thật:** AI soạn bài Nguyên hàm **36 giây**; giọng Thầy Trí cả bài **~4 phút** (câu ngắn ~20 giây);
+     giọng nam bài dài tới vài chục giây; Space/app ngủ thì lần đầu 30–60 giây.
+   - ⇒ Ưu tiên đúng chỗ: (c) kho bài/đề làm sẵn + hiện chữ dần khi soạn bài; tạo giọng chạy ngầm ngay sau khi soạn xong;
+     (d) giọng Thầy Trí lên ZeroGPU; đánh thức app/Space trước giờ học. Mục (b) st.fragment chỉ làm sau, lợi ích nhỏ hơn.
+   Kế hoạch ban đầu: (a) gắn đo thời gian từng phần trên web — không đổi chức năng; (b) tách vùng chạy riêng `st.fragment` cho khu nặng (phiếu in, thanh đọc, Lab, phòng thi), từng khu một + hồi quy; (c) kho bài/đề làm sẵn + tạo giọng chạy ngầm sau khi soạn bài; (d) giọng Thầy Trí lên ZeroGPU (gói PRO 40 phút/ngày) và đánh thức app/Space trước giờ học. Không hứa "độ trễ 0" — phần AI sinh nội dung luôn cần vài giây.
 2. Chủ dự án hỏi ý từng người rồi tự dán `SCHOOL_SUPPORT_CONTACTS` (mẫu trong `services/school_contacts.py`).
 3. Chủ dự án báo giọng nam "không phát": web thử lại phát được; chờ mô tả (thông báo gì, nút nào, trình duyệt nào).
 4. Thuật ngữ khối 11, 10 cho Lý/Hóa/Sinh/Tin/Công nghệ/Địa (quy trình như khối 12: Claude soạn → Wikipedia vi↔en hai chiều → chủ dự án duyệt).
