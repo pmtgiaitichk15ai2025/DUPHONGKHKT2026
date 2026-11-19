@@ -8535,6 +8535,11 @@ def create_pedagogical_tts_component(raw_text: str, subject_name: str, comp_key:
 
     clean_speech = re.sub(r'(?i)^[^\n]*chênh lệch số trang[^\n]*\n+', '', clean_speech)
 
+    # Owner 19/11/2026: mọi giọng tạo trên máy chủ (nữ, nam, Thầy Trí) đọc công thức bằng bộ đọc khoa học chuẩn,
+    # giống hệt bản trình duyệt (assets/scientific_speech_reader.js; test so sánh tests/test_scientific_speech_parity.py).
+    from services.scientific_speech import speech_text as _sci_speech
+    clean_speech = _sci_speech(clean_speech, subject_name)
+
 
 
     # Phiên âm chuẩn cho Véctơ (từ gốc đến ngọn, có phẩy, đọc rõ từng chữ cái, số 0)
@@ -8672,6 +8677,10 @@ def create_pedagogical_tts_component(raw_text: str, subject_name: str, comp_key:
     _male_key = hashlib.sha1(clean_speech.encode("utf-8")).hexdigest()[:16]
     _male_store = st.session_state.setdefault("male_voice_mp3", {})
     _male_mp3 = _male_store.get(_male_key, b"") if lang_code == "vi" else b""
+    # Giọng Thầy Trí (owner chọn mẫu r5_106 ngày 19/11/2026): Space riêng tư HF, token ở Secrets HF_TOKEN.
+    _teacher_store = st.session_state.setdefault("teacher_voice_mp3", {})
+    _teacher_mp3 = _teacher_store.get(_male_key, b"") if lang_code == "vi" else b""
+    _teacher_token = get_secret("HF_TOKEN", "") if lang_code == "vi" else ""
 
     # Render giao diện Thuyết minh chuẩn sư phạm Nam Bộ: Có cả Nút giọng Nam Bộ trực tiếp và Player MP3
     safe_clean_speech = clean_speech.replace('</script>', '').replace('<script>', '')
@@ -8804,6 +8813,7 @@ def create_pedagogical_tts_component(raw_text: str, subject_name: str, comp_key:
             "raw": raw_text, "subject": subject_name,
             "endpoint": get_voice_public_url(),
             "male": ("data:audio/mpeg;base64," + base64.b64encode(_male_mp3).decode("ascii")) if _male_mp3 else "",
+            "teacher": ("data:audio/mpeg;base64," + base64.b64encode(_teacher_mp3).decode("ascii")) if _teacher_mp3 else "",
         }, ensure_ascii=False).replace("</", "<\\/")
         selfhost_script = r"""
         <script>
@@ -8820,8 +8830,9 @@ def create_pedagogical_tts_component(raw_text: str, subject_name: str, comp_key:
             const femaleSource = player.querySelector('source')?.src || '';
             const sources = new Map(femaleSource ? [['female', femaleSource]] : []);
             if (config.male) sources.set('nam_bo', config.male);
+            if (config.teacher) sources.set('thay_tri', config.teacher);
             let selected = femaleSource ? 'female' : null;
-            let available = [...(femaleSource ? ['female'] : []), ...(config.male ? ['nam_bo'] : [])];
+            let available = [...(femaleSource ? ['female'] : []), ...(config.male ? ['nam_bo'] : []), ...(config.teacher ? ['thay_tri'] : [])];
             let voiceServiceReady = false;
             // Keep ready voices usable while CPU synthesis is pending. A late
             // response must never replace a newer choice or start playback.
@@ -8891,7 +8902,7 @@ def create_pedagogical_tts_component(raw_text: str, subject_name: str, comp_key:
                     sync();
                     status.textContent = info.owner_voice_state === 'preview_B' ? 'Chọn Giọng nữ, Giọng Thầy Trí (mẫu B) hoặc Giọng nam' : (available.length > (femaleSource ? 1 : 0) ? 'Chọn giọng đọc • Bản thử cần thẩm định' : 'Hai giọng nam đang hiệu chỉnh sau thẩm định');
                 }).catch(() => { status.textContent = 'Hai giọng nam chưa kết nối; giữ giọng hiện tại'; });
-            } else status.textContent = config.male ? 'Chọn Giọng nữ hoặc Giọng nam • Giọng Thầy Trí đang thiết lập' : 'Giọng nam: bấm nút tạo bên dưới • Giọng Thầy Trí đang thiết lập';
+            } else status.textContent = (config.teacher || config.male) ? 'Chọn giọng đọc: Giọng nữ' + (config.teacher ? ' • Giọng Thầy Trí' : '') + (config.male ? ' • Giọng nam' : '') : 'Bấm nút tạo giọng bên dưới để nghe Giọng Thầy Trí hoặc Giọng nam';
             window.addEventListener('pagehide', () => {
                 player.pause(); sources.forEach(url => {if(url.startsWith('blob:')) URL.revokeObjectURL(url)});
             });
@@ -8902,6 +8913,17 @@ def create_pedagogical_tts_component(raw_text: str, subject_name: str, comp_key:
     # One shared audio bar; the ordered voice row scrolls horizontally on phones.
     comp_height = 230 if lang_code == "vi" else (135 if audio_data else 85)
     components.html(tts_ui_html, height=comp_height)
+    if lang_code == "vi" and not _teacher_mp3 and _teacher_token:
+        if st.button("🎙️ Tạo giọng Thầy Trí đọc bài", key=f"teacher_voice_{comp_key}",
+                     help="Giọng Nam Bộ của thầy Phan Minh Trí (máy học từ bản thu của thầy); tạo MP3 trên máy chủ, mọi thiết bị đều nghe được."):
+            from services.teacher_voice import synthesize_teacher_mp3
+            with st.spinner("Đang tạo giọng Thầy Trí… bài dài có thể mất 1–3 phút."):
+                _tmp3 = synthesize_teacher_mp3(clean_speech, _teacher_token)
+            if _tmp3:
+                _teacher_store[_male_key] = _tmp3
+                st.rerun()
+            else:
+                st.warning("Máy chủ giọng Thầy Trí đang khởi động hoặc bận; thầy cô thử lại sau ít phút. Giọng nữ/nam vẫn dùng bình thường.")
     if lang_code == "vi" and not _male_mp3:
         if st.button("🎙️ Tạo giọng nam đọc bài (miễn phí, mọi thiết bị)", key=f"male_voice_{comp_key}",
                      help="Máy chủ tạo file MP3 giọng nam; Android, iPhone, Mac, Windows đều nghe được."):
@@ -12770,6 +12792,9 @@ if selected_station == station_labels[0]:
                                         chat_display = label_verified_quote_translation(chat_display, CROSS_STATION_PHILOSOPHY_BANK[1])
                                     t1_msg["content"] = chat_display
                             st.markdown(chemical_display_markdown(chat_display))
+                            # Owner 19/11/2026: đọc câu trả lời gia sư (kể cả lời chốt triết lý nhân sinh) bằng bộ đọc khoa học.
+                            if t1_msg["role"] == "assistant" and len(chat_display or "") > 15:
+                                create_pedagogical_tts_component(chat_display, subject, f"t1_chat_{t1_msg_index}")
 
 
 
@@ -16913,7 +16938,11 @@ if selected_station == station_labels[2]:
                     from services.socratic_context import complete_verified_quote_reference
                     m['content'] = complete_verified_quote_reference(m['content'], [closure_plan])
 
-            with st.chat_message(m["role"]): st.markdown(chemical_display_markdown(m["content"]))
+            with st.chat_message(m["role"]):
+                st.markdown(chemical_display_markdown(m["content"]))
+                # Owner 19/11/2026: đọc lời gia sư hỏi bài Trạm 3 bằng bộ đọc khoa học (giọng nữ/nam/Thầy Trí).
+                if m["role"] == "assistant" and len(m.get("content", "")) > 15:
+                    create_pedagogical_tts_component(m["content"], subject, f"t3_msg_{index}")
 
 
 

@@ -87,5 +87,42 @@ class SharedCache(unittest.TestCase):
         self.assertEqual(len(mv._CACHE), 1)
 
 
+class TeacherVoice(unittest.TestCase):
+    """Owner 19/11/2026 chọn mẫu r5_106 (~90%): giọng Thầy Trí qua Space riêng tư, token chỉ ở máy chủ."""
+
+    def test_chunks_cached_and_failures_quiet(self):
+        import os
+        import tempfile
+        import services.teacher_voice as tv
+        tv._CACHE.clear()
+        calls = []
+
+        class FakeClient:
+            def predict(self, text, voice, api_name):
+                calls.append((voice, api_name))
+                f = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
+                f.write(b"MP3")
+                f.close()
+                return f.name
+        out = tv.synthesize_teacher_mp3("Chào các em. " * 120, "tok", client_factory=lambda t: FakeClient(), sleep=lambda s: None)
+        self.assertTrue(out.startswith(b"MP3") and len(calls) > 1)
+        self.assertEqual({c for c in calls}, {("thay_tri", "/speak")})
+        n = len(calls)
+        tv.synthesize_teacher_mp3("Chào các em. " * 120, "tok", client_factory=lambda t: FakeClient())
+        self.assertEqual(len(calls), n)   # đã nhớ
+        self.assertEqual(tv.synthesize_teacher_mp3("x y z", ""), b"")   # thiếu token
+
+        def boom(t):
+            raise RuntimeError("space asleep")
+        self.assertEqual(tv.synthesize_teacher_mp3("Bài khác.", "tok", client_factory=boom), b"")
+
+    def test_app_wiring_keeps_token_server_side(self):
+        import pathlib
+        src = pathlib.Path(__file__).resolve().parents[1].joinpath("app.py").read_text(encoding="utf-8")
+        self.assertIn('get_secret("HF_TOKEN", "")', src)
+        self.assertIn("if (config.teacher) sources.set('thay_tri', config.teacher);", src)
+        self.assertNotIn('"token": _teacher_token', src)
+
+
 if __name__ == "__main__":
     unittest.main()

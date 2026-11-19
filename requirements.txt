@@ -39,3 +39,5 @@ ijson>=3.3,<4
 markdown-it-py>=3,<5
 # Giong nam mien phi (vi-VN-NamMinhNeural), loi thi giu giong nu
 edge-tts>=7.3.1,<8
+# Giong Thay Tri: goi Space rieng tu Hugging Face (token o Secrets HF_TOKEN)
+gradio_client>=1.3,<3
