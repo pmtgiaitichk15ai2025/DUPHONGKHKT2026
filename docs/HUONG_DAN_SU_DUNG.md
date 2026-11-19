@@ -1,7 +1,7 @@
 # 📘 HƯỚNG DẪN SỬ DỤNG GIA SƯ AI (GSAI) — 5 TRẠM
 
 > Dành cho **học sinh**, **giáo viên** và **ban giám khảo**.
-> Tên nút, ô chọn và radio trong tài liệu này được lấy **nguyên văn** từ giao diện app (cập nhật 17/11/2026).
+> Tên nút, ô chọn và radio trong tài liệu này được lấy **nguyên văn** từ giao diện app (cập nhật 19/11/2026).
 > Ký hiệu: 🔘 radio (chọn 1) · 🔽 hộp chọn · ☑️ ô tích · ⬜ ô nhập · 🔲 nút bấm · 📂 mục mở rộng (bấm để mở)
 
 ---
@@ -100,6 +100,12 @@ Lưu tiến bộ học tập **trên máy của em**, không lưu trên máy ch�
   - 🔘 **Kiểu phiếu bài học:**
     - `Chữ viết tay trên giấy ô ly` — giống vở ghi.
     - `Infographic màu theo bài học` — sơ đồ màu, dễ nhớ.
+    - `🌸 Infographic Sen Việt` — **vở ghi tay song ngữ – hoa sen Việt**: giấy ô ly, gáy lò xo, hồ sen, khung từ vựng Anh–Việt trên lá sen, số trang "Trang x/y" khi in. Đồ thị: đường cong xanh, tiệm cận đỏ nét đứt.
+      - 🔲 **🌐 Tạo bản song ngữ Việt – Anh** — 1 lượt AI (dùng key đang chọn); thuật ngữ theo bảng đã đối chiếu, công thức giữ nguyên. Nếu AI quá tải giữa chừng: 🔲 **🔁 Dịch tiếp … đoạn còn thiếu**.
+      - Từ có dấu **\*** trong khung từ vựng là AI đề xuất, giáo viên cần duyệt; dòng có nhãn **⚠** là lệch bảng thuật ngữ, giáo viên cần xem.
+      - 📂 **✍️ Báo thuật ngữ dịch sai / chưa chuẩn** → ⬜ gõ từ sai và cách đúng → 🔲 **📤 Gửi báo lỗi thuật ngữ** (về Trạm 5 / Google Sheets).
+      - 🔲 **🎨 Tải prompt tranh minh họa (dán vào AI vẽ ảnh)** — chỉ xin tranh nền, không chữ/công thức.
+      - Môn **Lịch sử, GDKT&PL, Ngữ văn, GDCD**: không có bản song ngữ (nội dung chính trị – pháp lý, chỉ mở khi giáo viên bộ môn duyệt thuật ngữ); phiếu vẫn in đầy đủ tiếng Việt.
     - `Bản in trắng đen` — tiết kiệm mực khi in.
   - 🔲 **📥 Tải phiếu HTML để xem / In PDF** (mở file → Ctrl+P → Lưu PDF).
   - 🔲 **📄 Tải nội dung gốc Markdown**.
@@ -111,15 +117,30 @@ Lưu tiến bộ học tập **trên máy của em**, không lưu trên máy ch�
 - 📂 **📂 Mở lại phiếu bài học đã lưu (.md)** → chọn file → 🔽 **Kiểu phiếu từ bản lưu** (`Chữ viết tay` / `Bản màu` / `Trắng đen`) → 🔲 **Mở phiếu từ bản lưu** → 🔲 **📥 Tải lại phiếu HTML**.
 - Khi AI trả nội dung chưa khớp ngữ cảnh, app giữ lại bản đó để đối chiếu: 🔲 **📥 Tải nguyên văn bài đang chờ đối chiếu ngữ cảnh** và 📂 **📚 Các bản chờ đối chiếu trước đó trong phiên**.
 
+### Nghe đọc bài (mọi môn) — khung 🎙️ THUYẾT MINH BÀI GIẢNG
+- Dưới bài học và dưới **mỗi câu trả lời của Thầy** (Trạm 1, 2, 3) có thanh đọc:
+  - 🔲 **▶ Giọng nữ** — có sẵn.
+  - 🔲 **🎙️ Tạo giọng Thầy Trí đọc bài** → chờ (bài dài 1–4 phút, câu ngắn ~20 giây) → 🔲 **▶ Giọng Thầy Trí** (giọng Nam Bộ của thầy Phan Minh Trí, đọc chậm rãi, ngắt theo dấu câu).
+  - 🔲 **🎙️ Tạo giọng nam đọc bài (miễn phí, mọi thiết bị)** → 🔲 **▶ Giọng nam**.
+- Công thức được đọc theo **bộ đọc chuẩn khoa học** (phân số, căn, tích phân, véc tơ, ion, đơn vị…). Nghe được trên Android, iPhone, Mac, Windows.
+
+### Học liệu tiếng Anh theo chủ đề
+- Dưới thông tin bài học: **🌐 Học liệu tiếng Anh theo chủ đề** — nút tìm đúng chủ đề bằng tiếng Anh chuyên ngành trên **Khan Academy, BBC Bitesize, CK-12, Wikipedia (English), Video tiếng Anh**. Đây là trang tìm kiếm của nguồn uy tín, chưa phải học liệu đã thẩm định theo CT2018/KNTT.
+
+### Hình Oxyz
+- Bài có tọa độ trong không gian: hình **3D xoay được** (kéo chuột để xoay, cuộn để phóng to), dựng đúng tọa độ trong đề; bản in có hình tĩnh.
+
 ### Bước 3 — Vấn đáp Socratic
 - 📂 **💬 Vấn đáp Socratic cùng Thầy AI về bài học '…'**
 - ⬜ **Gõ câu trả lời hoặc chỗ chưa hiểu gửi Thầy...** → Enter.
 - Thầy AI **hỏi gợi mở**, không đưa ngay đáp án. Hỏi lại bao nhiêu lần cũng được.
+- Lời thầy theo **văn phong Nam Bộ** gần gũi ("nghen", "nha"); kiến thức, công thức giữ chuẩn SGK.
 
 ### Bước 4 — Trắc nghiệm kiểm tra nhanh
 Với mỗi câu:
 1. 🔘 **Chọn đáp án câu …:** chọn A/B/C/D.
 2. (Khi bí) 📂 **💡 Gợi mở tư duy Socratic câu … (mở khi bí — không lộ đáp án)**.
+   Dưới gợi ý: **Đánh giá lời hướng dẫn của hệ thống:** 🔲 **👍** / 🔲 **👎** (rê chuột để xem chú thích; 👎 cho chọn lý do). Đánh giá lưu về Trạm 5 / Google Sheets.
 3. 🔲 **🔍 Kiểm tra câu …** → biết đúng/sai và xem giải thích.
 
 ### Bước 5 — Phòng Lab
@@ -231,7 +252,7 @@ Trạm 3 có **2 tab lớn**:
 ### 4.3. Sau khi nộp
 - Xem điểm, đáp án và lời giải từng câu.
 - **Ngữ văn:** 🔲 **Chấm Ngữ văn theo tiêu chí (AI tham khảo)** — điểm chỉ mang tính tham khảo, giáo viên chấm chính thức.
-- Hỏi lại Thầy: ⬜ **Hỏi Thầy về câu em làm sai hoặc chưa rõ trong bài thi...** → 🔲 **💬 Gửi hỏi Thầy**.
+- Hỏi lại Thầy: ⬜ **Hỏi Thầy về câu em làm sai hoặc chưa rõ trong bài thi...** → 🔲 **💬 Gửi hỏi Thầy**. Câu trả lời có thanh đọc (giọng nữ / Thầy Trí / nam).
 - 📂 **🏛️ BẢNG ĐỐI SOÁT CHÉO NGUỒN GỐC DÀNH CHO BAN GIÁM KHẢO & THANH TRA KHẢO THÍ** — nguồn gốc từng câu (kho / AI).
 - 📂 **📋 Đối soát nhãn mức độ câu hỏi (chưa thẩm định)**.
 - 🔲 **🔄 Làm đề khảo thí mới** — làm đề khác.
@@ -289,7 +310,10 @@ Trạm 3 có **2 tab lớn**:
 
 ### Học sinh
 1. ⬜ **Em hãy kể bằng lời của mình — Thầy đang lắng nghe…** → Enter.
-2. Thầy AI nhớ mạch câu chuyện trong phiên (kể cả khi em đổi chủ đề) và tôn trọng khi em chỉ muốn được nghe.
+2. Thầy AI nhớ mạch câu chuyện trong phiên (kể cả khi em đổi chủ đề) và tôn trọng khi em chỉ muốn được nghe. Thầy luôn lắng nghe, thấu cảm, không phán xét.
+   - Khi em kể chuyện **xâm hại, bạo lực**: hiện khung an toàn (111, 115) trước, rồi thầy trò chuyện ân cần, hướng dẫn từng bước nhỏ (đi khám trong 72 giờ, giữ bằng chứng, cách mở lời với ba mẹ).
+   - Khi em có **ý nghĩ tự hại**: hiện khung khẩn cấp cố định (người lớn tin cậy, 111, 115).
+   - Nếu trường đã cấu hình, có thêm **Người hỗ trợ ở trường em** (số điện thoại). Người mà em nhắc tên trong lời kể sẽ không hiện trong danh sách.
 3. 🔲 **🔄 Bắt đầu phiên lắng nghe mới** — xóa cuộc trò chuyện, bắt đầu lại.
 
 ### Phần dành cho giáo viên
@@ -344,12 +368,18 @@ Trạm 3 có **2 tab lớn**:
 - 📂 **📊 Thẩm Định Khảo Thí Chuẩn ETS: Hệ Số Tin Cậy Cronbach's Alpha (α) & Độ Phân Biệt (r_pbis)** → 🔲 **📥 Tải Báo Cáo Đo Lường Khảo Thí (CSV Item Analysis)**.
 - 📂 **🎲 Mô phỏng Mở rộng Toàn tỉnh (Monte Carlo Simulation)**: ⬜ **Số lượt mô phỏng (N):** · 🔽 **Tỷ lệ bao phủ phân vị mô phỏng:** 0.95 / 0.99 · 🔲 **🚀 Kích hoạt Mô phỏng Monte Carlo**. *Đây là mô phỏng dựa trên giả định, không phải số liệu thật.*
 
-### 6.5. Gửi yêu cầu cải tiến
+### 6.5. Phản hồi người dùng (Google Sheets)
+- Đánh giá 👍/👎 gợi ý Socratic: mục **Đánh giá gợi ý Socratic**.
+- Báo thuật ngữ song ngữ dịch sai: mục **Thuật ngữ song ngữ**.
+
+### 6.6. Gửi yêu cầu cải tiến
 ⬜ **Mô tả lỗi hoặc cải tiến cần thực hiện** → 🔲 **Tải yêu cầu để gửi người phát triển**.
 
 ---
 
 ## 7. Câu hỏi thường gặp & xử lý lỗi
+
+> **Quản trị (Streamlit Secrets):** `GEMINI_API_KEY`… (khóa AI chung) · `ADMIN_PASS` (Trạm 5) · `HF_TOKEN` (giọng Thầy Trí) · `SCHOOL_SUPPORT_CONTACTS` (danh bạ hỗ trợ Trạm 4, mẫu trong `services/school_contacts.py`).
 
 | Hiện tượng | Cách xử lý |
 | :--- | :--- |
@@ -360,6 +390,9 @@ Trạm 3 có **2 tab lớn**:
 | Mất bài đang làm khi tải lại trang | Thường xuyên dùng **📦 Nén & tải hồ sơ cá nhân** ở thanh bên. |
 | Không vào được Trạm 5 | Cần mật khẩu giáo viên (`ADMIN_PASS` trong Secrets). |
 | Muốn in đề | Trạm 3 → Xưởng xuất bản → **Tải File In HTML** → mở file → Ctrl+P → *Lưu dưới dạng PDF*. |
+| Giọng nam báo "đang bận" | Dịch vụ miễn phí đôi lúc từ chối; thử lại sau ít phút, giọng nữ vẫn dùng được. |
+| Giọng Thầy Trí lâu | Bài dài cần 1–4 phút cho lần đầu; lần sau mở lại cùng bài phát ngay. |
+| Không thấy nút giọng Thầy Trí | Quản trị cần có `HF_TOKEN` trong Secrets. |
 | Gặp lỗi khác | Thanh bên → **🛠️ Báo lỗi ứng dụng & Góp ý trải nghiệm**. |
 
 ---
