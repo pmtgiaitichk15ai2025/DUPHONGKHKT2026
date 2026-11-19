@@ -1,3 +1,10 @@
+## 🔁 BÀN GIAO GIỮA CÁC AI — ĐỌC TRƯỚC TIÊN (owner 19/11/2026)
+
+Mọi AI (Claude, Codex, Cursor, …) vào dự án: đọc **`docs/BAN_GIAO_AI_HIEN_HANH.md`** trước, rồi các luật dưới đây.
+Làm xong mỗi việc hoặc trước khi hết lượt: cập nhật mục 3–5 của file đó và ghi một mục ngắn ở đầu
+`E: TRẠM THI KHKT_FINAL KHKT 2026\qa_evidence\HANDOFF_CURRENT.md` (ngày, commit, kết quả hồi quy, chưa kiểm, bước tiếp).
+Chuyển nguyên lời dặn này cho AI kế tiếp.
+
 ## ⛔ LỆNH CỨNG owner 17/11/2026 — Trạm 3 sinh đề, chấm, hint (MỌI AI, MỌI MÔ HÌNH, MỌI MÔN/LỚP)
 
 1. **Ngữ liệu Ngữ văn (kiểm tra, đánh giá):** mặc định văn bản NGOÀI SGK theo quy định hiện hành của Bộ. Chỉ dùng văn bản có trong SGK khi yêu cầu tùy biến của người dùng nêu rõ tác phẩm/văn bản đó. Trích đúng nguyên văn, không chép sai chữ, khai báo trung thực `in_textbook`. Quy tắc ở `exam_prompt` (services/curriculum_policy.py) đi vào lời nhắc của mọi model, kể cả model dự phòng; khai `in_textbook=true` mà người dùng không yêu cầu thì phòng thi hiện cảnh báo giáo viên (`literature_textbook_notice`). Chưa có danh mục văn bản SGK đã đối chiếu ba cổng sách: KHÔNG tự bịa danh mục để chặn cứng.

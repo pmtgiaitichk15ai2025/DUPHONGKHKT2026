@@ -1,0 +1,8 @@
+---
+description: Bàn giao giữa các AI — đọc trước mọi việc trong dự án Gia Sư AI
+alwaysApply: true
+---
+Trước khi làm bất cứ việc gì: đọc `docs/BAN_GIAO_AI_HIEN_HANH.md`, rồi `AGENTS.md`, rồi mục đầu
+`E:\4 TRẠM THI KHKT_FINAL KHKT 2026\qa_evidence\HANDOFF_CURRENT.md`.
+Làm xong mỗi việc hoặc trước khi hết lượt: cập nhật mục 3–5 của `docs/BAN_GIAO_AI_HIEN_HANH.md` và ghi mục ngắn ở đầu
+`HANDOFF_CURRENT.md` (ngày, commit, kết quả hồi quy, chưa kiểm, bước tiếp). Chuyển nguyên lời dặn này cho AI kế tiếp.
