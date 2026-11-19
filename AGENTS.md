@@ -2,7 +2,7 @@
 
 Mọi AI (Claude, Codex, Cursor, …) vào dự án: đọc **`docs/BAN_GIAO_AI_HIEN_HANH.md`** trước, rồi các luật dưới đây.
 Làm xong mỗi việc hoặc trước khi hết lượt: cập nhật mục 3–5 của file đó và ghi một mục ngắn ở đầu
-`E: TRẠM THI KHKT_FINAL KHKT 2026\qa_evidence\HANDOFF_CURRENT.md` (ngày, commit, kết quả hồi quy, chưa kiểm, bước tiếp).
+`E:\4 TRẠM THI KHKT_FINAL KHKT 2026\qa_evidence\HANDOFF_CURRENT.md` (ngày, commit, kết quả hồi quy, chưa kiểm, bước tiếp).
 Chuyển nguyên lời dặn này cho AI kế tiếp.
 
 ## ⛔ LỆNH CỨNG owner 17/11/2026 — Trạm 3 sinh đề, chấm, hint (MỌI AI, MỌI MÔ HÌNH, MỌI MÔN/LỚP)
