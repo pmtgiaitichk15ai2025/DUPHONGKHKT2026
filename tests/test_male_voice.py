@@ -45,5 +45,22 @@ class NarratorWiring(unittest.TestCase):
         self.assertIn("from services.male_voice import synthesize_male_mp3", src)
 
 
+class RunsInsideStreamlitEventLoop(unittest.TestCase):
+    """Web 19/11/2026: Streamlit Cloud có event loop chạy sẵn → asyncio.run() hỏng mọi lần thử."""
+
+    def test_default_synth_works_when_loop_already_running(self):
+        import asyncio
+        from unittest import mock
+        import services.male_voice as mv
+
+        async def fake(text, voice, rate):
+            return b"MP3"
+
+        async def inside():
+            with mock.patch.object(mv, "_synth", fake):
+                return mv.synthesize_male_mp3("Chào các em.", sleep=lambda s: None)
+        self.assertEqual(asyncio.run(inside()), b"MP3")
+
+
 if __name__ == "__main__":
     unittest.main()

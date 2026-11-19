@@ -62,7 +62,11 @@ def synthesize_male_mp3(text, voice=MALE_VOICE, rate="-5%", synth=None, sleep=ti
             return b""
 
         def synth(t):
-            return asyncio.run(_synth(t, voice, rate))
+            # Web 19/11/2026: luồng script Streamlit Cloud đã có event loop chạy sẵn nên asyncio.run()
+            # báo lỗi ngay ở mọi lần thử. Chạy trong luồng riêng có event loop riêng.
+            from concurrent.futures import ThreadPoolExecutor
+            with ThreadPoolExecutor(max_workers=1) as pool:
+                return pool.submit(asyncio.run, _synth(t, voice, rate)).result(timeout=120)
     out = bytearray()
     for part in chunks:
         data = b""

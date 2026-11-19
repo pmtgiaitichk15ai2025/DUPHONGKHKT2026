@@ -57,7 +57,8 @@ class TraumaInformedInstruction(unittest.TestCase):
         si = self._si(True)
         self.assertTrue(si.startswith("[TRAM5_COUNSELING_LOCK_V1]"))
         for must in ("CHẾ ĐỘ SANG CHẤN", "thầy tin em", "KHÔNG phải lỗi của em", "an toàn lúc này",
-                     "không cần qua người đó", "câu mở lời", "Khung pháp lý", "khẩu hiệu"):
+                     "không cần qua người đó", "câu mở lời", "Khung pháp lý", "khẩu hiệu",
+                     "72 giờ", "chưa tắm rửa", "túi giấy", "đã lỡ tắm", "bằng chứng"):
             self.assertIn(must, si)
 
     def test_general_mode_is_warm_too(self):
