@@ -3,7 +3,7 @@
 > Chủ dự án: thầy Phan Minh Trí (không lập trình — hướng dẫn từng bước bấm, trả lời tiếng Việt, ngắn gọn, trung thực).
 > Repo: `pmtgiaitichk15ai2025/DUPHONGKHKT2026` (nhánh `main`). App: `https://duphongkhkt2026.streamlit.app`.
 > Thư mục làm việc trên máy chủ dự án: `E:\4 TRẠM THI KHKT_FINAL KHKT 2026` (mã trong repo; bằng chứng ở `qa_evidence\`).
-> Cập nhật lần cuối: 19/11/2026 tối — đo độ trễ (Claude; tài khoản Claude còn ~9% lượt tuần, chủ dự án chuyển sang Codex).
+> Cập nhật lần cuối: 20/11/2026 — Codex tiếp giảm tạo giọng trùng; trạng thái CI/Cloud mới nhất ở đầu qa_evidence/HANDOFF_CURRENT.md tại thư mục dự án gốc.
 
 ## 0. LỜI DẶN BẮT BUỘC CHO MỌI AI TIẾP NHẬN
 
@@ -30,7 +30,7 @@
 
 ## 3. Trạng thái hiện tại (20/11/2026)
 
-- Codex 20/11: nền main `d269c75`, bản vá dùng chung `services/audio_cache.py` + `male_voice.py`/`teacher_voice.py`: gộp yêu cầu tạo cùng MP3 đang chạy, giữ độc lập nội dung/giọng/tốc độ, không lưu lỗi, không thêm lượt AI/retry. 16/16 test tập trung đạt; hồi quy toàn bộ **1227 test OK (2 skipped)**, 4179,066 giây, log `qa_evidence/regression_full28_20261120.log` tại thư mục dự án gốc. Đang commit/push; chưa CI bản mới/Cloud, chưa đo hiệu quả web. Không gọi AI/TTS thật.
+- Codex 20/11: nền main `d269c75`, bản vá dùng chung `services/audio_cache.py` + `male_voice.py`/`teacher_voice.py`: gộp yêu cầu tạo cùng MP3 đang chạy, giữ độc lập nội dung/giọng/tốc độ, không lưu lỗi, không thêm lượt AI/retry. 16/16 test tập trung đạt; hồi quy toàn bộ **1227 test OK (2 skipped)**, 4179,066 giây, log `qa_evidence/regression_full28_20261120.log` tại thư mục dự án gốc. Đã commit/push mã `356fc4c` lên main; CI mã: run `44718927851`. Kết quả CI/Cloud và SHA main sau cập nhật tài liệu: đọc đầu `qa_evidence/HANDOFF_CURRENT.md` tại thư mục dự án gốc. Chưa đo hiệu quả web. Không gọi AI/TTS thật.
 - Tham chiếu lịch sử bên dưới chưa được xác minh lại trong ca này:
 
 - main `788e8a5`; mã gần nhất `2290744` hồi quy **1223/1223 OK**, đã kiểm web: Trạm 4 khung khẩn cấp mới, gia sư Trạm 1 văn phong Nam Bộ, giọng Thầy Trí/nam, phiếu Sen Việt song ngữ, học liệu tiếng Anh.
@@ -38,7 +38,7 @@
 
 ## 4. Việc tiếp theo (theo thứ tự ưu tiên)
 
-1. **Giảm độ trễ** — bản vá gộp tạo MP3 trùng đã hồi quy đạt; tiếp phát hành, CI và kiểm web.
+1. **Giảm độ trễ** — bản vá gộp tạo MP3 trùng đã hồi quy đạt và push; kiểm trạng thái CI trong checkpoint rồi kiểm web bằng Chrome MCP đúng profile (phiên Codex tiếp nhận chưa có công cụ Chrome MCP).
    **Đo trước đây:** ĐÃ ĐO trên web 19/11 (Claude, trình duyệt, khóa trường):
    - Mở app lần đầu ~4,5 giây; chuyển trạm 0,3–0,8 giây; bấm radio/kiểm tra câu khi đã có bài ~0,3–0,5 giây
      (đo bằng trạng thái "Running" của Streamlit — phương pháp thô, sàn ~0,3 giây).
