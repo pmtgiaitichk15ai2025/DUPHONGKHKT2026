@@ -11,6 +11,8 @@ SPACE_ID = "pmtgiaitichk15ai2025/gsai-giong-thay-tri"
 CHUNK_CHARS = 700        # VieNeu CPU: đoạn ngắn ổn định hơn và tiến độ đều
 _CACHE = {}
 CACHE_MAX = 40
+from services.audio_cache import AudioCache
+_AUDIO_CACHE = AudioCache(_CACHE, CACHE_MAX)
 
 
 def _client(token):
@@ -23,9 +25,13 @@ def synthesize_teacher_mp3(text, token, client_factory=_client, attempts=2, slee
     text = str(text or "").strip()
     if not text or not token:
         return b""
-    key = hashlib.sha256(text.encode("utf-8")).hexdigest()
-    if key in _CACHE:
-        return _CACHE[key]
+    # Scope reuse to the credential without retaining the raw token in the key.
+    key = hashlib.sha256((str(token) + "\0" + text).encode("utf-8")).hexdigest()
+    return _AUDIO_CACHE.get_or_create(
+        key, lambda: _synthesize(text, token, client_factory, attempts, sleep))
+
+
+def _synthesize(text, token, client_factory, attempts, sleep):
     from services.male_voice import split_chunks
     try:
         client = client_factory(token)
@@ -47,8 +53,4 @@ def synthesize_teacher_mp3(text, token, client_factory=_client, attempts=2, slee
         if not data:
             return b""
         out += data
-    result = bytes(out)
-    if len(_CACHE) >= CACHE_MAX:
-        _CACHE.pop(next(iter(_CACHE)))
-    _CACHE[key] = result
-    return result
+    return bytes(out)

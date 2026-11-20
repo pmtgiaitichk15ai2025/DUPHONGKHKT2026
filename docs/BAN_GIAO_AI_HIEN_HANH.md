@@ -28,14 +28,18 @@
 - **Giọng Thầy Trí**: mẫu `r5_106` (~90% giống), tốc độ chậm rãi ngắt theo dấu câu (đã duyệt). Space riêng tư HF `pmtgiaitichk15ai2025/gsai-giong-thay-tri`; mã Space + bản thu ở `E:\...\voice_space\` (KHÔNG đưa lên GitHub).
 - Thuật ngữ Anh–Việt chỉ in khi đã đối chiếu (≥2 nguồn) hoặc chủ dự án duyệt; tồn tại phải ghi rõ (`data/subject_glossary/`).
 
-## 3. Trạng thái hiện tại (19/11/2026)
+## 3. Trạng thái hiện tại (20/11/2026)
+
+- Codex 20/11: nền main `d269c75`, bản vá dùng chung `services/audio_cache.py` + `male_voice.py`/`teacher_voice.py`: gộp yêu cầu tạo cùng MP3 đang chạy, giữ độc lập nội dung/giọng/tốc độ, không lưu lỗi, không thêm lượt AI/retry. 16/16 test tập trung đạt; hồi quy toàn bộ **1227 test OK (2 skipped)**, 4179,066 giây, log `qa_evidence/regression_full28_20261120.log` tại thư mục dự án gốc. Đang commit/push; chưa CI bản mới/Cloud, chưa đo hiệu quả web. Không gọi AI/TTS thật.
+- Tham chiếu lịch sử bên dưới chưa được xác minh lại trong ca này:
 
 - main `788e8a5`; mã gần nhất `2290744` hồi quy **1223/1223 OK**, đã kiểm web: Trạm 4 khung khẩn cấp mới, gia sư Trạm 1 văn phong Nam Bộ, giọng Thầy Trí/nam, phiếu Sen Việt song ngữ, học liệu tiếng Anh.
 - Secrets trên Cloud đã có: khóa Gemini chung, `ADMIN_PASS`, `HF_TOKEN`. CHƯA có `SCHOOL_SUPPORT_CONTACTS`.
 
 ## 4. Việc tiếp theo (theo thứ tự ưu tiên)
 
-1. **Giảm độ trễ** — ĐÃ ĐO trên web 19/11 (Claude, trình duyệt, khóa trường):
+1. **Giảm độ trễ** — bản vá gộp tạo MP3 trùng đã hồi quy đạt; tiếp phát hành, CI và kiểm web.
+   **Đo trước đây:** ĐÃ ĐO trên web 19/11 (Claude, trình duyệt, khóa trường):
    - Mở app lần đầu ~4,5 giây; chuyển trạm 0,3–0,8 giây; bấm radio/kiểm tra câu khi đã có bài ~0,3–0,5 giây
      (đo bằng trạng thái "Running" của Streamlit — phương pháp thô, sàn ~0,3 giây).
    - **Chậm thật:** AI soạn bài Nguyên hàm **36 giây**; giọng Thầy Trí cả bài **~4 phút** (câu ngắn ~20 giây);
@@ -50,6 +54,7 @@
 
 ## 5. Tồn tại đã biết
 
+- Chưa đo hiệu quả bản vá gộp tạo MP3 trên web; chỉ giảm lượt tạo trùng đồng thời, không giảm thời gian tổng hợp một bài mới.
 - Giọng Thầy Trí trên CPU: bài dài 1–4 phút lần đầu (có nhớ sẵn). Giọng nam (edge-tts) là đường không chính thức, có lúc từ chối.
 - Bảng thuật ngữ chưa đối chiếu từng trang SGK (kho sách ở ổ F bị cấm).
 - Lỗi trong mẫu infographic Bài 5 (tác giả NCE): Luyện tập 1 huyết áp P'(5) = −250/169 ≈ −1,479 (mẫu ghi −0,740).
