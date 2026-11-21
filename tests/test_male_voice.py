@@ -41,8 +41,8 @@ class NarratorWiring(unittest.TestCase):
     def test_app_registers_male_source_and_button(self):
         import pathlib
         src = pathlib.Path(__file__).resolve().parents[1].joinpath("app.py").read_text(encoding="utf-8")
-        self.assertIn("if (config.male) sources.set('nam_bo', config.male);", src)
-        self.assertIn("from services.male_voice import synthesize_male_mp3", src)
+        self.assertNotIn("data-selfhost-voice=\"nam_bo\"", src)
+        self.assertNotIn("from services.male_voice import synthesize_male_mp3", src)
 
 
 class RunsInsideStreamlitEventLoop(unittest.TestCase):
@@ -120,7 +120,7 @@ class TeacherVoice(unittest.TestCase):
         import pathlib
         src = pathlib.Path(__file__).resolve().parents[1].joinpath("app.py").read_text(encoding="utf-8")
         self.assertIn('get_secret("HF_TOKEN", "")', src)
-        self.assertIn("if (config.teacher) sources.set('thay_tri', config.teacher);", src)
+        self.assertIn("VOICE_REVISION, synthesize_teacher_mp3", src)
         self.assertNotIn('"token": _teacher_token', src)
 
 

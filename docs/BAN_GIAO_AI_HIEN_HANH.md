@@ -25,20 +25,22 @@
 - **Trạm 4**: nơi học sinh gửi niềm tin — thấu cảm, ấm áp, không bao giờ lạnh lùng (`services/school_counseling.py`: sứ mệnh trạm, chế độ sang chấn, khung khẩn cấp cố định ấm áp; danh bạ trường `services/school_contacts.py`).
 - **Lời thầy văn phong Nam Bộ**, kiến thức giữ chuẩn SGK (`services/voice_style.py`).
 - **Lịch sử, GDKT&PL, Ngữ văn, GDCD không sinh bản song ngữ** (nhạy cảm chính trị – pháp lý; chỉ mở khi giáo viên bộ môn duyệt).
-- **Giọng Thầy Trí**: mẫu `r5_106` (~90% giống), tốc độ chậm rãi ngắt theo dấu câu (đã duyệt). Space riêng tư HF `pmtgiaitichk15ai2025/gsai-giong-thay-tri`; mã Space + bản thu ở `E:\...\voice_space\` (KHÔNG đưa lên GitHub).
+- **Giọng Thầy Trí**: quyết định mới21/11 dùng duy nhất mẫu WAV mới của owner, thay mẫu r5_106 cũ; độ giống mẫu mới chưa được owner xác nhận. Space riêng tư HF `pmtgiaitichk15ai2025/gsai-giong-thay-tri`; mã Space + bản thu ở `E:\...\voice_space\` (KHÔNG đưa lên GitHub).
 - Thuật ngữ Anh–Việt chỉ in khi đã đối chiếu (≥2 nguồn) hoặc chủ dự án duyệt; tồn tại phải ghi rõ (`data/subject_glossary/`).
 
-## 3. Trạng thái hiện tại (20/11/2026)
+## 3. Trạng thái hiện tại (21/11/2026 — chuẩn bị phát hành)
 
-- Ưu tiên mới owner: điều tra Văn Android không chốt nhân sinh. Đã tái hiện thiếu nhận diện một số cách nói tự nhiên ở hàm chung Trạm1–3; 20 test cũ đạt nhưng chưa phủ ca mới. Đã nhận ảnh: “Dạ! Em đã thực sự thông suốt ạ!”; xác nhận detector bỏ sót. Đã vá local hàm chung; 23 test liên quan đạt, gồm đưa nguyên câu qua nhánh thật trên 65 môn/lớp; Hồi quy toàn bộ đã kết thúc: 1230 tests, OK (skipped=2), 2999,270s; log regression_full29_20261120.log. Ngày 21/11 đang phát hành bản closure; SHA/CI mới nhất xem đầu checkpoint. Bằng chứng/chi tiết/bước tiếp ở đầu qa_evidence/HANDOFF_CURRENT.md tại thư mục dự án gốc.
-
-- Codex 20/11: nền main `d269c75`, bản vá dùng chung `services/audio_cache.py` + `male_voice.py`/`teacher_voice.py`: gộp yêu cầu tạo cùng MP3 đang chạy, giữ độc lập nội dung/giọng/tốc độ, không lưu lỗi, không thêm lượt AI/retry. 16/16 test tập trung đạt; hồi quy toàn bộ **1227 test OK (2 skipped)**, 4179,066 giây, log `qa_evidence/regression_full28_20261120.log` tại thư mục dự án gốc. Đã commit/push mã `356fc4c` lên main; CI mã: run `44718927851`. Kết quả CI/Cloud và SHA main sau cập nhật tài liệu: đọc đầu `qa_evidence/HANDOFF_CURRENT.md` tại thư mục dự án gốc. Chưa đo hiệu quả web. Không gọi AI/TTS thật.
-- Tham chiếu lịch sử bên dưới chưa được xác minh lại trong ca này:
-
-- main `788e8a5`; mã gần nhất `2290744` hồi quy **1223/1223 OK**, đã kiểm web: Trạm 4 khung khẩn cấp mới, gia sư Trạm 1 văn phong Nam Bộ, giọng Thầy Trí/nam, phiếu Sen Việt song ngữ, học liệu tiếng Anh.
-- Secrets trên Cloud đã có: khóa Gemini chung, `ADMIN_PASS`, `HF_TOKEN`. CHƯA có `SCHOOL_SUPPORT_CONTACTS`.
+- Owner yêu cầu push main. Mã nền b7f6afe, đợt này: duy nhất giọng mẫu21/11 ở Trạm1–4; revision cache; cache tư vấn riêng phiên + dọn file tạm; sửa test đồ thị làm ô nhiễm module Streamlit; mặc định ẩn bảng đối soát Trạm3, giữ nguyên mã/dữ liệu.
+- Đã kiểm Chrome MCP local: Trạm3 phát MP3 104.291s, currentTime tăng9.162545/pausedfalse/errornull; Trạm4 33.2505s, currentTime5.137408/pausedfalse/errornull. T1/2 có bằng chứng phát trước đó. Không suy đạt Android/iOS hoặc owner đã duyệt độ giống mẫu. Chọn đoạn vẫn cần kiểm riêng.
+- Full33:1238 tests OK(skipped2), trước bản cache tư vấn và cờẩn. Full34 sau cache bịMemoryError và máy restart, KHÔNG đạt/không còn chạy. Không chạy lại monolithic y hệt chỉ để gặp lại lỗi; GitHub CI sẽ kiểm toàn suite đúng commit đợt mới, phải lấy kết quả trước kết luận phát hành đạt CI.
+- 29 focused cuối đã đạt; trước push kiểm lại focused + AppTestgraded bảngẩn, logs VOICE_RELEASE_FOCUSED_20261121.log và T3_AUDIT_HIDDEN_APPTEST_20261121.log tại rootQA. Kết quả/commit/push/CI mới nhất ở đầu root qa_evidence/HANDOFF_CURRENT.md. Không nhận đang chạy nếu không có process.
+- Bảng đối soát chỉ bật lại khi owner yêu cầu bằng Secrets SHOW_TRAM3_SOURCE_AUDIT="true". Local fileWatcherType=none, sửa mã cần restart để nạp. Không commit secrets/cache/audio/DB. Private HF Space chỉ cập nhật code app.py commit86666b4b32ae2ccba1096ae2f4537a1ab01dc3e6; giữ private, cùng mẫuDEFAULT, tênfileprivateUUID/TTL600s khi lockrảnh; không claim zero-retention hoặc đã dọn cache cũ.
+- Closure intent đã ở mainb7f6afe/CI đạt. Không mở lại ca đã đóng vì nhật ký cũ. Không có Gemini/TTS pending. ChromeMCP trực tiếp đã hoạt động, pageId phải list lại sau restart; chỉ tablocal ownerủyquyền, không tabriêng.
+- Còn mở: Cloud nạp đúngcommit; kiểm đoạn chọn/browser di động/độ giống owner; tốc độ TTS lần đầu/streaming chưa triển khai; sốcâuUI1/0/0 nhưng nhận12/4/6 chưa rõ automationstate hay app; câu trảlời dài hơn yêu cầu; thuậtngữ/kho sách/phiếu lịch sử giữ phạmvi cũ. Không tuyên bố tấtcảmôn/lớp họcthuật đã nghiệmthu. Yêu cầu “hoàn thành mục mở” không tự cho phép trảphí, tăngAI/retry hoặc bịa nguồn.
 
 ## 4. Việc tiếp theo (theo thứ tự ưu tiên)
+
+- Owner 21/11: hoàn tất một giọng đọc Trạm1–4, hồi quy toàn bộ, phát hành và kiểm thực; cập nhật nhật ký sau mốc. Không đưa WAV vào repo public, không fallback giọng khác.
 
 0. Owner 20/11 ưu tiên điều tra và xử lý closure nhân sinh/chuyển trạm dùng chung; không kết luận mọi môn/lớp đều lỗi hoặc Android là nguyên nhân. Đã khóa ca ảnh Android, vá local và qua hồi quy toàn bộ; tiếp phát hành/CI/Cloud. Không thêm API/retry; không tự chuyển màn hình hoặc nhét bài nhân sinh cố định. Chưa biết lớp của ca ảnh, cơ chế dùng chung đã kiểm 65 môn/lớp.
 
@@ -54,9 +56,11 @@
 2. Chủ dự án hỏi ý từng người rồi tự dán `SCHOOL_SUPPORT_CONTACTS` (mẫu trong `services/school_contacts.py`).
 3. Chủ dự án báo giọng nam "không phát": web thử lại phát được; chờ mô tả (thông báo gì, nút nào, trình duyệt nào).
 4. Thuật ngữ khối 11, 10 cho Lý/Hóa/Sinh/Tin/Công nghệ/Địa (quy trình như khối 12: Claude soạn → Wikipedia vi↔en hai chiều → chủ dự án duyệt).
-5. Chưa kiểm web: thanh đọc gia sư Trạm 3; phiếu Sen Việt môn Lịch sử (đã có test chặn 2 lớp).
+5. Thanh đọc Trạm3 đã kiểm phát Chrome. Phiếu Sen Việt môn Lịch sử vẫn cần bằng chứng web (đã có test chặn2lớp).
 
 ## 5. Tồn tại đã biết
+
+- Single-voice đã kiểm phát Chrome Trạm1–4; Android/iOS, chọn đoạn qua component và độ giống mẫu chưa xác nhận. Space private đã đổi mẫu nhưng Cloud app cũ vẫn có thể giữ MP3 cũ đến khi nạp revision mới.
 
 - Detector bỏ sót “Em đã hiểu rồi ạ”, “Em ko hỏi gì thêm”, “Em không hỏi gì nữa”; dùng chung cả 3 trạm. Closure Trạm1 chưa kiểm đủ nội dung nhân sinh trước ghi nhận, chuyển trạm hiện là lời mời trong prompt. Đã tái hiện đúng câu trong ảnh, sửa và đạt full; chờ phát hành/CI/Cloud; chưa nghiệm thu phản hồi AI thật. Hai CI của đợt audio 44718927851/44719623078 đã success.
 

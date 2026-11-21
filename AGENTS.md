@@ -1,3 +1,6 @@
+## Owner 21/11/2026 — một giọng đọc duy nhất Trạm 1–4
+Chủ dự án chọn mẫu WAV mới tmpu5f1vlug.wav (bản riêng tư voice_space/reference_owner_20261121.wav). Đọc nội dung mọi môn/lớp ở Trạm1–4 chỉ dùng giọng mẫu này; không giọng nữ/nam/trình duyệt dự phòng. Quyết định này thay yêu cầu lịch sử giữ giọng nữ. Không đưa bản thu lên GitHub công khai; Space HF giữ private. Mỗi thay mẫu phải đổi VOICE_REVISION để không tái dùng MP3 cũ. Không tuyên bố giống mẫu hoặc đạt mọi thiết bị khi chưa nghe/kiểm thực.
+
 ## 🔁 BÀN GIAO GIỮA CÁC AI — ĐỌC TRƯỚC TIÊN (owner 19/11/2026)
 
 Mọi AI (Claude, Codex, Cursor, …) vào dự án: đọc **`docs/BAN_GIAO_AI_HIEN_HANH.md`** trước, rồi các luật dưới đây.

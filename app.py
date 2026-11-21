@@ -8347,628 +8347,49 @@ def generate_pedagogical_tts_audio_bytes(clean_text: str, lang: str = "vi") -> b
 
 
 def create_pedagogical_tts_component(raw_text: str, subject_name: str, comp_key: str):
-
-    """Trình phát Thuyết minh Bài giảng Chuẩn Sư phạm & Voice Engine 2 luồng Nam Bộ / US."""
-
-    # Tiêm Bộ máy Phát âm Sư phạm 2 Luồng Toàn Cục bằng st.html (không dùng iframe, bắt dblclick/selection 100%)
-
-    global_voice_script = r"""
-
-    <script>
-
-    (function() {
-
-        if (window.__gsai_pedagogical_voice_ready) return;
-
-        window.__gsai_pedagogical_voice_ready = true;
-
-
-
-        let voicesList = [];
-
-        function updateVoices() {
-
-            if (!window.speechSynthesis) return;
-
-            voicesList = window.speechSynthesis.getVoices();
-
-        }
-
-        updateVoices();
-
-        if (window.speechSynthesis) {
-
-            window.speechSynthesis.onvoiceschanged = updateVoices;
-
-        }
-
-
-
-        // 1. Giọng Tiếng Anh bản ngữ US (Jenny / Guy / Google US)
-
-        window.__getNativeEnglishVoice = function() {
-
-            return voicesList.find(v => v.lang.startsWith('en') && (
-
-                v.name.includes('Jenny') || v.name.includes('Guy') || v.name.includes('Natural') ||
-
-                v.name.includes('Google') || v.name.includes('US') || v.name.includes('Samantha') || v.name.includes('Aria')
-
-            )) || voicesList.find(v => v.lang.startsWith('en')) || null;
-
-        };
-
-
-
-        // 2. Giọng Tiếng Việt Nam Bộ chuẩn sư phạm (Microsoft NamMinh / HoaiMy / Google Tiếng Việt)
-
-        window.__getSouthernVietnameseVoice = function() {
-
-            return voicesList.find(v => v.name.includes('NamMinh') || v.name.includes('Nam Minh')) ||
-
-                   voicesList.find(v => v.name.includes('HoaiMy') || v.name.includes('Hoai My')) ||
-
-                   voicesList.find(v => v.lang.includes('vi') && v.name.includes('Natural')) ||
-
-                   voicesList.find(v => v.lang.includes('vi') || v.lang.startsWith('vi')) || null;
-
-        };
-
-
-
-        // Hàm phát âm Sư phạm 2 luồng thông minh
-
-        window.__speakPedagogicalText = function(rawText, forceLang) {
-
-            if (!rawText || !window.speechSynthesis) return;
-
-            let text = String(rawText).trim();
-
-            // Lọc các ký tự bullet point, định dạng markdown
-
-            text = text.replace(/^[•\-\*]\s*/, '').replace(/[*#`_~\[\]]/g, ' ').trim();
-
-            if (!text || text.length < 2) return;
-
-
-
-            // Kiểm tra dấu tiếng Việt để phân luồng
-
-            const viPattern = /[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴĐ]/;
-
-            const isVietnamese = viPattern.test(text) || forceLang === 'vi';
-
-
-
-            try {
-
-                window.speechSynthesis.cancel();
-
-                const utter = new SpeechSynthesisUtterance(text);
-
-                if (isVietnamese) {
-
-                    // Luồng 1: Tiếng Việt giọng Nam Bộ chuẩn mực sư phạm (nhịp 0.90 tròn vành rõ chữ)
-
-                    utter.lang = 'vi-VN';
-
-                    utter.rate = 0.90;
-
-                    utter.pitch = 1.0;
-
-                    const vVoice = window.__getSouthernVietnameseVoice();
-
-                    if (vVoice) utter.voice = vVoice;
-
-                } else {
-
-                    // Luồng 2: Tiếng Anh bản ngữ chuẩn US (nhịp 0.88 chuẩn trọng âm)
-
-                    utter.lang = 'en-US';
-
-                    utter.rate = 0.88;
-
-                    utter.pitch = 1.0;
-
-                    const eVoice = window.__getNativeEnglishVoice();
-
-                    if (eVoice) utter.voice = eVoice;
-
-                }
-
-                window.speechSynthesis.speak(utter);
-
-            } catch(e) {
-
-                console.warn("TTS Error:", e);
-
-            }
-
-        };
-
-
-
-        window.__stopPedagogicalText = function() {
-
-            if (window.speechSynthesis) window.speechSynthesis.cancel();
-
-        };
-
-
-
-        // Lắng nghe sự kiện bôi đen (selection) & double-click trên TOÀN BỘ TRANG (document)
-
-        let lastSpoken = "";
-
-        let lastTime = 0;
-
-        function handleSelectionTrigger(e) {
-
-            try {
-
-                const sel = window.getSelection();
-
-                if (!sel) return;
-
-                const str = sel.toString().trim();
-
-                if (!str || str.length < 2 || str.length > 500) return;
-
-                const now = Date.now();
-
-                if (str.toLowerCase() === lastSpoken.toLowerCase() && (now - lastTime) < 1200) return;
-
-                lastSpoken = str;
-
-                lastTime = now;
-
-                window.__speakPedagogicalText(str);
-
-            } catch(err) {}
-
-        }
-
-
-
-        document.addEventListener('mouseup', handleSelectionTrigger, true);
-
-        document.addEventListener('touchend', handleSelectionTrigger, true);
-
-        document.addEventListener('dblclick', handleSelectionTrigger, true);
-
-    })();
-
-    </script>
-
-    """
-
-    st.html(global_voice_script, unsafe_allow_javascript=True)
-
-
-
-    if not raw_text or len(raw_text.strip()) < 10:
-
-        return
-
-
-
-    # Xử lý nội dung thuyết minh và chuẩn hóa ngắt nghỉ sư phạm
-
-    clean_speech = raw_text
-
-
-
-    # Lọc bỏ phần lưu ý hành chính về đợt tái bản SGK khỏi giọng đọc sư phạm
-
-    clean_speech = re.sub(r'(?i)(?:⚠️\s*)?Lưu ý[\s\S]*?(?:nhé!|nhé\.|GDPT 2018[\.\)]|trực tiếp nhé!)\s*', '', clean_speech)
-
-    clean_speech = re.sub(r'(?i)^[^\n]*tái bản[^\n]*\n+', '', clean_speech)
-
-    clean_speech = re.sub(r'(?i)^[^\n]*chênh lệch số trang[^\n]*\n+', '', clean_speech)
-
-    # Owner 19/11/2026: mọi giọng tạo trên máy chủ (nữ, nam, Thầy Trí) đọc công thức bằng bộ đọc khoa học chuẩn,
-    # giống hệt bản trình duyệt (assets/scientific_speech_reader.js; test so sánh tests/test_scientific_speech_parity.py).
+    """One owner-selected voice for reading in stations 1–4, on request only."""
     from services.scientific_speech import speech_text as _sci_speech
-    clean_speech = _sci_speech(clean_speech, subject_name)
-
-
-
-    # Phiên âm chuẩn cho Véctơ (từ gốc đến ngọn, có phẩy, đọc rõ từng chữ cái, số 0)
-
-    def _rep_vector_speech(m):
-
-        target = m.group(2).strip()
-
-        if target == '0':
-
-            return ' véc tơ không '
-
-        has_prime = "'" in target
-
-        raw = target.replace("'", "").strip()
-
-        spaced = ' '.join(list(raw))
-
-        if has_prime:
-
-            spaced += ' phẩy'
-
-        return f' véc tơ {spaced} '
-
-
-
-    clean_speech = re.sub(r'\\(overrightarrow|vec)\{([^}]+)\}', _rep_vector_speech, clean_speech)
-
-    clean_speech = re.sub(r'\\(overrightarrow|vec)\s+([a-zA-Z0-9\']+)', _rep_vector_speech, clean_speech)
-
-
-
-    # Phân số, căn thức, tích phân, giới hạn, lũy thừa
-
-    clean_speech = re.sub(r'\\(d)?frac\{([^}]+)\}\{([^}]+)\}', r' \2 phần \3 ', clean_speech)
-
-    clean_speech = re.sub(r'\\sqrt\[(\d+)\]\{([^}]+)\}', r' căn bậc \1 của \2 ', clean_speech)
-
-    clean_speech = re.sub(r'\\sqrt\{([^}]+)\}', r' căn bậc hai của \1 ', clean_speech)
-
-    clean_speech = re.sub(r'\\int_\{([^}]+)\}\^\{([^}]+)\}', r' tích phân từ \1 đến \2 ', clean_speech)
-
-    clean_speech = re.sub(r'\\int', ' tích phân ', clean_speech)
-
-    clean_speech = re.sub(r'\\lim_\{([^}]+)\}', r' giới hạn khi \1 ', clean_speech)
-
-    clean_speech = re.sub(r'\\lim', ' giới hạn ', clean_speech)
-
-    clean_speech = re.sub(r'\^2', ' bình phương ', clean_speech)
-
-    clean_speech = re.sub(r'\^3', ' lập phương ', clean_speech)
-
-    clean_speech = re.sub(r'\^\{([^}]+)\}', r' mũ \1 ', clean_speech)
-
-    clean_speech = re.sub(r'\^([a-zA-Z0-9])', r' mũ \1 ', clean_speech)
-
-    clean_speech = re.sub(r'\\Delta', ' Đen-ta ', clean_speech)
-
-    clean_speech = re.sub(r'\\alpha', ' An-pha ', clean_speech)
-
-    clean_speech = re.sub(r'\\beta', ' Bê-ta ', clean_speech)
-
-    clean_speech = re.sub(r'\\pi', ' Pi ', clean_speech)
-
-    clean_speech = re.sub(r'\\infty', ' vô cực ', clean_speech)
-
-    clean_speech = re.sub(r'\\le|\\leq', ' nhỏ hơn hoặc bằng ', clean_speech)
-
-    clean_speech = re.sub(r'\\ge|\\geq', ' lớn hơn hoặc bằng ', clean_speech)
-
-    clean_speech = re.sub(r'\\neq', ' khác ', clean_speech)
-
-    clean_speech = re.sub(r'\\approx', ' xấp xỉ ', clean_speech)
-
-    clean_speech = re.sub(r'\\in', ' thuộc ', clean_speech)
-
-    clean_speech = re.sub(r'\\notin', ' không thuộc ', clean_speech)
-
-    clean_speech = re.sub(r'\\subset', ' tập con của ', clean_speech)
-
-    clean_speech = re.sub(r'\\forall', ' với mọi ', clean_speech)
-
-    clean_speech = re.sub(r'\\exists', ' tồn tại ', clean_speech)
-
-    clean_speech = re.sub(r'\\pm', ' cộng trừ ', clean_speech)
-
-    clean_speech = re.sub(r'\\cdot|\\times', ' nhân ', clean_speech)
-
-    clean_speech = re.sub(r'\\to|\\rightarrow', ' tiến tới ', clean_speech)
-
-    clean_speech = re.sub(r'\\Rightarrow', ' suy ra ', clean_speech)
-
-    clean_speech = re.sub(r'\\Leftrightarrow', ' tương đương ', clean_speech)
-
-    clean_speech = re.sub(r'\bOxyz\b', ' Ô ích y dét ', clean_speech)
-
-    clean_speech = re.sub(r'\bOxy\b', ' Ô ích y ', clean_speech)
-
-    # 1. Lọc bỏ 100% toàn bộ bảng Markdown (| ... |) và khối mã khỏi giọng đọc để không đọc thành ký tự gạch đứng
-    clean_speech = re.sub(r'(?m)^[ \t]*\|.*\|.*(?:\r?\n|$)', ' ', clean_speech)
-    clean_speech = re.sub(r'```[\s\S]*?```', ' ', clean_speech)
-    clean_speech = re.sub(r'\|[ \t]*[-:]+[ \t]*\|', ' ', clean_speech)
-
-    # 2. Chuyển đổi các ký hiệu đồ họa giải tích và mũi tên sang lời nói tự nhiên sư phạm
-    clean_speech = re.sub(r'\\+(?:nearrow|uparrow)', ' đồng biến đi lên ', clean_speech)
-    clean_speech = re.sub(r'\\+(?:searrow|downarrow)', ' nghịch biến đi xuống ', clean_speech)
-    clean_speech = clean_speech.replace('↗', ' đồng biến đi lên ').replace('↘', ' nghịch biến đi xuống ')
-    clean_speech = re.sub(r'\\left|\\right|\\displaystyle|\\limits', ' ', clean_speech)
-    clean_speech = re.sub(r'\\mathbb\{R\}', ' tập số thực R ', clean_speech)
-    clean_speech = re.sub(r'\\setminus', ' loại trừ ', clean_speech)
-    clean_speech = re.sub(r'\|\s*\||║', ' không xác định ', clean_speech)
-    clean_speech = re.sub(r'\by\'\b|\bf\'\b', ' đạo hàm y phẩy ', clean_speech)
-    clean_speech = re.sub(r'\bx_1\b|\bx1\b', ' x một ', clean_speech)
-    clean_speech = re.sub(r'\bx_2\b|\bx2\b', ' x hai ', clean_speech)
-    clean_speech = re.sub(r'\bx_0\b|\bx0\b', ' x không ', clean_speech)
-    clean_speech = re.sub(r'\by\(x_1\)\b|\by\(x1\)\b', ' y tại x một ', clean_speech)
-    clean_speech = re.sub(r'\by\(x_2\)\b|\by\(x2\)\b', ' y tại x hai ', clean_speech)
-    clean_speech = re.sub(r'-\s*\\infty|-\s*inf\b', ' âm vô cực ', clean_speech)
-    clean_speech = re.sub(r'\+\s*\\infty|\+\s*inf\b', ' dương vô cực ', clean_speech)
-    clean_speech = re.sub(r'\\infty|\binf\b', ' vô cực ', clean_speech)
-    clean_speech = re.sub(r'\bad\s*-\s*bc\b', ' a d trừ b c ', clean_speech)
-    clean_speech = re.sub(r'\bTCĐ\b', ' Tiệm cận đứng ', clean_speech)
-    clean_speech = re.sub(r'\bTCN\b', ' Tiệm cận ngang ', clean_speech)
-    clean_speech = re.sub(r'\bTCX\b', ' Tiệm cận xiên ', clean_speech)
-    clean_speech = re.sub(r'\bCĐ\b', ' Cực đại ', clean_speech)
-    clean_speech = re.sub(r'\bCT\b', ' Cực tiểu ', clean_speech)
-
-    clean_speech = re.sub(r'[*#`_~\(\)\$\\{}]', ' ', clean_speech)
-    clean_speech = re.sub(r'\s+', ' ', clean_speech).strip()
-
-    lang_code = "en" if subject_name == "Tiếng Anh" else "vi"
-    audio_data = generate_pedagogical_tts_audio_bytes(clean_speech, lang=lang_code)
-    # Giọng nam (owner 18/11/2026): MP3 tạo trên máy chủ khi người học bấm nút, phát được mọi thiết bị.
+    from services.teacher_voice import VOICE_REVISION, synthesize_teacher_mp3
     import hashlib
-    _male_key = hashlib.sha1(clean_speech.encode("utf-8")).hexdigest()[:16]
-    _male_store = st.session_state.setdefault("male_voice_mp3", {})
-    _male_mp3 = _male_store.get(_male_key, b"") if lang_code == "vi" else b""
-    # Giọng Thầy Trí (owner chọn mẫu r5_106 ngày 19/11/2026): Space riêng tư HF, token ở Secrets HF_TOKEN.
-    _teacher_store = st.session_state.setdefault("teacher_voice_mp3", {})
-    _teacher_mp3 = _teacher_store.get(_male_key, b"") if lang_code == "vi" else b""
-    _teacher_token = get_secret("HF_TOKEN", "") if lang_code == "vi" else ""
 
-    # Render giao diện Thuyết minh chuẩn sư phạm Nam Bộ: Có cả Nút giọng Nam Bộ trực tiếp và Player MP3
-    safe_clean_speech = clean_speech.replace('</script>', '').replace('<script>', '')
-    escaped_speech_js = json.dumps(safe_clean_speech, ensure_ascii=False)
-
-    player_title = "ENGLISH LESSON AUDIO" if subject_name == "Tiếng Anh" else "THUYẾT MINH BÀI GIẢNG"
-    sub_title = "Google TTS • English audio" if subject_name == "Tiếng Anh" else "Chọn giọng đọc • Dùng chung một thanh điều khiển"
-    current_voice_label = "Nghe bài học" if lang_code == "en" else "Nghe giọng nữ hiện tại"
-    voice_toggle_display = "flex" if lang_code == "en" else "none"
-    pending_voice_controls = "" if lang_code == "en" else '''
-        <div style="width:100%;min-width:0">
-        <div style="display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;max-width:100%;padding-bottom:4px" aria-label="Chọn giọng đọc">
-            <button type="button" data-selfhost-voice="female" title="Giọng tổng hợp hiện tại"
-                style="flex:0 0 auto;white-space:nowrap;padding:6px 16px;border-radius:20px;border:1px solid #38bdf8;color:#cbd5e1;background:#334155">▶ Giọng nữ</button>
-            <button type="button" data-selfhost-voice="thay_tri" disabled title="Giọng Thầy Trí: đang thiết lập bộ giọng miễn phí, tự chạy"
-                style="flex:0 0 auto;white-space:nowrap;padding:6px 16px;border-radius:20px;border:1px solid #38bdf8;color:#cbd5e1;background:#334155">▶ Giọng Thầy Trí</button>
-            <button type="button" data-selfhost-voice="nam_bo" disabled title="Giọng nam tổng hợp"
-                style="flex:0 0 auto;white-space:nowrap;padding:6px 16px;border-radius:20px;border:1px solid #38bdf8;color:#cbd5e1;background:#334155">▶ Giọng nam</button>
-        </div>
-            <div id="selfhost_voice_status" role="status" style="color:#94a3b8;font-size:11px;margin-top:4px">Hai giọng đang hiệu chỉnh</div>
-        </div>'''
-
-    b64_source = ""
+    clean_speech = _sci_speech(str(raw_text or ""), subject_name)
+    if not clean_speech.strip():
+        return
+    from services.owner_voice_selection import selected_text
+    selection = selected_text(key=f"owner_selection_{comp_key}")
+    selection_request = None
+    if isinstance(selection, dict) and isinstance(selection.get("text"), str):
+        selection_request = selection.get("request")
+        if selection_request and st.session_state.get(f"owner_selection_seen_{comp_key}") != selection_request:
+            clean_speech = _sci_speech(selection["text"], subject_name)
+            st.session_state[f"owner_selection_seen_{comp_key}"] = selection_request
+        else:
+            selection_request = None
+    # Do not reuse MP3s made with the previously selected voice.
+    audio_key = hashlib.sha256((VOICE_REVISION + "\0" + clean_speech).encode("utf-8")).hexdigest()
+    private_audio = comp_key.startswith("t4_msg_")
+    store = st.session_state.setdefault("owner_counsel_voice_mp3" if private_audio else "owner_voice_mp3", {})
+    audio_data = store.get(audio_key, b"")
+    token = get_secret("HF_TOKEN", "")
+    if not audio_data:
+        read_clicked = st.button("🔊 Đọc nội dung bằng giọng Thầy Trí", key=f"teacher_voice_{comp_key}",
+                     disabled=not bool(token), help="Dùng duy nhất giọng từ mẫu thầy đã chọn.")
+        if token and (read_clicked or selection_request):
+            with st.spinner("Đang tạo giọng đọc… nội dung dài có thể cần vài phút."):
+                if private_audio:
+                    audio_data = synthesize_teacher_mp3(clean_speech, token, use_shared_cache=False)
+                else:
+                    audio_data = synthesize_teacher_mp3(clean_speech, token)
+            if audio_data:
+                if len(store) >= 40:
+                    store.pop(next(iter(store)))
+                store[audio_key] = audio_data
+            else:
+                st.warning("Giọng đọc đang bận hoặc chưa kết nối được. Em có thể đọc nội dung và thử lại sau.")
+        if not token:
+            st.caption("Giọng đọc chưa được kết nối. Thầy cô cần cấu hình dịch vụ giọng đọc.")
     if audio_data:
-        b64_audio = base64.b64encode(audio_data).decode('ascii')
-        b64_source = f'<audio id="audio_player_{comp_key}" controls style="width: 100%; height: 38px; border-radius: 20px; outline: none; margin-top: 8px;"><source src="data:audio/mp3;base64,{b64_audio}" type="audio/mp3"></audio>'
-
-    if lang_code == "vi" and not b64_source:
-        b64_source = f'<audio id="audio_player_{comp_key}" controls preload="none" style="width:100%;height:38px;margin-top:8px"></audio>'
-
-    tts_ui_html = f"""
-    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 4px 0 10px 0; background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border: 1.5px solid #0284c7; border-radius: 12px; padding: 12px 16px; box-shadow: 0 4px 14px rgba(2,132,199,0.25);">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 20px;">🎙️</span>
-                <div>
-                    <span style="color: #38bdf8; font-weight: 800; font-size: 13.5px;">{player_title}</span>
-                    <div style="color: #94a3b8; font-size: 11px;">{sub_title}</div>
-                </div>
-            </div>
-            {pending_voice_controls}
-            <button id="btn_tts_direct_{comp_key}" type="button" style="
-                background: linear-gradient(135deg, #0284c7, #0369a1);
-                color: #ffffff;
-                border: 1px solid #38bdf8;
-                padding: 6px 16px;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: 700;
-                cursor: pointer;
-                display: {voice_toggle_display};
-                align-items: center;
-                gap: 6px;
-                box-shadow: 0 2px 10px rgba(56, 189, 248, 0.3);
-            ">
-                <span id="btn_tts_icon_{comp_key}">▶️</span> <span id="btn_tts_txt_{comp_key}">{current_voice_label}</span>
-            </button>
-        </div>
-        {b64_source}
-    </div>
-    <script>
-    (function() {{
-        var btn = document.getElementById('btn_tts_direct_{comp_key}');
-        if (!btn) return;
-        var textToRead = {escaped_speech_js};
-        var langMode = '{lang_code}';
-        var isSpeaking = false;
-
-        btn.onclick = function() {{
-            var aud = document.getElementById('audio_player_{comp_key}');
-            var btnTxt = document.getElementById('btn_tts_txt_{comp_key}');
-            var btnIcon = document.getElementById('btn_tts_icon_{comp_key}');
-            if (aud) {{
-                if (aud.paused) {{
-                    var p = aud.play();
-                    if (btnTxt) btnTxt.innerText = 'Tạm dừng thuyết minh';
-                    if (btnIcon) btnIcon.innerText = '⏸️';
-                    if (p !== undefined) {{
-                        p.catch(function(e) {{
-                            console.warn('Audio play blocked, fallback synthesis:', e);
-                            if (window.speechSynthesis) {{
-                                var u = new SpeechSynthesisUtterance(textToRead);
-                                u.lang = (langMode === 'en' ? 'en-US' : 'vi-VN');
-                                u.rate = 0.88;
-                                window.speechSynthesis.speak(u);
-                            }}
-                        }});
-                    }}
-                    aud.onended = function() {{
-                        if (btnTxt) btnTxt.innerText = 'Nghe bài học';
-                        if (btnIcon) btnIcon.innerText = '▶️';
-                    }};
-                }} else {{
-                    aud.pause();
-                    if (btnTxt) btnTxt.innerText = 'Nghe bài học';
-                    if (btnIcon) btnIcon.innerText = '▶️';
-                }}
-            }} else if (window.speechSynthesis) {{
-                if (isSpeaking || window.speechSynthesis.speaking) {{
-                    window.speechSynthesis.cancel();
-                    isSpeaking = false;
-                    if (btnTxt) btnTxt.innerText = 'Nghe bài học';
-                    if (btnIcon) btnIcon.innerText = '▶️';
-                }} else {{
-                    isSpeaking = true;
-                    if (btnTxt) btnTxt.innerText = 'Tạm dừng thuyết minh';
-                    if (btnIcon) btnIcon.innerText = '⏸️';
-                    var u = new SpeechSynthesisUtterance(textToRead);
-                    u.lang = (langMode === 'en' ? 'en-US' : 'vi-VN');
-                    u.rate = 0.88;
-                    u.onend = function() {{
-                        isSpeaking = false;
-                        if (btnTxt) btnTxt.innerText = 'Nghe bài học';
-                        if (btnIcon) btnIcon.innerText = '▶️';
-                    }};
-                    window.speechSynthesis.speak(u);
-                }}
-            }}
-        }};
-    }})();
-    </script>
-    """
-    if lang_code == "vi":
-        # This worker is optional. Cloud must use a configured HTTPS proxy;
-        # never point a remote learner at their own localhost.
-        reader_path = os.path.join(os.path.dirname(__file__), "assets", "scientific_speech_reader.js")
-        with open(reader_path, encoding="utf-8") as reader_file:
-            scientific_reader = reader_file.read()
-        voice_config = json.dumps({
-            "raw": raw_text, "subject": subject_name,
-            "endpoint": get_voice_public_url(),
-            "male": ("data:audio/mpeg;base64," + base64.b64encode(_male_mp3).decode("ascii")) if _male_mp3 else "",
-            "teacher": ("data:audio/mpeg;base64," + base64.b64encode(_teacher_mp3).decode("ascii")) if _teacher_mp3 else "",
-        }, ensure_ascii=False).replace("</", "<\\/")
-        selfhost_script = r"""
-        <script>
-        (function(config) {
-            const status = document.getElementById('selfhost_voice_status');
-            const buttons = [...document.querySelectorAll('[data-selfhost-voice]')];
-            // Streamlit uses srcdoc iframes, whose location has no hostname.
-            let host = location.hostname;
-            try { host = host || window.parent.location.hostname; } catch (_) {}
-            const local = ['127.0.0.1', 'localhost'].includes(host);
-            const endpoint = config.endpoint || (local ? 'http://127.0.0.1:8510' : '');
-            const player = document.querySelector('audio');
-            if (!player) return;
-            const femaleSource = player.querySelector('source')?.src || '';
-            const sources = new Map(femaleSource ? [['female', femaleSource]] : []);
-            if (config.male) sources.set('nam_bo', config.male);
-            if (config.teacher) sources.set('thay_tri', config.teacher);
-            let selected = femaleSource ? 'female' : null;
-            let available = [...(femaleSource ? ['female'] : []), ...(config.male ? ['nam_bo'] : []), ...(config.teacher ? ['thay_tri'] : [])];
-            let voiceServiceReady = false;
-            // Keep ready voices usable while CPU synthesis is pending. A late
-            // response must never replace a newer choice or start playback.
-            const pending = new Map();
-            let choice = 0;
-            const sync = () => buttons.forEach(b => {
-                const voice = b.dataset.selfhostVoice;
-                b.disabled = !available.includes(voice);
-                b.setAttribute('aria-busy', String(pending.has(voice)));
-                b.setAttribute('aria-pressed', String(voice === selected));
-                b.style.background = voice === selected ? '#0369a1' : '#334155';
-                if (voice !== 'female') b.title = available.includes(voice) ? 'Bản thử cần thẩm định' : (!endpoint ? 'Chưa cấu hình dịch vụ giọng đọc HTTPS' : voiceServiceReady ? 'Dịch vụ chưa cung cấp giọng này' : 'Chưa kết nối được dịch vụ giọng đọc');
-            });
-            const play = () => player.play().catch(() => {
-                status.textContent = 'Âm thanh đã sẵn sàng; nhấn phát trên thanh bên dưới';
-            });
-            player.addEventListener('play', () => {
-                if (window.speechSynthesis) window.speechSynthesis.cancel();
-            });
-            buttons.forEach(button => button.addEventListener('click', async () => {
-                if (button.disabled) return;
-                const voice = button.dataset.selfhostVoice;
-                const ticket = ++choice;
-                if (selected === voice && (player.src || femaleSource)) {
-                    if (player.paused) play(); else player.pause();
-                    return;
-                }
-                player.pause();
-                const previous = selected;
-                status.textContent = 'Đang chuẩn bị ' + button.textContent.trim() + '… Có thể chọn giọng khác đã sẵn sàng.';
-                try {
-                    if (!sources.has(voice)) {
-                        if (!pending.has(voice)) {
-                            pending.set(voice, (async () => {
-                                const text = window.GSAIScienceReader.prepareText(config.raw, 'vi', config.subject);
-                                const response = await fetch(endpoint.replace(/\/$/, '') + '/speech', {
-                                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                                    body: JSON.stringify({text, voice, reader_revision: window.GSAIScienceReader.VERSION})
-                                });
-                                if (!response.ok) throw Error('Chưa tạo được giọng này; vẫn có thể chọn giọng khác.');
-                                const blob = await response.blob();
-                                if (!blob.size) throw Error('Âm thanh rỗng; hãy chọn giọng khác.');
-                                sources.set(voice, URL.createObjectURL(blob));
-                            })().finally(() => { pending.delete(voice); sync(); }));
-                        }
-                        sync();
-                        await pending.get(voice);
-                    }
-                    if (ticket !== choice) return;
-                    player.src = sources.get(voice); selected = voice;
-                    status.textContent = voice === 'female' ? 'Giọng tổng hợp hiện tại' : button.textContent.trim() + ' • Bản thử cần thẩm định';
-                    await play();
-                } catch (error) {
-                    if (ticket !== choice) return;
-                    selected = previous;
-                    status.textContent = error.message || 'Không kết nối được giọng đọc';
-                } finally { sync(); }
-            }));
-            sync();
-            if (endpoint) {
-                fetch(endpoint.replace(/\/$/, '') + '/health').then(r => {
-                    if (!r.ok) throw Error();
-                    return r.json();
-                }).then(info => {
-                    voiceServiceReady = true;
-                    available = [...(femaleSource ? ['female'] : []), ...(config.male ? ['nam_bo'] : []), ...(info.available_voices || []).filter(v => ['thay_tri', 'nam_bo'].includes(v))];
-                    sync();
-                    status.textContent = info.owner_voice_state === 'preview_B' ? 'Chọn Giọng nữ, Giọng Thầy Trí (mẫu B) hoặc Giọng nam' : (available.length > (femaleSource ? 1 : 0) ? 'Chọn giọng đọc • Bản thử cần thẩm định' : 'Hai giọng nam đang hiệu chỉnh sau thẩm định');
-                }).catch(() => { status.textContent = 'Hai giọng nam chưa kết nối; giữ giọng hiện tại'; });
-            } else status.textContent = (config.teacher || config.male) ? 'Chọn giọng đọc: Giọng nữ' + (config.teacher ? ' • Giọng Thầy Trí' : '') + (config.male ? ' • Giọng nam' : '') : 'Bấm nút tạo giọng bên dưới để nghe Giọng Thầy Trí hoặc Giọng nam';
-            window.addEventListener('pagehide', () => {
-                player.pause(); sources.forEach(url => {if(url.startsWith('blob:')) URL.revokeObjectURL(url)});
-            });
-        })(GSAI_VOICE_CONFIG);
-        </script>
-        """.replace("GSAI_VOICE_CONFIG", voice_config)
-        tts_ui_html += "<script>" + scientific_reader + "</script>" + selfhost_script
-    # One shared audio bar; the ordered voice row scrolls horizontally on phones.
-    comp_height = 230 if lang_code == "vi" else (135 if audio_data else 85)
-    components.html(tts_ui_html, height=comp_height)
-    if lang_code == "vi" and not _teacher_mp3 and _teacher_token:
-        if st.button("🎙️ Tạo giọng Thầy Trí đọc bài", key=f"teacher_voice_{comp_key}",
-                     help="Giọng Nam Bộ của thầy Phan Minh Trí (máy học từ bản thu của thầy); tạo MP3 trên máy chủ, mọi thiết bị đều nghe được."):
-            from services.teacher_voice import synthesize_teacher_mp3
-            with st.spinner("Đang tạo giọng Thầy Trí… bài dài có thể mất 1–3 phút."):
-                _tmp3 = synthesize_teacher_mp3(clean_speech, _teacher_token)
-            if _tmp3:
-                _teacher_store[_male_key] = _tmp3
-                st.rerun()
-            else:
-                st.warning("Máy chủ giọng Thầy Trí đang khởi động hoặc bận; thầy cô thử lại sau ít phút. Giọng nữ/nam vẫn dùng bình thường.")
-    if lang_code == "vi" and not _male_mp3:
-        if st.button("🎙️ Tạo giọng nam đọc bài (miễn phí, mọi thiết bị)", key=f"male_voice_{comp_key}",
-                     help="Máy chủ tạo file MP3 giọng nam; Android, iPhone, Mac, Windows đều nghe được."):
-            from services.male_voice import synthesize_male_mp3
-            with st.spinner("Đang tạo giọng nam… bài dài có thể mất 10–30 giây."):
-                _mp3 = synthesize_male_mp3(clean_speech)
-            if _mp3:
-                _male_store[_male_key] = _mp3
-                st.rerun()
-            else:
-                st.warning("Dịch vụ giọng nam đang bận hoặc từ chối; thầy cô thử lại sau ít phút. Giọng nữ vẫn dùng bình thường.")
-
-
-
+        st.audio(audio_data, format="audio/mp3")
 
 
 def render_voice_speech_tex_and_english_evaluator(stage_id: str, current_subject: str, current_grade: int):
@@ -8987,7 +8408,7 @@ def render_voice_speech_tex_and_english_evaluator(stage_id: str, current_subject
 
     # GIAO DIỆN PHÒNG LUYỆN NÓI TIẾNG ANH PHẢN XẠ 1-1 (AI SPEAKING LAB 50/50 CÂN ĐỐI)
 
-    st.markdown('<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border: 1.5px solid #38bdf8; border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.15);"><div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;"><div style="display: flex; align-items: center; gap: 10px;"><span style="font-size: 24px;">🇬🇧</span><div><span style="color: #38bdf8; font-weight: 800; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">PHÒNG THỰC HÀNH NÓI TIẾNG ANH PHẢN XẠ 1-1 BẢN NGỮ (AI SPEAKING LAB)</span><div style="color: #94a3b8; font-size: 12.5px; margin-top: 2px;">💡 <b>Mẹo học sinh thông minh:</b> Em có thể <b>bôi đen (select)</b> hoặc <b>nhấp đúp (double-click)</b> bất kỳ từ/câu nào trên màn hình để nghe tự động (Chữ Anh đọc chuẩn US, Chữ Việt đọc giọng Nam Bộ). Hoặc bấm trực tiếp các nút nghe nhanh bên dưới!</div></div></div></div></div>', unsafe_allow_html=True)
+    st.markdown('<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border: 1.5px solid #38bdf8; border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.15);"><div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;"><div style="display: flex; align-items: center; gap: 10px;"><span style="font-size: 24px;">🇬🇧</span><div><span style="color: #38bdf8; font-weight: 800; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">PHÒNG THỰC HÀNH NÓI TIẾNG ANH PHẢN XẠ 1-1 BẢN NGỮ (AI SPEAKING LAB)</span><div style="color: #94a3b8; font-size: 12.5px; margin-top: 2px;">💡 <b>Mẹo học sinh thông minh:</b> Em có thể <b>bôi đen (select)</b> hoặc <b>nhấp đúp (double-click)</b> bất kỳ từ/câu nào trên màn hình rồi bấm nút đọc đoạn chọn (dùng cùng giọng Thầy Trí). Hoặc bấm trực tiếp các nút nghe nhanh bên dưới!</div></div></div></div></div>', unsafe_allow_html=True)
 
 
 
@@ -17045,74 +16466,76 @@ if selected_station == station_labels[2]:
 
 
 
-        # BẢNG KÊ ĐỐI SOÁT CHÉO NGUỒN GỐC DÀNH CHO BAN GIÁM KHẢO & THANH TRA KHẢO THÍ (ĐỐI CHIẾU SAU THI)
-        is_ai_exam = exam.get("is_ai_generated", False) or not exam.get("is_real_exam", False)
+        # Owner: hidden until explicitly re-enabled; retain the complete audit implementation.
+        if str(get_secret("SHOW_TRAM3_SOURCE_AUDIT", "false")).strip().lower() in ("1", "true", "yes", "on"):
+            # BẢNG KÊ ĐỐI SOÁT CHÉO NGUỒN GỐC DÀNH CHO BAN GIÁM KHẢO & THANH TRA KHẢO THÍ (ĐỐI CHIẾU SAU THI)
+            is_ai_exam = exam.get("is_ai_generated", False) or not exam.get("is_real_exam", False)
 
-        with st.expander("🏛️ BẢNG ĐỐI SOÁT CHÉO NGUỒN GỐC DÀNH CHO BAN GIÁM KHẢO & THANH TRA KHẢO THÍ", expanded=False):
-            if is_ai_exam:
-                st.info(
-                    "🤖 **ĐỀ THI ĐỘC BẢN DO TRỢ LÝ AI KHẢO THÍ BIÊN SOẠN (CHƯƠNG TRÌNH GDPT 2018):**\n\n"
-                    "• **Tính chất đề thi:** 100% ngữ liệu, tham số và bài toán được AI tính toán ngầm và sáng tác độc bản cho kỳ thi này.\n"
-                    "• **Nguồn gốc:** Đề thi tự tạo mới, **KHÔNG trích xuất từ ngân hàng đề cũ**, do đó không áp dụng bảng đối soát mã nguồn TOANMATH/Sở GD&ĐT.\n"
-                    "• **Bản quyền khảo thí:** Độc bản thuộc về đơn vị tổ chức thi.\n"
-                    "• **Kiểm định chất lượng:** Toàn bộ câu hỏi đã vượt qua hệ thống kiểm định 7 tầng (Deep Solver Guard, đơn điệu, BBT chuẩn, đồ thị f' chính xác)."
-                )
-            else:
-                st.info("📋 **Minh bạch xuất xứ & Pháp chế khảo thí:** Bảng kê định danh toàn bộ câu hỏi đối chiếu với ngân hàng đề thi thật từ các trường Chuyên & Sở GD&ĐT toàn quốc (Niên khóa 2025 - 2026).")
-                audit_trail_data = exam.get("audit_trail", [])
-                portal_info = _ree_call("portal_for_subject", {}, subject)
-                if not isinstance(portal_info, dict):
-                    portal_info = {}
-                portal_name_val = exam.get("portal") or portal_info.get("portal_name") or "Kho Khảo Thí Quốc Gia"
+            with st.expander("🏛️ BẢNG ĐỐI SOÁT CHÉO NGUỒN GỐC DÀNH CHO BAN GIÁM KHẢO & THANH TRA KHẢO THÍ", expanded=False):
+                if is_ai_exam:
+                    st.info(
+                        "🤖 **ĐỀ THI ĐỘC BẢN DO TRỢ LÝ AI KHẢO THÍ BIÊN SOẠN (CHƯƠNG TRÌNH GDPT 2018):**\n\n"
+                        "• **Tính chất đề thi:** 100% ngữ liệu, tham số và bài toán được AI tính toán ngầm và sáng tác độc bản cho kỳ thi này.\n"
+                        "• **Nguồn gốc:** Đề thi tự tạo mới, **KHÔNG trích xuất từ ngân hàng đề cũ**, do đó không áp dụng bảng đối soát mã nguồn TOANMATH/Sở GD&ĐT.\n"
+                        "• **Bản quyền khảo thí:** Độc bản thuộc về đơn vị tổ chức thi.\n"
+                        "• **Kiểm định chất lượng:** Toàn bộ câu hỏi đã vượt qua hệ thống kiểm định 7 tầng (Deep Solver Guard, đơn điệu, BBT chuẩn, đồ thị f' chính xác)."
+                    )
+                else:
+                    st.info("📋 **Minh bạch xuất xứ & Pháp chế khảo thí:** Bảng kê định danh toàn bộ câu hỏi đối chiếu với ngân hàng đề thi thật từ các trường Chuyên & Sở GD&ĐT toàn quốc (Niên khóa 2025 - 2026).")
+                    audit_trail_data = exam.get("audit_trail", [])
+                    portal_info = _ree_call("portal_for_subject", {}, subject)
+                    if not isinstance(portal_info, dict):
+                        portal_info = {}
+                    portal_name_val = exam.get("portal") or portal_info.get("portal_name") or "Kho Khảo Thí Quốc Gia"
 
-                if not audit_trail_data:
-                    audit_trail_data = []
-                    q_num = 1
-                    if subject == "Ngữ văn":
-                        dh_list = exam.get("part_doc_hieu", {}).get("questions", [])
-                        for idx, q in enumerate(dh_list):
-                            audit_trail_data.append({
-                                "STT": q_num,
-                                "Phần": "Đọc hiểu",
-                                "Trường / Sở GD&ĐT": q.get("school") or exam.get("school", "THPT Chuyên"),
-                                "Kỳ thi & Lần thi": q.get("exam_session") or "Kỳ thi Cuối Học Kỳ 1 (Chính thức)",
-                                "Niên khóa": q.get("year", "2025 - 2026"),
-                                "Vị trí đề gốc": q.get("orig_pos", f"Câu {idx+1}"),
-                                "Cổng dữ liệu": q.get("portal", "Kho Khảo Thí Ngữ Văn (CV 3175)"),
-                                "Mã đối soát": q.get("audit_id", f"NV_DH_{q_num:02d}")
-                            })
-                            q_num += 1
-
-                        for idx, v in enumerate(exam.get("part_viet", [])):
-                            audit_trail_data.append({
-                                "STT": q_num,
-                                "Phần": "Viết",
-                                "Trường / Sở GD&ĐT": v.get("school") or exam.get("school", "THPT Chuyên"),
-                                "Kỳ thi & Lần thi": v.get("exam_session") or "Kỳ thi Cuối Học Kỳ 1 (Chính thức)",
-                                "Niên khóa": v.get("year", "2025 - 2026"),
-                                "Vị trí đề gốc": v.get("orig_pos", f"Câu {idx+1}"),
-                                "Cổng dữ liệu": v.get("portal", "Kho Khảo Thí Ngữ Văn (CV 3175)"),
-                                "Mã đối soát": v.get("audit_id", f"NV_V_{q_num:02d}")
-                            })
-                            q_num += 1
-                    else:
-                        for p_label, p_key in [("Phần I", "p1"), ("Phần II", "p2"), ("Phần III", "p3")]:
-                            for idx, q in enumerate(exam.get(p_key, [])):
+                    if not audit_trail_data:
+                        audit_trail_data = []
+                        q_num = 1
+                        if subject == "Ngữ văn":
+                            dh_list = exam.get("part_doc_hieu", {}).get("questions", [])
+                            for idx, q in enumerate(dh_list):
                                 audit_trail_data.append({
                                     "STT": q_num,
-                                    "Phần": p_label,
+                                    "Phần": "Đọc hiểu",
                                     "Trường / Sở GD&ĐT": q.get("school") or exam.get("school", "THPT Chuyên"),
                                     "Kỳ thi & Lần thi": q.get("exam_session") or "Kỳ thi Cuối Học Kỳ 1 (Chính thức)",
                                     "Niên khóa": q.get("year", "2025 - 2026"),
-                                    "Vị trí đề gốc": q.get("orig_pos", f"{p_label} - Câu {idx+1}"),
-                                    "Cổng dữ liệu": q.get("portal", portal_name_val),
-                                    "Mã đối soát": q.get("audit_id", f"AUDIT_{q_num:02d}")
+                                    "Vị trí đề gốc": q.get("orig_pos", f"Câu {idx+1}"),
+                                    "Cổng dữ liệu": q.get("portal", "Kho Khảo Thí Ngữ Văn (CV 3175)"),
+                                    "Mã đối soát": q.get("audit_id", f"NV_DH_{q_num:02d}")
                                 })
                                 q_num += 1
 
-                if audit_trail_data:
-                    df_audit = pd.DataFrame(audit_trail_data)
-                    st.dataframe(df_audit, hide_index=True, width="stretch")
+                            for idx, v in enumerate(exam.get("part_viet", [])):
+                                audit_trail_data.append({
+                                    "STT": q_num,
+                                    "Phần": "Viết",
+                                    "Trường / Sở GD&ĐT": v.get("school") or exam.get("school", "THPT Chuyên"),
+                                    "Kỳ thi & Lần thi": v.get("exam_session") or "Kỳ thi Cuối Học Kỳ 1 (Chính thức)",
+                                    "Niên khóa": v.get("year", "2025 - 2026"),
+                                    "Vị trí đề gốc": v.get("orig_pos", f"Câu {idx+1}"),
+                                    "Cổng dữ liệu": v.get("portal", "Kho Khảo Thí Ngữ Văn (CV 3175)"),
+                                    "Mã đối soát": v.get("audit_id", f"NV_V_{q_num:02d}")
+                                })
+                                q_num += 1
+                        else:
+                            for p_label, p_key in [("Phần I", "p1"), ("Phần II", "p2"), ("Phần III", "p3")]:
+                                for idx, q in enumerate(exam.get(p_key, [])):
+                                    audit_trail_data.append({
+                                        "STT": q_num,
+                                        "Phần": p_label,
+                                        "Trường / Sở GD&ĐT": q.get("school") or exam.get("school", "THPT Chuyên"),
+                                        "Kỳ thi & Lần thi": q.get("exam_session") or "Kỳ thi Cuối Học Kỳ 1 (Chính thức)",
+                                        "Niên khóa": q.get("year", "2025 - 2026"),
+                                        "Vị trí đề gốc": q.get("orig_pos", f"{p_label} - Câu {idx+1}"),
+                                        "Cổng dữ liệu": q.get("portal", portal_name_val),
+                                        "Mã đối soát": q.get("audit_id", f"AUDIT_{q_num:02d}")
+                                    })
+                                    q_num += 1
+
+                    if audit_trail_data:
+                        df_audit = pd.DataFrame(audit_trail_data)
+                        st.dataframe(df_audit, hide_index=True, width="stretch")
 
 
 
@@ -17995,14 +17418,18 @@ background:linear-gradient(135deg, rgba(6,78,59,0.35), rgba(15,23,42,0.65));marg
     c_col1, c_col2 = st.columns([1, 1])
     with c_col1:
         if st.button("🔄 Bắt đầu phiên lắng nghe mới", key="counsel_reset_btn"):
+            from services.owner_voice_selection import clear_counsel_voice
+            clear_counsel_voice(st.session_state)
             st.session_state.counseling_messages = []
             st.rerun()
     with c_col2:
         st.caption(f"Số lượt tư vấn đã lưu sang Trạm 5: {len(st.session_state.get('counseling_logs') or [])}")
 
-    for _m in st.session_state.counseling_messages:
+    for _counsel_index, _m in enumerate(st.session_state.counseling_messages):
         with st.chat_message(_m.get("role", "assistant")):
             st.markdown(_m.get("content") or "")
+            if _m.get("role", "assistant") == "assistant":
+                create_pedagogical_tts_component(_m.get("content") or "", subject, f"t4_msg_{_counsel_index}")
 
     _user_msg = st.chat_input("Em hãy kể bằng lời của mình — Thầy đang lắng nghe…", key="counsel_chat_input")
     if _user_msg:

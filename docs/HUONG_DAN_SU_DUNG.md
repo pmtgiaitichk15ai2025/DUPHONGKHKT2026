@@ -117,12 +117,11 @@ Lưu tiến bộ học tập **trên máy của em**, không lưu trên máy ch�
 - 📂 **📂 Mở lại phiếu bài học đã lưu (.md)** → chọn file → 🔽 **Kiểu phiếu từ bản lưu** (`Chữ viết tay` / `Bản màu` / `Trắng đen`) → 🔲 **Mở phiếu từ bản lưu** → 🔲 **📥 Tải lại phiếu HTML**.
 - Khi AI trả nội dung chưa khớp ngữ cảnh, app giữ lại bản đó để đối chiếu: 🔲 **📥 Tải nguyên văn bài đang chờ đối chiếu ngữ cảnh** và 📂 **📚 Các bản chờ đối chiếu trước đó trong phiên**.
 
-### Nghe đọc bài (mọi môn) — khung 🎙️ THUYẾT MINH BÀI GIẢNG
-- Dưới bài học và dưới **mỗi câu trả lời của Thầy** (Trạm 1, 2, 3) có thanh đọc:
-  - 🔲 **▶ Giọng nữ** — có sẵn.
-  - 🔲 **🎙️ Tạo giọng Thầy Trí đọc bài** → chờ (bài dài 1–4 phút, câu ngắn ~20 giây) → 🔲 **▶ Giọng Thầy Trí** (giọng Nam Bộ của thầy Phan Minh Trí, đọc chậm rãi, ngắt theo dấu câu).
-  - 🔲 **🎙️ Tạo giọng nam đọc bài (miễn phí, mọi thiết bị)** → 🔲 **▶ Giọng nam**.
-- Công thức được đọc theo **bộ đọc chuẩn khoa học** (phân số, căn, tích phân, véc tơ, ion, đơn vị…). Nghe được trên Android, iPhone, Mac, Windows.
+### Nghe đọc bài (mọi môn, Trạm 1–4)
+- Dưới bài học và câu trả lời của Thầy: **🔊 Đọc nội dung bằng giọng Thầy Trí** → chờ tạo MP3 → phát/tạm dừng bằng thanh âm thanh.
+- Chỉ dùng giọng từ mẫu chủ dự án chọn ngày 21/11/2026; không tự đổi sang giọng nữ/nam/trình duyệt khi lỗi.
+- Muốn đọc một đoạn: bôi đen nội dung rồi bấm **🔊 Đọc đoạn đã bôi đen**. Trình duyệt cần cho phép lấy đoạn chọn; chưa xác nhận đường này trên mọi thiết bị.
+- Công thức qua bộ đọc khoa học dùng chung; bài dài có thể cần vài phút ở lần tạo đầu. Dịch vụ bận thì thử lại sau, nội dung học vẫn dùng được.
 
 ### Học liệu tiếng Anh theo chủ đề
 - Dưới thông tin bài học: **🌐 Học liệu tiếng Anh theo chủ đề** — nút tìm đúng chủ đề bằng tiếng Anh chuyên ngành trên **Khan Academy, BBC Bitesize, CK-12, Wikipedia (English), Video tiếng Anh**. Đây là trang tìm kiếm của nguồn uy tín, chưa phải học liệu đã thẩm định theo CT2018/KNTT.
@@ -252,7 +251,7 @@ Trạm 3 có **2 tab lớn**:
 ### 4.3. Sau khi nộp
 - Xem điểm, đáp án và lời giải từng câu.
 - **Ngữ văn:** 🔲 **Chấm Ngữ văn theo tiêu chí (AI tham khảo)** — điểm chỉ mang tính tham khảo, giáo viên chấm chính thức.
-- Hỏi lại Thầy: ⬜ **Hỏi Thầy về câu em làm sai hoặc chưa rõ trong bài thi...** → 🔲 **💬 Gửi hỏi Thầy**. Câu trả lời có thanh đọc (giọng nữ / Thầy Trí / nam).
+- Hỏi lại Thầy: ⬜ **Hỏi Thầy về câu em làm sai hoặc chưa rõ trong bài thi...** → 🔲 **💬 Gửi hỏi Thầy**. Câu trả lời có thanh đọc duy nhất giọng Thầy Trí theo mẫu đã chọn.
 - 📂 **🏛️ BẢNG ĐỐI SOÁT CHÉO NGUỒN GỐC DÀNH CHO BAN GIÁM KHẢO & THANH TRA KHẢO THÍ** — nguồn gốc từng câu (kho / AI).
 - 📂 **📋 Đối soát nhãn mức độ câu hỏi (chưa thẩm định)**.
 - 🔲 **🔄 Làm đề khảo thí mới** — làm đề khác.
@@ -390,7 +389,7 @@ Trạm 3 có **2 tab lớn**:
 | Mất bài đang làm khi tải lại trang | Thường xuyên dùng **📦 Nén & tải hồ sơ cá nhân** ở thanh bên. |
 | Không vào được Trạm 5 | Cần mật khẩu giáo viên (`ADMIN_PASS` trong Secrets). |
 | Muốn in đề | Trạm 3 → Xưởng xuất bản → **Tải File In HTML** → mở file → Ctrl+P → *Lưu dưới dạng PDF*. |
-| Giọng nam báo "đang bận" | Dịch vụ miễn phí đôi lúc từ chối; thử lại sau ít phút, giọng nữ vẫn dùng được. |
+| Giọng đọc báo đang bận | Thử lại sau; app không chuyển sang giọng khác. |
 | Giọng Thầy Trí lâu | Bài dài cần 1–4 phút cho lần đầu; lần sau mở lại cùng bài phát ngay. |
 | Không thấy nút giọng Thầy Trí | Quản trị cần có `HF_TOKEN` trong Secrets. |
 | Gặp lỗi khác | Thanh bên → **🛠️ Báo lỗi ứng dụng & Góp ý trải nghiệm**. |
@@ -398,3 +397,6 @@ Trạm 3 có **2 tab lớn**:
 ---
 
 *Dưỡng thiện tâm – Ươm nhân tài.*
+
+
+Trạm 3: bảng đối soát nguồn gốc tạm ẩn theo yêu cầu chủ dự án. Giữ nguyên mã/dữ liệu; chỉ bật lại khi chủ dự án đồng ý bằng cấu hình Streamlit Secrets `SHOW_TRAM3_SOURCE_AUDIT = "true"`. Mặc định tắt cho mọi môn/lớp.

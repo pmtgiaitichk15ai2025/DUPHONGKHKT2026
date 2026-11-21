@@ -1,0 +1,28 @@
+<!doctype html><html lang="vi"><meta charset="utf-8">
+<style>body{margin:0;font:14px system-ui}button{border:1px solid #64748b;border-radius:8px;padding:7px 12px;background:#172033;color:#eee;cursor:pointer}button:disabled{opacity:.5;cursor:default}</style>
+<button id="read" disabled>🔊 Đọc đoạn đã bôi đen</button>
+<script>
+const button=document.getElementById('read');
+let selected='';
+function send(type,extra={}){window.parent.postMessage({isStreamlitMessage:true,type,...extra},'*');}
+function update(){
+  try{selected=String(window.parent.getSelection() || '').trim();}
+  catch(_){selected='';}
+  button.disabled=!selected;
+}
+try{window.parent.document.addEventListener('selectionchange',update);}
+catch(_){button.title='Trình duyệt chưa cho phép lấy đoạn chọn.';}
+button.addEventListener('mousedown',e=>e.preventDefault());
+button.addEventListener('click',()=>{
+  if(selected)send('streamlit:setComponentValue',{value:{text:selected,request:Date.now()},dataType:'json'});
+});
+window.addEventListener('message',e=>{
+  if(e.source!==window.parent || e.data?.type!=='streamlit:render')return;
+  send('streamlit:setFrameHeight',{height:40});update();
+});
+window.addEventListener('pagehide',()=>{
+  try{window.parent.document.removeEventListener('selectionchange',update);}catch(_){}
+});
+send('streamlit:componentReady',{apiVersion:1});
+send('streamlit:setFrameHeight',{height:40});
+</script></html>

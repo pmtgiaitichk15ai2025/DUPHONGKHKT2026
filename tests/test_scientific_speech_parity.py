@@ -55,11 +55,11 @@ class StationWiring(unittest.TestCase):
 
     def test_all_tutor_replies_have_reader_and_scientific_text(self):
         src = (ROOT / "app.py").read_text(encoding="utf-8")
-        for key in ('f"t1_chat_{t1_msg_index}"', 'f"t2_msg_{idx_m}"', 'f"t3_msg_{index}"', '"tram1_lesson"'):
+        for key in ('f"t1_chat_{t1_msg_index}"', 'f"t2_msg_{idx_m}"', 'f"t3_msg_{index}"', '"tram1_lesson"', 'f"t4_msg_{_counsel_index}"'):
             self.assertIn(key, src)
         body = src.split("def create_pedagogical_tts_component", 1)[1].split("\ndef ", 1)[0]
-        self.assertIn("clean_speech = _sci_speech(clean_speech, subject_name)", body)
-        self.assertLess(body.index("_sci_speech(clean_speech"), body.index("generate_pedagogical_tts_audio_bytes(clean_speech"))
+        self.assertIn('clean_speech = _sci_speech(str(raw_text or ""), subject_name)', body)
+        self.assertLess(body.index("clean_speech = _sci_speech"), body.index("audio_data = synthesize_teacher_mp3"))
 
 
 if __name__ == "__main__":

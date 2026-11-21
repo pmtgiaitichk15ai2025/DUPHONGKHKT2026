@@ -4,12 +4,11 @@ import ast
 import itertools
 import math
 import re
-import sys
 import types
 import unittest
 from fractions import Fraction
 from pathlib import Path
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from services.plot_labels import label_box, merge_coincident, place_labels, axis_letter_annotations
 
@@ -90,12 +89,6 @@ class RendererWiringTests(unittest.TestCase):
         node = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'render_exact_function_plotly')
         ns = {'re': re}
         exec(compile(ast.Module(body=[node], type_ignores=[]), 'app-plot', 'exec'), ns)
-        components = types.ModuleType('streamlit.components.v1')
-        components.html = Mock()
-        sys.modules.setdefault('streamlit', types.ModuleType('streamlit'))
-        sys.modules.setdefault('streamlit.components', types.ModuleType('streamlit.components'))
-        sys.modules['streamlit.components.v1'] = components
-        sys.modules['streamlit.components'].v1 = components
         traces = []
         for name, x, y, text in (('Cực đại (CĐ)', -0.47, 1.63, 'CĐ(-sqrt(2)/3; 4*sqrt(2)/9 + 1)'),
                                  ('Cực tiểu (CT)', 0.47, 0.37, 'CT(sqrt(2)/3; 1 - 4*sqrt(2)/9)'),
@@ -109,7 +102,10 @@ class RendererWiringTests(unittest.TestCase):
         fig = types.SimpleNamespace(data=traces, layout=layout, update_layout=Mock(),
                                     to_html=Mock(return_value='<div></div>'),
                                     add_annotation=lambda **kw: (notes.append(kw), layout.annotations.append(types.SimpleNamespace(**kw))))
-        ns['render_exact_function_plotly'](fig)
+        import streamlit.components.v1 as components
+        with patch.object(components, 'html'):
+            ns['render_exact_function_plotly'](fig)
+        self.assertTrue(callable(components.declare_component))
         self.assertEqual(len(notes), 4)  # I và giao Oy chung một nhãn
         self.assertIn('≡ Giao trục Oy', traces[2].name)
         self.assertFalse(traces[3].showlegend)
