@@ -2397,7 +2397,10 @@ def detect_student_concluded_intent(user_input: str, history: list = None) -> bo
     if not user_input or not isinstance(user_input, str):
         return False
 
-    txt = user_input.strip().lower()
+    import unicodedata
+    txt = unicodedata.normalize("NFC", user_input).strip().lower()
+    txt = re.sub(r"\b(?:ko|k0|khong)\b", "không", txt)
+    txt = re.sub(r"\s+", " ", txt)
     # A quoted/past understanding claim or a negated mastery phrase must not
     # trigger the educational closing message through substring matching.
     if re.search(r"(?:chưa|không)\s+(?:thật\s+sự\s+)?(?:nắm\s+(?:vững|chắc)|thông\s+suốt|tự\s+làm\s+được)", txt):
@@ -2410,7 +2413,25 @@ def detect_student_concluded_intent(user_input: str, history: list = None) -> bo
     # genuine follow-up questions and unresolved confusion as higher priority.
     if re.search(r"(?:chưa|không)\s+hết\s+(?:thắc\s+mắc|câu\s+hỏi)|không\s+hiểu", txt):
         return False
+    # Natural self-reports must not depend on the suffix "rồi". The owner
+    # Android example is "Dạ! Em đã thực sự thông suốt ạ!".
+    # Keep these claims narrow; questions and uncertainty still win below.
+    if re.search(r"(?:chưa|không)\s+(?:(?:thực|thật)\s+sự\s+)?(?:hiểu|thông\s+suốt|thấu\s+suốt)", txt):
+        return False
+    if re.search(r"\b(?:không|chưa)\s+(?:có\s+ý\s+nói|nói|khẳng\s+định|chắc).*?(?:hiểu|thông\s+suốt)", txt):
+        return False
+    natural_mastery = re.search(
+        r"(?:^|[.!;]\s*)(?:dạ[ ,!]*|vâng[ ,!]*)?(?:em|con|mình|tôi)\s+"
+        r"(?:(?:đã|thực sự|thật sự|hoàn toàn|cũng)\s+)*"
+        r"(?:thông suốt|thấu suốt|hiểu(?: rõ| bài| hết)?)"
+        r"(?:\s+(?:rồi|ạ|thầy|cô|nha|nhé|nghen))*[.!;]*$", txt)
+    no_more_questions = re.search(
+        r"\bkhông\s+(?:(?:còn|có)\s+)?(?:gì\s+|câu\s+)?hỏi"
+        r"(?:\s+(?:gì|nào|thêm|nữa))+\b", txt)
     question_scan = txt
+    if no_more_questions:
+        question_scan = question_scan[:no_more_questions.start()] + question_scan[no_more_questions.end():]
+
     # Reported understanding may coordinate several embedded why/how clauses.
     # Mask that complete statement, but preserve questions and contrast turns.
     def reported_understanding(match):
@@ -2437,6 +2458,9 @@ def detect_student_concluded_intent(user_input: str, history: list = None) -> bo
     ]
     if any(qm in question_scan for qm in question_markers):
         return False
+
+    if natural_mastery or no_more_questions:
+        return True
 
     # 2. XÉT CÁC MẪU NGỮ NGHĨA BIỂU ĐẠT THẤU HIỂU & KHÔNG CÒN CÂU HỎI
     concluded_signals = [

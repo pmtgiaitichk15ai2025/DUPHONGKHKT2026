@@ -30,6 +30,8 @@
 
 ## 3. Trạng thái hiện tại (20/11/2026)
 
+- Ưu tiên mới owner: điều tra Văn Android không chốt nhân sinh. Đã tái hiện thiếu nhận diện một số cách nói tự nhiên ở hàm chung Trạm1–3; 20 test cũ đạt nhưng chưa phủ ca mới. Đã nhận ảnh: “Dạ! Em đã thực sự thông suốt ạ!”; xác nhận detector bỏ sót. Đã vá local hàm chung; 23 test liên quan đạt, gồm đưa nguyên câu qua nhánh thật trên 65 môn/lớp; Hồi quy toàn bộ đã kết thúc: 1230 tests, OK (skipped=2), 2999,270s; log regression_full29_20261120.log. Ngày 21/11 đang phát hành bản closure; SHA/CI mới nhất xem đầu checkpoint. Bằng chứng/chi tiết/bước tiếp ở đầu qa_evidence/HANDOFF_CURRENT.md tại thư mục dự án gốc.
+
 - Codex 20/11: nền main `d269c75`, bản vá dùng chung `services/audio_cache.py` + `male_voice.py`/`teacher_voice.py`: gộp yêu cầu tạo cùng MP3 đang chạy, giữ độc lập nội dung/giọng/tốc độ, không lưu lỗi, không thêm lượt AI/retry. 16/16 test tập trung đạt; hồi quy toàn bộ **1227 test OK (2 skipped)**, 4179,066 giây, log `qa_evidence/regression_full28_20261120.log` tại thư mục dự án gốc. Đã commit/push mã `356fc4c` lên main; CI mã: run `44718927851`. Kết quả CI/Cloud và SHA main sau cập nhật tài liệu: đọc đầu `qa_evidence/HANDOFF_CURRENT.md` tại thư mục dự án gốc. Chưa đo hiệu quả web. Không gọi AI/TTS thật.
 - Tham chiếu lịch sử bên dưới chưa được xác minh lại trong ca này:
 
@@ -37,6 +39,8 @@
 - Secrets trên Cloud đã có: khóa Gemini chung, `ADMIN_PASS`, `HF_TOKEN`. CHƯA có `SCHOOL_SUPPORT_CONTACTS`.
 
 ## 4. Việc tiếp theo (theo thứ tự ưu tiên)
+
+0. Owner 20/11 ưu tiên điều tra và xử lý closure nhân sinh/chuyển trạm dùng chung; không kết luận mọi môn/lớp đều lỗi hoặc Android là nguyên nhân. Đã khóa ca ảnh Android, vá local và qua hồi quy toàn bộ; tiếp phát hành/CI/Cloud. Không thêm API/retry; không tự chuyển màn hình hoặc nhét bài nhân sinh cố định. Chưa biết lớp của ca ảnh, cơ chế dùng chung đã kiểm 65 môn/lớp.
 
 1. **Giảm độ trễ** — bản vá gộp tạo MP3 trùng đã hồi quy đạt và push; kiểm trạng thái CI trong checkpoint rồi kiểm web bằng Chrome MCP đúng profile (phiên Codex tiếp nhận chưa có công cụ Chrome MCP).
    **Đo trước đây:** ĐÃ ĐO trên web 19/11 (Claude, trình duyệt, khóa trường):
@@ -53,6 +57,8 @@
 5. Chưa kiểm web: thanh đọc gia sư Trạm 3; phiếu Sen Việt môn Lịch sử (đã có test chặn 2 lớp).
 
 ## 5. Tồn tại đã biết
+
+- Detector bỏ sót “Em đã hiểu rồi ạ”, “Em ko hỏi gì thêm”, “Em không hỏi gì nữa”; dùng chung cả 3 trạm. Closure Trạm1 chưa kiểm đủ nội dung nhân sinh trước ghi nhận, chuyển trạm hiện là lời mời trong prompt. Đã tái hiện đúng câu trong ảnh, sửa và đạt full; chờ phát hành/CI/Cloud; chưa nghiệm thu phản hồi AI thật. Hai CI của đợt audio 44718927851/44719623078 đã success.
 
 - Chưa đo hiệu quả bản vá gộp tạo MP3 trên web; chỉ giảm lượt tạo trùng đồng thời, không giảm thời gian tổng hợp một bài mới.
 - Giọng Thầy Trí trên CPU: bài dài 1–4 phút lần đầu (có nhớ sẵn). Giọng nam (edge-tts) là đường không chính thức, có lúc từ chối.

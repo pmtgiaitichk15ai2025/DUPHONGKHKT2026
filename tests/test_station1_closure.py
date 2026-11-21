@@ -123,6 +123,46 @@ class Station1ClosureTests(unittest.TestCase):
         self.assertFalse(detect('Em không còn câu hỏi thêm phần cũ nhưng tại sao T không đổi?'))
         self.assertFalse(detect('Em không có câu hỏi thêm vì em chưa hiểu để hỏi.'))
 
+    def test_owner_android_natural_closing_and_mobile_variants(self):
+        import unicodedata
+        detect = load_function('detect_student_concluded_intent')
+        messages = ('Dạ! Em đã thực sự thông suốt ạ!',
+                    'Em đã hiểu rồi ạ', 'Dạ em hiểu rồi thầy',
+                    'Em ko hỏi gì thêm', 'Em không có gì hỏi thêm',
+                    'Em không hỏi gì nữa', 'Em không còn câu hỏi nào nữa ạ')
+        for message in messages:
+            for normalized in (message, message.upper(), unicodedata.normalize('NFD', message)):
+                with self.subTest(message=normalized):
+                    self.assertTrue(detect(normalized))
+
+    def test_owner_actual_detector_routes_every_subject_grade_to_moral_prompt(self):
+        from services.academic_context import subjects_for_grade
+        detect = load_function('detect_student_concluded_intent')
+        node = self.closure_try()
+        with patch.object(self, 'closure_try', return_value=node):
+            for grade in range(6, 13):
+                for subject in subjects_for_grade(grade):
+                    with self.subTest(subject=subject, grade=grade):
+                        self.run_reply(reply='Fixture response.', subject=subject, grade=grade,
+                                       message='Dạ! Em đã thực sự thông suốt ạ!', detector=detect)
+                        self.assertIn('BẮT BUỘC có một bài giảng triết lý nhân sinh', self.last_prompt)
+                        self.assertIn('tiến sang Trạm 2', self.last_prompt)
+                        self.assertNotIn('Cuối lời giải thích, hãy ân cần hỏi', self.last_prompt)
+
+    def test_natural_closing_preserves_negation_and_followup(self):
+        detect = load_function('detect_student_concluded_intent')
+        for message in ('Em chưa thực sự thông suốt ạ!',
+                        'Em không thực sự thông suốt ạ!',
+                        'Em không có ý nói em đã thực sự thông suốt ạ!',
+                        'Em chưa chắc mình đã hiểu rồi ạ',
+                        'Dạ em hiểu rồi nhưng tại sao nhân vật làm vậy?',
+                        'Em ko hỏi gì thêm vì em chưa hiểu để hỏi',
+                        'Em không hỏi gì nữa nhưng vẫn còn băn khoăn',
+                        'Em đã thực sự thông suốt chưa?',
+                        'Lúc trước em đã thực sự thông suốt ạ'):
+            with self.subTest(message=message):
+                self.assertFalse(detect(message))
+
     def closure_try(self):
         tree = ast.parse((Path(__file__).resolve().parents[1] / 'app.py').read_text(encoding='utf-8'))
         return next(node for node in ast.walk(tree) if isinstance(node, ast.Try) and
@@ -130,7 +170,7 @@ class Station1ClosureTests(unittest.TestCase):
                         for child in node.body for n in ast.walk(child)))
 
     def run_reply(self, reply='', failure=False, subject='Toán học', grade=8,
-                  message='Em không còn thắc mắc.', closed=False, topic=''):
+                  message='Em không còn thắc mắc.', closed=False, topic='', detector=None):
         class State(dict):
             __getattr__ = dict.__getitem__
         state=State(tram1_chat_history=[], tram1_understood=closed, **({'current_topic': topic} if topic else {}))
@@ -144,7 +184,7 @@ class Station1ClosureTests(unittest.TestCase):
             write_stream=Mock(side_effect=RuntimeError('offline') if failure else None,return_value=reply),
             empty=Slot, error=Mock())
         ns=dict(json=json,st=st,grade_num=grade,t1_input=message,t1_hist_ctx='',t1_sys_inst='',subject=subject,student_name='QA',
-            detect_student_concluded_intent=lambda *a:True,get_unique_philosophical_lesson=lambda *a:{'lesson':'Kiên trì','author':'FixtureAuthor','origin':'fixture','quote':'test'},get_cross_station_pedagogical_context=lambda *a:'',register_station_closure=register,
+            detect_student_concluded_intent=detector or (lambda *a:True),get_unique_philosophical_lesson=lambda *a:{'lesson':'Kiên trì','author':'FixtureAuthor','origin':'fixture','quote':'test'},get_cross_station_pedagogical_context=lambda *a:'',register_station_closure=register,
             stream_gemini_with_fallback=Mock(return_value=iter(())),sanitize_katex_latex=lambda s:s,
             chemical_display_markdown=lambda s:s)
         exec(compile(ast.Module(body=[self.closure_try()],type_ignores=[]),'t1-closure-try','exec'),ns)
