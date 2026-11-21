@@ -44,6 +44,21 @@ class Tram3SimpleSinhDeAppTest(unittest.TestCase):
         self.assertEqual([e.message for e in at.exception], [])
         return at
 
+    def test_custom_question_counts_reach_generation_request(self):
+        # Capture before bank/model calls: this test never creates an exam or calls AI.
+        at = self._open("Lớp 12", "Toán học")
+        for counts in ((1, 0, 0), (3, 1, 2)):
+            for label, value in zip(("Số câu TN P.I:", "Số câu Đ/S P.II:", "Số câu TLN P.III:"), counts):
+                next(w for w in at.number_input if w.label == label).set_value(value).run(timeout=90)
+            seen = []
+            def capture(subject, grade, topics, requested, code, custom, pathway=""):
+                seen.append(tuple(requested))
+                raise RuntimeError("qa-stop-before-bank-or-api")
+            with patch("services.curriculum_policy.exam_generation_request", side_effect=capture):
+                next(b for b in at.button if b.label == "🚀 Sinh đề").click().run(timeout=90)
+            self.assertEqual(seen, [counts])
+            self.assertTrue(any("qa-stop-before-bank-or-api" in e.message for e in at.exception))
+
     def test_every_subject_has_one_sinh_de_and_no_mode_radio(self):
         from services.academic_context import subjects_for_grade
 
